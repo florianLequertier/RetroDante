@@ -3,7 +3,7 @@ package com.retroDante.game;
 import com.badlogic.gdx.math.Vector2;
 
 public class Force {
-	public static float GRAVITY_CONSTANT = 9.8f;
+	public static float GRAVITY_CONSTANT =	50f;
 	public static float JUMP_CONSTANT = 200f;
 	
 	private Vector2 m_direction;

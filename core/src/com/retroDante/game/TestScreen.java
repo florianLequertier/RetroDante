@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.Controllable.KeyStatus;
 
 public class TestScreen implements Screen, InputProcessor{
 
@@ -27,14 +28,19 @@ public class TestScreen implements Screen, InputProcessor{
 		batch = new SpriteBatch();
 		font = new BitmapFont();	
 		
-    	player = new Player(new Texture(Gdx.files.internal("badlogic.jpg")));
+		TileSetInfo playerTileSet = new TileSetInfo("badlogic.jpg", "D:/git_repo/RetroDante/desktop/bin/aaa.txt");
+    	player = new Player(playerTileSet, 0);//new Texture(Gdx.files.internal("badlogic.jpg"))
     	player.setPosition(new Vector2(200, 200));
+    	//player.addConstantForce(new Force(new Vector2( 0, 9), Force.TypeOfForce.CONSTANT));
     	
     	//platforms : 
-    	Element2D platform = Element2D.StaticElement(new Texture(Gdx.files.internal("badlogic.jpg")));
+    	TileSetInfo platformTileSet = new TileSetInfo("badlogic.jpg", "D:/git_repo/RetroDante/desktop/bin/aaa.txt");
+    	Element2D platform = new Platform(platformTileSet, 0);
     	platform.setPosition(new Vector2(200, 100));
     	
     	m_platformContainer.add(platform);
+    	
+    	Gdx.input.setInputProcessor(this);
 		
 	}
 	
@@ -47,8 +53,11 @@ public class TestScreen implements Screen, InputProcessor{
 	@Override
 	public void render(float delta) {
 		
+		//update de la logique :
 		update(delta*10.f);
 		
+		
+		//update du rendu : 
 		 Gdx.gl.glClearColor(0.2f, 0.2f,0.2f, 1f);
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	         
@@ -97,13 +106,13 @@ public class TestScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
+		player.listenKey(KeyStatus.DOWN, keycode);
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		player.listenKey(KeyStatus.UP, keycode);
 		return false;
 	}
 

@@ -192,7 +192,6 @@ public class Rigidbody {
 		Iterator<Force> it = m_tabForce.iterator();
 		while(it.hasNext())
 		{
-			System.out.println("coucou");
 			Force f = it.next();
 			if(!f.update(deltaTime))
 			{

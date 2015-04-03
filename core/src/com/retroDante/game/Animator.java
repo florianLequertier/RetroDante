@@ -45,7 +45,9 @@ public class Animator{
 	
 	TextureRegion getCurrentFrame()
 	{
+		if(m_isPlaying)
 		m_currentFrame = (float) m_timer.getElapsedTime();
+		
 		return m_animationContainer.get(m_currentAnimation).getKeyFrame(m_currentFrame, m_isLooping);
 	}
 	

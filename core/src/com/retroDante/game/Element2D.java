@@ -43,7 +43,7 @@ public class Element2D extends Rigidbody implements Drawable{
 	
 	private Texture m_visual;
 	private TextureRegion m_texRegion;
-	private Animator m_animator;
+	protected Animator m_animator;
 	
 	
 	//constructeurs et factories : 
@@ -54,6 +54,14 @@ public class Element2D extends Rigidbody implements Drawable{
 		m_texRegion = new TextureRegion(m_visual, 0,0, (int)getUnit().x, (int)getUnit().y );
 		m_animator = new Animator( new Animation(900, m_texRegion));
 	}
+	Element2D(TileSetInfo tileSet, int spriteIndex)
+	{
+		m_visual = tileSet.getTexture();
+		m_texRegion = tileSet.get(spriteIndex);
+		m_animator = new Animator( new Animation(900, m_texRegion));
+		setDimension(new Vector2(m_texRegion.getRegionWidth(), m_texRegion.getRegionHeight()));
+	}
+
 	
 	/**
 	 * Cette fonction est une factory créant un element "static" (n'usant pas la gravitée, mais étant solide) :
@@ -85,7 +93,6 @@ public class Element2D extends Rigidbody implements Drawable{
 		Element2D newElement = new Element2D(tex);
 		newElement.makeSolidBody();
 		
-		String path = "img/image02.png";
 		newElement.m_visual = tex;
 		newElement.m_texRegion = new TextureRegion(newElement.m_visual, 0,0, (int)getUnit().x, (int)getUnit().y );
 		newElement.m_animator = new Animator( new Animation(900, newElement.m_texRegion));
@@ -132,14 +139,20 @@ public class Element2D extends Rigidbody implements Drawable{
 	//updates : 
 	public void update(float deltaTime)
 	{
+		updateAnimation(deltaTime);
 		updateForces(deltaTime);
 		updateMovement(deltaTime);
+	}
+	
+	public void updateAnimation(float deltaTime)
+	{
+		m_texRegion = m_animator.getCurrentFrame();
 	}
 	
 	public void updateMovement(float deltaTime)
 	{
 		m_velocity.add(getForceResult());//ajout des forces
-		m_velocity.mulAdd(m_velocity, deltaTime);
+		m_velocity.scl( deltaTime);
 		move( m_velocity );
 
 		
