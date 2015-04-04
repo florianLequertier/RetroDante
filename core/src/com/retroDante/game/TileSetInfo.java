@@ -19,21 +19,27 @@ import com.badlogic.gdx.utils.Array;
 public class TileSetInfo {
 	
 	String m_name;
+	int m_spriteNumber;
+	int m_spriteByLine[];
 	int m_lineNumber;
 	Texture m_texture;
 	TextureRegion[][] m_textureRegion;
 	
 	TileSetInfo(String TexturePath, String DescriptionPath)
 	{
-		m_texture = new Texture(Gdx.files.internal(TexturePath));
+		String localPath = Gdx.files.getLocalStoragePath();
+		
+		m_texture = new Texture(localPath+"/asset/"+TexturePath);
+		m_spriteNumber = 0;
 		
 		Scanner lecteur;
 		try {
 			
-			lecteur = new Scanner(new File(DescriptionPath));
+			lecteur = new Scanner(new File(localPath+"/asset/"+DescriptionPath));
 			
 			m_name = lecteur.nextLine();
 			m_lineNumber = lecteur.nextInt();
+			m_spriteByLine = new int[m_lineNumber];
 			
 			m_textureRegion = new TextureRegion[m_lineNumber][];
 			int posX = 0;
@@ -41,6 +47,7 @@ public class TileSetInfo {
 			for(int i= 0; i<m_lineNumber; i++)
 			{
 				int nbSprite = lecteur.nextInt();
+				m_spriteByLine[i] = nbSprite;
 				int height = lecteur.nextInt();
 				
 				
@@ -50,6 +57,7 @@ public class TileSetInfo {
 					int width = lecteur.nextInt();
 					m_textureRegion[i][j] = new TextureRegion(m_texture, posX, posY, width, height);
 					posX += width;
+					m_spriteNumber++;
 				}
 
 				
@@ -67,16 +75,31 @@ public class TileSetInfo {
 	
 	TextureRegion get(int index)
 	{
-		if(index >= m_textureRegion.length * m_textureRegion[0].length)
+		if(index >= m_spriteNumber)
 		{
-			while(index >= m_textureRegion.length * m_textureRegion[0].length)
+			while(index >= m_spriteNumber)
 			{
-				index -= m_textureRegion.length * m_textureRegion[0].length;
+				index -= m_spriteNumber;
 			}
 		}
 		
-		int indexRow = index / m_textureRegion[0].length;
-		int indexColl = index % m_textureRegion[0].length;
+		
+		int indexRow = 0;
+		int indexColl = 0;
+		
+		int result = index;
+		while(result > 0)
+		{
+			result -= m_spriteByLine[indexRow];
+			
+			if(result >= 0)
+			{
+				indexRow++;
+				index -= m_spriteByLine[indexRow];
+			}
+		}
+		indexColl = index;
+	
 		
 		return m_textureRegion[indexRow][indexColl];
 	}

@@ -8,6 +8,8 @@ public class Platform extends Element2D{
 	{
 		super(tex);
 		this.makeStaticBody();
+		
+		m_type = "platform";
 
 	}
 	
@@ -15,6 +17,8 @@ public class Platform extends Element2D{
 	{
 		super(tileSet, spriteIndex);
 		this.makeStaticBody();
+		
+		m_type = "platform";
 
 	}
 }

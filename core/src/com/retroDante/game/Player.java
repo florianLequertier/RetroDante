@@ -35,6 +35,7 @@ public class Player extends Element2D implements Controllable{
 		super(tileSet, spriteIndex);
 		this.makeSolidBody();
 		
+		m_type = "player";
 		m_life = 100.f;
 		m_speed = 10.f;
 		m_isDead = false;
@@ -48,7 +49,11 @@ public class Player extends Element2D implements Controllable{
 		super(tileSet, spriteIndex);
 		this.makeSolidBody();
 		m_animator = new Animator(tileSet.getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator.changeSpeed(deltaAnim);
+		m_animator.changeAnimation(0);
+		m_animator.play(true);
 		
+		m_type = "player";
 		m_life = 100.f;
 		m_speed = 10.f;
 		m_isDead = false;
@@ -95,7 +100,6 @@ public class Player extends Element2D implements Controllable{
 	{
 		checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
 		super.update(deltaTime, others);
-
 	}
 	@Override
 	public void update(float deltaTime)

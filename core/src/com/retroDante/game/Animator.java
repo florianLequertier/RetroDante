@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 public class Animator{
 	
 	List<Animation> m_animationContainer = new ArrayList<Animation>();
-	private Clock m_timer;
+	private Clock m_timer = new Clock();
 	int m_currentAnimation;
 	float m_currentFrame;
 	boolean m_isPlaying;

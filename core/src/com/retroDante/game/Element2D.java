@@ -41,6 +41,7 @@ public class Element2D extends Rigidbody implements Drawable{
 	}
 	
 	
+	protected String m_type;
 	private Texture m_visual;
 	private TextureRegion m_texRegion;
 	protected Animator m_animator;
@@ -50,12 +51,14 @@ public class Element2D extends Rigidbody implements Drawable{
 	
 	Element2D(Texture tex)
 	{
+		m_type = "element2D";
 		m_visual = tex;
 		m_texRegion = new TextureRegion(m_visual, 0,0, (int)getUnit().x, (int)getUnit().y );
 		m_animator = new Animator( new Animation(900, m_texRegion));
 	}
 	Element2D(TileSetInfo tileSet, int spriteIndex)
 	{
+		m_type = "element2D";
 		m_visual = tileSet.getTexture();
 		m_texRegion = tileSet.get(spriteIndex);
 		m_animator = new Animator( new Animation(900, m_texRegion));
@@ -75,6 +78,7 @@ public class Element2D extends Rigidbody implements Drawable{
 		Element2D newElement = new Element2D(tex);
 		newElement.makeStaticBody();
 		
+		newElement.m_type = "element2D";
 		newElement.m_visual = tex;
 		newElement.m_texRegion = new TextureRegion(newElement.m_visual, 0,0, (int)getUnit().x, (int)getUnit().y );
 		newElement.m_animator = new Animator( new Animation(900, newElement.m_texRegion));
@@ -93,6 +97,7 @@ public class Element2D extends Rigidbody implements Drawable{
 		Element2D newElement = new Element2D(tex);
 		newElement.makeSolidBody();
 		
+		newElement.m_type = "element2D";
 		newElement.m_visual = tex;
 		newElement.m_texRegion = new TextureRegion(newElement.m_visual, 0,0, (int)getUnit().x, (int)getUnit().y );
 		newElement.m_animator = new Animator( new Animation(900, newElement.m_texRegion));
@@ -143,6 +148,13 @@ public class Element2D extends Rigidbody implements Drawable{
 		updateForces(deltaTime);
 		updateMovement(deltaTime);
 	}
+	public void update(float deltaTime, List<Element2D> others)
+	{
+		updateAnimation(deltaTime);
+		updateForces(deltaTime);
+		updateMovement(deltaTime, others);
+	}
+	
 	
 	public void updateAnimation(float deltaTime)
 	{
@@ -160,12 +172,6 @@ public class Element2D extends Rigidbody implements Drawable{
 		m_velocity = Vector2.Zero;
 	}
 
-	public void update(float deltaTime, List<Element2D> others)
-	{
-		updateForces(deltaTime);
-		updateMovement(deltaTime, others);
-	}
-	
 	public void updateMovement(float deltaTime, List<Element2D> others)
 	{
 		m_velocity.add(getForceResult());//ajout des forces

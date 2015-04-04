@@ -28,13 +28,16 @@ public class TestScreen implements Screen, InputProcessor{
 		batch = new SpriteBatch();
 		font = new BitmapFont();	
 		
-		TileSetInfo playerTileSet = new TileSetInfo("badlogic.jpg", "D:/git_repo/RetroDante/desktop/bin/aaa.txt");
-    	player = new Player(playerTileSet, 0);//new Texture(Gdx.files.internal("badlogic.jpg"))
+		TileSetManager tileSetManager = new TileSetManager();
+		tileSetManager.load(Gdx.files.getLocalStoragePath()+"/asset/"+"textureInfo/tileSetManagerLoader.txt");
+		
+		TileSetInfo playerTileSet = tileSetManager.get("test_player");
+    	player = new Player(playerTileSet, 0, 1);//new Texture(Gdx.files.internal("badlogic.jpg"))
     	player.setPosition(new Vector2(200, 200));
     	//player.addConstantForce(new Force(new Vector2( 0, 9), Force.TypeOfForce.CONSTANT));
     	
     	//platforms : 
-    	TileSetInfo platformTileSet = new TileSetInfo("badlogic.jpg", "D:/git_repo/RetroDante/desktop/bin/aaa.txt");
+    	TileSetInfo platformTileSet = new TileSetInfo("texture/badlogic.jpg", "textureInfo/aaa.txt");
     	Element2D platform = new Platform(platformTileSet, 0);
     	platform.setPosition(new Vector2(200, 100));
     	
