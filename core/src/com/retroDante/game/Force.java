@@ -3,8 +3,8 @@ package com.retroDante.game;
 import com.badlogic.gdx.math.Vector2;
 
 public class Force {
-	public static float GRAVITY_CONSTANT =	50f;
-	public static float JUMP_CONSTANT = 200f;
+	public static float GRAVITY_CONSTANT =	200f;
+	public static float JUMP_CONSTANT = 700f;
 	
 	private Vector2 m_direction;
 	private float m_initialIntensity;
@@ -23,7 +23,7 @@ public class Force {
 	static Force Jump()
 	{
 		Force f = new Force(new Vector2(0.f, JUMP_CONSTANT), TypeOfForce.LINEAR);
-		f.m_decreaseFactor = -50.f;
+		f.m_decreaseFactor = -700.f;
 		return f;
 	}
 	

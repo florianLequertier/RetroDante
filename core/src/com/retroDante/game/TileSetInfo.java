@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -132,5 +133,16 @@ public class TileSetInfo {
 	Texture getTexture()
 	{
 		return m_texture;
+	}
+	
+	
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("name : ").append(m_name).append(", nombre de sprite : ").append(m_spriteNumber);
+		
+		
+		return builder.toString();
 	}
 }

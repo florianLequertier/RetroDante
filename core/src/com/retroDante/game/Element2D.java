@@ -10,17 +10,16 @@ import java.io.IOException;
 import java.util.List;
 
 
-
-
-
-
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 
-public class Element2D extends Rigidbody implements Drawable{
+public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 	
 	/*Vector2 m_position = new Vector2(0,0);
 	Vector2 m_velocity = new Vector2(0,0);
@@ -45,12 +44,14 @@ public class Element2D extends Rigidbody implements Drawable{
 	private Texture m_visual;
 	private TextureRegion m_texRegion;
 	protected Animator m_animator;
+	private float m_animationSpeed;
 	
 	
 	//constructeurs et factories : 
 	
 	Element2D(Texture tex)
 	{
+		m_animationSpeed = 60;
 		m_type = "element2D";
 		m_visual = tex;
 		m_texRegion = new TextureRegion(m_visual, 0,0, (int)getUnit().x, (int)getUnit().y );
@@ -58,6 +59,7 @@ public class Element2D extends Rigidbody implements Drawable{
 	}
 	Element2D(TileSetInfo tileSet, int spriteIndex)
 	{
+		m_animationSpeed = 60;
 		m_type = "element2D";
 		m_visual = tileSet.getTexture();
 		m_texRegion = tileSet.get(spriteIndex);
@@ -138,6 +140,16 @@ public class Element2D extends Rigidbody implements Drawable{
 		m_visual = texture;
 	}
 	
+	public void setAnimationSpeed(float newSpeed)
+	{
+		m_animationSpeed = newSpeed;
+		m_animator.changeSpeed(m_animationSpeed);
+	}
+	
+	public float getAnimationSpeed()
+	{
+		return m_animationSpeed;
+	}
 	
 	
 	
@@ -236,6 +248,22 @@ public class Element2D extends Rigidbody implements Drawable{
 	public void draw(SpriteBatch batch) {
 		Vector2 position = new Vector2(this.m_collider.getX(), this.m_collider.getY());
 		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
+	}
+	
+	
+	//serializable : 
+	
+	@Override
+	public void write(Json json) {
+		super.write(json);
+		json.writeValue("m_type", m_type);
+		json.writeValue("m_animationSpeed", m_animationSpeed);
+	}
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		super.read(json, jsonData);
+		m_type = jsonData.child().getString("m_type");
+		setAnimationSpeed( jsonData.child().getFloat("m_animationSpeed") );
 	}
 	
 	

@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
 
-public class Rigidbody {
+public class Rigidbody implements Json.Serializable{
 	
 	protected Vector2 m_velocity = new Vector2(0,0);
 	protected Rectangle m_collider = new Rectangle(0,0,32,32);
@@ -250,6 +252,30 @@ public class Rigidbody {
 				return true;
 			else
 				return false;
+		}
+
+		@Override
+		public void write(Json json) {
+			
+			//save de la position de l'entitée : 
+			json.writeValue("m_colliderPosX", m_collider.getX());
+			json.writeValue("m_colliderPosY", m_collider.getY());
+			json.writeValue("m_colliderWidth", m_collider.getWidth());
+			json.writeValue("m_colliderHeight", m_collider.getHeight());
+
+		}
+
+		@Override
+		public void read(Json json, JsonValue jsonData) {
+			
+			//load de la position de l'entitée : 
+			float posX = jsonData.child().getFloat("m_colliderPosX");
+			float posY = jsonData.child().getFloat("m_colliderPosY");
+			float width = jsonData.child().getFloat("m_colliderWidth");
+			float height = jsonData.child().getFloat("m_colliderHeight");
+
+			m_collider = new Rectangle(posX, posY, width, height);
+			
 		}
 
 		

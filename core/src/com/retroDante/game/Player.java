@@ -2,11 +2,16 @@ package com.retroDante.game;
 
 import java.util.List;
 
+import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.retroDante.game.Controllable.KeyStatus;
 
-public class Player extends Element2D implements Controllable{
+public class Player extends Element2D implements Json.Serializable, Controllable {
 	
 	float m_life;
 	float m_speed;
@@ -14,16 +19,18 @@ public class Player extends Element2D implements Controllable{
 	boolean m_isGrounded;
 	PlayerController m_controller;
 	
+	
 	/**
 	 * Le player est un solidBody 
 	 */
+	
 	Player(Texture tex) 
 	{
 		super(tex);
 		this.makeSolidBody();
 		
 		m_life = 100.f;
-		m_speed = 10.f;
+		m_speed = 60.f;
 		m_isDead = false;
 		
 		m_controller = new PlayerController();
@@ -37,7 +44,7 @@ public class Player extends Element2D implements Controllable{
 		
 		m_type = "player";
 		m_life = 100.f;
-		m_speed = 10.f;
+		m_speed = 60.f;
 		m_isDead = false;
 		
 		m_controller = new PlayerController();
@@ -48,25 +55,59 @@ public class Player extends Element2D implements Controllable{
 	{
 		super(tileSet, spriteIndex);
 		this.makeSolidBody();
+		
 		m_animator = new Animator(tileSet.getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
-		m_animator.changeSpeed(deltaAnim);
+		setAnimationSpeed(deltaAnim);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
 		
 		m_type = "player";
 		m_life = 100.f;
-		m_speed = 10.f;
+		m_speed = 60.f;
 		m_isDead = false;
 		
 		m_controller = new PlayerController();
 		
 	}
 	
+	Player()
+	{
+		super( TileSetManager.getInstance().get("player"), 0);
+		this.makeSolidBody();
+		
+		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
+		setAnimationSpeed(1.f);
+		m_animator.changeAnimation(0);
+		m_animator.play(true);
+		
+		m_type = "player";
+		m_life = 100.f;
+		m_speed = 60.f;
+		m_isDead = false;
+		
+		m_controller = new PlayerController();
+		
+	}
+	
+	//setters/ getters : 
+	
+	void setLife(float life)
+	{
+		m_life = life;
+	}
+	
+	float getLife()
+	{
+		return m_life;
+	}
 	
 	void kill()
 	{
 		m_isDead = true;
 	}
+	
+	
+	//overrides Controllers : 
 	
 	@Override
 	public void listenKey(KeyStatus status, int keycode) {
@@ -95,6 +136,7 @@ public class Player extends Element2D implements Controllable{
 		}
 	}
 	
+	//Override element2D :
 	@Override
 	public void update(float deltaTime, List<Element2D> others)
 	{
@@ -161,6 +203,55 @@ public class Player extends Element2D implements Controllable{
 		m_velocity = Vector2.Zero;
 	}
 	
+	//loader Json : 
+	
+	static Player load(String filePath)
+	{
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
+		String fileString = file.readString();
+		System.out.println(fileString);
+		Json json = new Json();
+		Player player = json.fromJson(Player.class, fileString);
+		return player;
+	}
+	void save(String filePath)
+	{
+		Json json = new Json();
+		String text = json.toJson(this);
+		System.out.println(text);
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);// internal(filePath);
+		file.writeString(text, false);
+	}
+	
+	@Override
+	public void write(Json json) {
+		json.writeObjectStart("player");
+			super.write(json);
+			json.writeValue("m_life", m_life);
+			json.writeValue("m_speed", m_speed);
+		json.writeObjectEnd();
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		super.read(json, jsonData);
+		System.out.println(jsonData);
+		m_speed = jsonData.child().getFloat("m_speed");
+		m_life = jsonData.child().getFloat("m_life");
+	}
+	
+	//autres methodes : 
+	
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Player : \n").append("\n vie : ").append(m_life).append("\n vitesse : ").append(m_speed).append("\n position : ").append(getPosition().toString()).append("\n vitesse d'animation :  ").append(getAnimationSpeed());
+		
+		return builder.toString();
+		
+	}
+		
 	
 
 }

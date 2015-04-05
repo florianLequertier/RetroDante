@@ -21,4 +21,13 @@ public class Platform extends Element2D{
 		m_type = "platform";
 
 	}
+	
+	Platform() 
+	{
+		super(TileSetManager.getInstance().get("platform"), 0);
+		this.makeStaticBody();
+		
+		m_type = "platform";
+
+	}
 }
