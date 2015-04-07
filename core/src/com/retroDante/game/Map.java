@@ -4,14 +4,19 @@ package com.retroDante.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
-public class Map implements Drawable{
+public class Map implements Drawable, Json.Serializable{
 
 	List<MapLayout> m_backgrounds;
 	List<MapLayout> m_foregrounds;
 	MapLayout m_mainground;
+
 	
 	//constructeur : 
 	Map()
@@ -108,6 +113,8 @@ public class Map implements Drawable{
 		return m_mainground.getElements();
 	}
 	
+	
+	
 	//Override drawable : 
 	@Override
 	public void draw(SpriteBatch batch) {
@@ -121,6 +128,131 @@ public class Map implements Drawable{
 		{
 			layout.draw(batch);
 		}
+	}
+	
+	//parrallax : 
+	public void drawWithParralax(SpriteBatch batch) {
+		
+		for(MapLayout layout : m_backgrounds)
+		{
+			layout.drawWithParralax(batch);
+		}
+		m_mainground.draw(batch);
+		for(MapLayout layout : m_foregrounds)
+		{
+			layout.drawWithParralax(batch);
+		}
+	}
+	
+	public void updateParralax(GameCamera camera)
+	{
+		int backgroundIndex = m_backgrounds.size();
+		for(MapLayout layout : m_backgrounds)
+		{
+			float newParralaxDecalX = -backgroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+			float newParralaxDecalY = -backgroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+			
+			layout.setParralxDecal( new Vector2(newParralaxDecalX, newParralaxDecalY) );
+			
+			backgroundIndex--;
+		}
+		
+		
+		int foregroundIndex = 0;
+		for(MapLayout layout : m_foregrounds)
+		{
+			float newParralaxDecalX = -foregroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+			float newParralaxDecalY = -foregroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+			
+			layout.setParralxDecal( new Vector2(newParralaxDecalX, newParralaxDecalY) );
+			
+			foregroundIndex++;
+		}
+	}
+	
+	//serialisation : 
+	
+	static Map load(String filePath)
+	{
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
+		String fileString = file.readString();
+		Json json = new Json();
+		Map map = json.fromJson(Map.class, fileString);
+		return map;
+	}
+	void save(String filePath)
+	{
+		Json json = new Json();
+		String text = json.toJson(this);
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);// internal(filePath);
+		file.writeString(text, false);
+	}
+	
+	@Override
+	public void write(Json json) {
+		json.writeArrayStart("foregrounds");
+			for(MapLayout lay : m_foregrounds)
+			{
+				lay.write(json);
+			}
+		json.writeArrayEnd();
+		
+		json.writeObjectStart("mainground");
+			m_mainground.write(json);
+		json.writeObjectEnd();
+		
+		json.writeArrayStart("backgrounds");
+			for(MapLayout lay : m_backgrounds)
+			{
+				lay.write(json);
+			}
+		json.writeArrayEnd();
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		System.out.println(jsonData);
+		JsonValue tempValue;
+		JsonValue tempLayout;
+		
+		tempValue = jsonData.child();//.getChild("foregrounds");
+		System.out.println("child : "+tempValue.toString());
+		int size = tempValue.size;
+			for(int i=0; i< size; i++)
+			{
+				tempLayout = tempValue.get(i);
+				for(int j=0; j< tempLayout.size; j++)
+				{
+					Element2D newElement = json.fromJson(Platform.class, tempLayout.getString(j));
+					this.addToForeground(i, newElement);
+				}
+			}
+			
+		tempValue = jsonData.get("mainground");//.getChild("foregrounds");
+		System.out.println("child : "+tempValue.toString());
+		tempLayout = tempValue.get("layout");
+		System.out.println("child : "+tempLayout.toString());
+		for(int j=0; j< tempLayout.size; j++)
+		{
+			Element2D newElement = json.fromJson(Platform.class, tempLayout.getString(j));
+			this.addToMainground( newElement);
+		}
+		
+		
+		
+		tempValue = jsonData.next();//.getChild("foregrounds");
+		System.out.println("child : "+tempValue.toString());
+		size = tempValue.size;
+		for(int i=0; i< size; i++)
+			{
+				tempLayout = tempValue.get(i);
+				for(int j=0; j< tempLayout.size; j++)
+				{
+					Element2D newElement = json.fromJson(Platform.class, tempLayout.getString(j));
+					this.addToBackground(i, newElement);
+				}
+			}
 	}
 
 	

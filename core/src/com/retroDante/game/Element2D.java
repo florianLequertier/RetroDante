@@ -250,6 +250,13 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
 	}
 	
+	public void drawWithParralax(SpriteBatch batch, float decalX, float decalY) {
+		
+		Vector2 position = new Vector2(this.m_collider.getX()+decalX, this.m_collider.getY() +decalY);
+		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
+		
+	}
+	
 	
 	//serializable : 
 	

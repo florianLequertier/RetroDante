@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.retroDante.game.Controllable.KeyStatus;
 
@@ -19,6 +20,7 @@ public class TestScreen implements Screen, InputProcessor{
 
 	private SpriteBatch batch;
     private BitmapFont font;
+    GameCamera gameCamera;
     Player player;
     List<Element2D> m_platformContainer = new ArrayList<Element2D>();
     Map map;
@@ -29,17 +31,26 @@ public class TestScreen implements Screen, InputProcessor{
 	public void show() {
 		
 		batch = new SpriteBatch();
-		font = new BitmapFont();	
+		font = new BitmapFont();
+		
+		//camear : 
+		gameCamera = new GameCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
+		batch.setProjectionMatrix(gameCamera.combined);
+		
 
 		TileSetManager tileSetManager = TileSetManager.getInstance();
 		tileSetManager.load(Gdx.files.getLocalStoragePath()+"/asset/"+"textureInfo/tileSetManagerLoader.txt");
 		System.out.println(tileSetManager.toString());
 		
 		map = Map.createMapTest();
+		map.save("test_save_map.txt");
+		Map.load("test_save_map.txt");
+		gameCamera.setParralaxTarget(map); //observe camera
 		
 		TileSetInfo playerTileSet = tileSetManager.get("player");
     	player = new Player(playerTileSet, 0, 1);//new Texture(Gdx.files.internal("badlogic.jpg"))
     	player.setPosition(new Vector2(200, 400));
+    	player.setCamera(gameCamera);
     	
     	//test save : 
     	//player.setPosition(new Vector2(100,300));
@@ -66,6 +77,9 @@ public class TestScreen implements Screen, InputProcessor{
     	m_platformContainer.add(platform);
     	
     	Gdx.input.setInputProcessor(this);
+    	
+    	gameCamera.setPosition(player.getPosition());
+    	gameCamera.update(); //update camera
 		
 	}
 	
@@ -82,7 +96,9 @@ public class TestScreen implements Screen, InputProcessor{
 	@Override
 	public void render(float delta) {
 		
-		
+		//updateCamera
+		gameCamera.update();
+		batch.setProjectionMatrix(gameCamera.combined);
 		//update de la logique :
 		update(delta);
 		

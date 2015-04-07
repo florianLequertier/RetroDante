@@ -18,7 +18,7 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	boolean m_isDead;
 	boolean m_isGrounded;
 	PlayerController m_controller;
-	
+	GameCamera m_camera;
 	
 	/**
 	 * Le player est un solidBody 
@@ -91,17 +91,27 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	
 	//setters/ getters : 
 	
-	void setLife(float life)
+	public void setCamera(GameCamera newCamera)
+	{
+		m_camera = newCamera;
+	}
+	
+	public void removeCamera()
+	{
+		m_camera = null;
+	}
+	
+	public void setLife(float life)
 	{
 		m_life = life;
 	}
 	
-	float getLife()
+	public float getLife()
 	{
 		return m_life;
 	}
 	
-	void kill()
+	public void kill()
 	{
 		m_isDead = true;
 	}
@@ -198,6 +208,12 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 			move( new Vector2(0.f, m_velocity.y) );
 		
 		
+		//on bouge la camera si elle est présente : 
+		if(m_camera != null)
+		{
+			m_camera.follow( m_collider.getCenter(new Vector2(0,0)) );// getPosition().add( new Vector2(m_collider.getWidth()*0.5f, m_collider.getHeight()*0.5f) ) );
+		}
+			
 		
 		//réinitialisation : 
 		m_velocity = Vector2.Zero;
