@@ -42,9 +42,10 @@ public class TestScreen implements Screen, InputProcessor{
 		tileSetManager.load(Gdx.files.getLocalStoragePath()+"/asset/"+"textureInfo/tileSetManagerLoader.txt");
 		System.out.println(tileSetManager.toString());
 		
+		//test map save : OK (magie avec plateform !!! )
 		map = Map.createMapTest();
 		map.save("test_save_map.txt");
-		Map.load("test_save_map.txt");
+		map = Map.load("test_save_map.txt");
 		gameCamera.setParralaxTarget(map); //observe camera
 		
 		TileSetInfo playerTileSet = tileSetManager.get("player");
@@ -52,19 +53,20 @@ public class TestScreen implements Screen, InputProcessor{
     	player.setPosition(new Vector2(200, 400));
     	player.setCamera(gameCamera);
     	
-    	//test save : 
-    	//player.setPosition(new Vector2(100,300));
-    	//player.setLife(10);
-    	//player.save("test_save_player.txt");
-    	//player = Player.load("test_save_player.txt");
-    	System.out.println(player.toString());
+    	//test save player, OK : 
     	
-		//Json json = new Json();
-		//String text = json.toJson(player);
-		//System.out.println(text);
-		//FileHandle file = Gdx.files.local("test_save_player.txt");
-		//file.writeString(text, true);
-		//json.toJson(player, Gdx.files.internal("test_save_player.txt"));
+	    	//player.setPosition(new Vector2(100,300));
+	    	//player.setLife(10);
+	    	//player.save("test_save_player.txt");
+	    	//player = Player.load("test_save_player.txt");
+	    	//System.out.println(player.toString());
+	    	
+			//Json json = new Json();
+			//String text = json.toJson(player);
+			//System.out.println(text);
+			//FileHandle file = Gdx.files.local("test_save_player.txt");
+			//file.writeString(text, true);
+			//json.toJson(player, Gdx.files.internal("test_save_player.txt"));
 		
 		//fin test save
 		
@@ -96,6 +98,10 @@ public class TestScreen implements Screen, InputProcessor{
 	@Override
 	public void render(float delta) {
 		
+		//System.out.println("framerate : "+delta);
+		if(delta > 0.5)
+			return;
+		
 		//updateCamera
 		gameCamera.update();
 		batch.setProjectionMatrix(gameCamera.combined);
@@ -111,6 +117,12 @@ public class TestScreen implements Screen, InputProcessor{
 	        
 		     font.draw(batch, "Bienvenue dans inGameScreen",50,Gdx.graphics.getHeight()-50);
 		     
+		     
+		     //arriere plan : 
+		     map.drawBackgroungWithParralax(batch);
+		     
+		     
+		     //plan du milieu : 
 		     player.draw(batch);
 		     
 		     for(Element2D e : m_platformContainer)
@@ -118,7 +130,15 @@ public class TestScreen implements Screen, InputProcessor{
 		    	 e.draw(batch);
 		     }
 		     
-		     map.draw(batch);
+		     //map.draw(batch);
+		     //map.drawWithParralax(batch); //version avec parralax
+		     map.drawMaingroundWithParralax(batch);
+		     
+		     
+		     //plan avant : 
+		     map.drawForegroundWithParralax(batch);
+		     
+		     
 	     
 	     batch.end();
 		

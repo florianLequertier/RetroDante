@@ -269,8 +269,8 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		super.read(json, jsonData);
-		m_type = jsonData.child().getString("m_type");
-		setAnimationSpeed( jsonData.child().getFloat("m_animationSpeed") );
+		m_type = jsonData.getString("m_type");
+		setAnimationSpeed( jsonData.getFloat("m_animationSpeed") );
 	}
 	
 	

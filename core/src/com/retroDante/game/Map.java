@@ -29,6 +29,7 @@ public class Map implements Drawable, Json.Serializable{
 	//factories : 
 	static public Map createMapTest()
 	{
+		//mainground : 
 		Map map = new Map();
 		Platform p = new Platform();
 		p.setPosition(new Vector2(400, 200));
@@ -39,6 +40,19 @@ public class Map implements Drawable, Json.Serializable{
 		p = new Platform();
 		p.setPosition(new Vector2(10, 200));
 			map.addToMainground(p);
+		
+		//background : 
+		p = new Platform();
+		p.setPosition(new Vector2(70, 450));
+			map.addToBackground(-1, p);
+		p = new Platform();
+		p.setPosition(new Vector2(70, 350));
+			map.addToBackground(-2, p);
+		p = new Platform();
+		p.setPosition(new Vector2(70, 250));
+			map.addToBackground(-3, p);
+		p.setPosition(new Vector2(70, 150));
+			map.addToBackground(-4, p);
 			
 		
 		return map;
@@ -47,28 +61,34 @@ public class Map implements Drawable, Json.Serializable{
 	//ajout à la map : 
 	void addToForeground(int index, Element2D element)
 	{
-		try
+		for(MapLayout layout : m_foregrounds)
 		{
-			MapLayout currentLayout = m_foregrounds.get(index);
-			currentLayout.addElement(element);
+			if(layout.getIndex() == index)
+			{
+				layout.addElement(element);
+				return;
+			}
 		}
-		catch(IndexOutOfBoundsException e)
-		{
-			System.out.println("mauvais ajout dans map : index incorrect");
-		}
+		MapLayout newLayout = new MapLayout();
+		newLayout.setIndex(index);
+		newLayout.addElement(element);
+		m_foregrounds.add(newLayout);
 	}
 	
 	void addToBackground(int index, Element2D element)
 	{
-		try
+		for(MapLayout layout : m_backgrounds)
 		{
-			MapLayout currentLayout = m_backgrounds.get(index);
-			currentLayout.addElement(element);
+			if(layout.getIndex() == index)
+			{
+				layout.addElement(element);
+				return;
+			}
 		}
-		catch(IndexOutOfBoundsException e)
-		{
-			System.out.println("mauvais ajout dans map : index incorrect");
-		}
+		MapLayout newLayout = new MapLayout();
+		newLayout.setIndex(index);
+		newLayout.addElement(element);
+		m_backgrounds.add(newLayout);
 	}
 	
 	void addToMainground(Element2D element)
@@ -79,27 +99,26 @@ public class Map implements Drawable, Json.Serializable{
 	//suppression de la map : 
 	void removeToForeground(int index, Element2D element)
 	{
-		try
+		for(MapLayout layout : m_foregrounds)
 		{
-			MapLayout currentLayout = m_foregrounds.get(index);
-			currentLayout.removeElement(element);
+			if(layout.getIndex() == index)
+			{
+				layout.removeElement(element);
+				return;
+			}
 		}
-		catch(IndexOutOfBoundsException e)
-		{
-			System.out.println("mauvais ajout dans map : index incorrect");
-		}
+
 	}
 	
 	void removeToBackground(int index, Element2D element)
 	{
-		try
+		for(MapLayout layout : m_backgrounds)
 		{
-			MapLayout currentLayout = m_backgrounds.get(index);
-			currentLayout.removeElement(element);
-		}
-		catch(IndexOutOfBoundsException e)
-		{
-			System.out.println("mauvais ajout dans map : index incorrect");
+			if(layout.getIndex() == index)
+			{
+				layout.removeElement(element);
+				return;
+			}
 		}
 	}
 	
@@ -142,31 +161,53 @@ public class Map implements Drawable, Json.Serializable{
 		{
 			layout.drawWithParralax(batch);
 		}
+	} 
+	public void drawBackgroungWithParralax(SpriteBatch batch) {
+		
+		for(MapLayout layout : m_backgrounds)
+		{
+			layout.drawWithParralax(batch);
+		}
+		
 	}
+	public void drawMaingroundWithParralax(SpriteBatch batch) {
+		
+		m_mainground.draw(batch);
+		
+	}
+	public void drawForegroundWithParralax(SpriteBatch batch) {
+
+		for(MapLayout layout : m_foregrounds)
+		{
+			layout.drawWithParralax(batch);
+		}
+		
+	}
+	
+	
 	
 	public void updateParralax(GameCamera camera)
 	{
-		int backgroundIndex = m_backgrounds.size();
+		int maxIndex = MapLayout.getMaxIndex();
+		
 		for(MapLayout layout : m_backgrounds)
 		{
-			float newParralaxDecalX = -backgroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
-			float newParralaxDecalY = -backgroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
 			
-			layout.setParralxDecal( new Vector2(newParralaxDecalX, newParralaxDecalY) );
+			float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+			float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
 			
-			backgroundIndex--;
+			layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
+
 		}
 		
 		
-		int foregroundIndex = 0;
 		for(MapLayout layout : m_foregrounds)
 		{
-			float newParralaxDecalX = -foregroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
-			float newParralaxDecalY = -foregroundIndex * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+			float newParralaxDecalX = ( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+			float newParralaxDecalY = ( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
 			
-			layout.setParralxDecal( new Vector2(newParralaxDecalX, newParralaxDecalY) );
-			
-			foregroundIndex++;
+			layout.setParralaxDecal( new Vector2(newParralaxDecalX, newParralaxDecalY) );
+
 		}
 	}
 	
@@ -190,7 +231,8 @@ public class Map implements Drawable, Json.Serializable{
 	
 	@Override
 	public void write(Json json) {
-		json.writeArrayStart("foregrounds");
+	
+		json.writeObjectStart("foregrounds");
 			for(MapLayout lay : m_foregrounds)
 			{
 				lay.write(json);
@@ -201,7 +243,7 @@ public class Map implements Drawable, Json.Serializable{
 			m_mainground.write(json);
 		json.writeObjectEnd();
 		
-		json.writeArrayStart("backgrounds");
+		json.writeObjectStart("backgrounds");
 			for(MapLayout lay : m_backgrounds)
 			{
 				lay.write(json);
@@ -215,42 +257,56 @@ public class Map implements Drawable, Json.Serializable{
 		System.out.println(jsonData);
 		JsonValue tempValue;
 		JsonValue tempLayout;
+		JsonValue tempElement;
+		JsonValue tempContainer;
+		int index = 0;
+		int size = 0;
 		
-		tempValue = jsonData.child();//.getChild("foregrounds");
-		System.out.println("child : "+tempValue.toString());
-		int size = tempValue.size;
-			for(int i=0; i< size; i++)
+		tempValue = jsonData.get("foregrounds");//.getChild("foregrounds");
+		size = tempValue.size;
+		for(int i=0; i< size; i++)
 			{
 				tempLayout = tempValue.get(i);
-				for(int j=0; j< tempLayout.size; j++)
+				index = tempLayout.getInt("m_index");
+				tempContainer = tempLayout.get("container");
+				
+				for(int j=0; j< tempContainer.size; j++)
 				{
-					Element2D newElement = json.fromJson(Platform.class, tempLayout.getString(j));
-					this.addToForeground(i, newElement);
+					tempElement = tempContainer.get(j);
+					
+					Element2D newElement = json.fromJson(Platform.class, tempElement.toString());
+					this.addToBackground(index, newElement);
 				}
 			}
 			
 		tempValue = jsonData.get("mainground");//.getChild("foregrounds");
-		System.out.println("child : "+tempValue.toString());
 		tempLayout = tempValue.get("layout");
-		System.out.println("child : "+tempLayout.toString());
-		for(int j=0; j< tempLayout.size; j++)
+		index = tempLayout.getInt("m_index");
+		tempContainer = tempLayout.get("container");
+		for(int j=0; j< tempContainer.size; j++)
 		{
-			Element2D newElement = json.fromJson(Platform.class, tempLayout.getString(j));
+			tempElement = tempContainer.get(j);
+
+			Element2D newElement = json.fromJson(Platform.class, tempElement.toString());
 			this.addToMainground( newElement);
 		}
 		
 		
 		
-		tempValue = jsonData.next();//.getChild("foregrounds");
-		System.out.println("child : "+tempValue.toString());
+		tempValue = jsonData.get("backgrounds");//.getChild("foregrounds");
 		size = tempValue.size;
 		for(int i=0; i< size; i++)
 			{
 				tempLayout = tempValue.get(i);
-				for(int j=0; j< tempLayout.size; j++)
+				index = tempLayout.getInt("m_index");
+				tempContainer = tempLayout.get("container");
+				
+				for(int j=0; j< tempContainer.size; j++)
 				{
-					Element2D newElement = json.fromJson(Platform.class, tempLayout.getString(j));
-					this.addToBackground(i, newElement);
+					tempElement = tempContainer.get(j);
+					
+					Element2D newElement = json.fromJson(Platform.class, tempElement.toString());
+					this.addToBackground(index, newElement);
 				}
 			}
 	}

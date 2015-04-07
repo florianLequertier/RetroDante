@@ -267,12 +267,12 @@ public class Rigidbody implements Json.Serializable{
 
 		@Override
 		public void read(Json json, JsonValue jsonData) {
-			
+			System.out.println("read in Rigidbody : "+jsonData.child().toString());
 			//load de la position de l'entitée : 
-			float posX = jsonData.child().getFloat("m_colliderPosX");
-			float posY = jsonData.child().getFloat("m_colliderPosY");
-			float width = jsonData.child().getFloat("m_colliderWidth");
-			float height = jsonData.child().getFloat("m_colliderHeight");
+			float posX = jsonData.getFloat("m_colliderPosX");
+			float posY = jsonData.getFloat("m_colliderPosY");
+			float width = jsonData.getFloat("m_colliderWidth");
+			float height = jsonData.getFloat("m_colliderHeight");
 
 			m_collider = new Rectangle(posX, posY, width, height);
 			

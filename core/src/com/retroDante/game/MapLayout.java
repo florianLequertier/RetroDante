@@ -12,12 +12,32 @@ import com.badlogic.gdx.utils.JsonValue;
 public class MapLayout implements Drawable, Json.Serializable {
 	
 	List<Element2D> m_container;
-	Vector2 m_parralxDecal = new Vector2(0,0);
+	Vector2 m_parralaxDecal = new Vector2(0,0);
 	float m_parralaxFactor = 1;
+	int m_index = 0;
+	static int s_maxIndex = 0;
+	static int getMaxIndex() { return s_maxIndex;}
+	
 	
 	MapLayout()
 	{
 		m_container = new ArrayList<Element2D>();
+	}
+	
+	public void setIndex(int newIndex)
+	{
+		m_index = newIndex;
+		int absIndex = Math.abs( m_index );
+		if( absIndex > s_maxIndex)
+		{
+			s_maxIndex = absIndex;
+			System.out.println("maxIndex : "+s_maxIndex);
+		}
+	}
+	
+	public int getIndex()
+	{
+		return m_index;
 	}
 	
 	void addElement(Element2D element)
@@ -35,9 +55,14 @@ public class MapLayout implements Drawable, Json.Serializable {
 		return m_container;
 	}
 	
-	public void setParralxDecal(Vector2 newParralaxDecal)
+	public void setParralaxDecal(Vector2 newParralaxDecal)
 	{
-		m_parralxDecal = newParralaxDecal;
+		m_parralaxDecal = newParralaxDecal;
+	}
+	
+	public Vector2 getParralaxDecal()
+	{
+		return m_parralaxDecal;
 	}
 	
 	public void setParralaxFactor(float newParralaxFactor)
@@ -64,7 +89,7 @@ public class MapLayout implements Drawable, Json.Serializable {
 		
 		for(Element2D element : m_container)
 		{
-			element.drawWithParralax(batch, 0, 0);
+			element.drawWithParralax(batch, m_parralaxDecal.x, m_parralaxDecal.y);
 		}	
 	}
 	
@@ -72,14 +97,17 @@ public class MapLayout implements Drawable, Json.Serializable {
 	@Override
 	public void write(Json json) {
 		
-		json.writeArrayStart("layout");
-			for(Element2D e : m_container)
-			{
-				json.writeObjectStart();
-					e.write(json);
-				json.writeObjectEnd();
-			}
-		json.writeArrayEnd();
+		json.writeObjectStart("layout");
+			json.writeValue("m_index", m_index); //new 
+			json.writeArrayStart("container");
+				for(Element2D e : m_container)
+				{
+					json.writeObjectStart();
+						e.write(json);
+					json.writeObjectEnd();
+				}
+			json.writeArrayEnd();
+		json.writeObjectEnd();
 			
 	}
 

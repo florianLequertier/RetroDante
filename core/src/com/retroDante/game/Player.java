@@ -251,10 +251,11 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		super.read(json, jsonData);
-		System.out.println(jsonData);
-		m_speed = jsonData.child().getFloat("m_speed");
-		m_life = jsonData.child().getFloat("m_life");
+		JsonValue playerData = jsonData.get("player");
+		super.read(json, playerData);
+		System.out.println("playerData = "+playerData);
+		m_speed = playerData.getFloat("m_speed");
+		m_life = playerData.getFloat("m_life");
 	}
 	
 	//autres methodes : 
