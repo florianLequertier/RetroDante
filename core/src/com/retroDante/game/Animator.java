@@ -1,6 +1,7 @@
 package com.retroDante.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 public class Animator{
 	
 	List<Animation> m_animationContainer = new ArrayList<Animation>();
+	HashMap<String, Integer> m_animationNames = new HashMap<String, Integer>();
 	private Clock m_timer = new Clock();
 	int m_currentAnimation;
 	float m_currentFrame;
@@ -33,17 +35,57 @@ public class Animator{
 		m_animationContainer = animationContainer;
 	}
 	
-	void setIsLooping(boolean newState)
+	Animator(List<Animation> animationContainer, String... names)
+	{
+		m_currentFrame = 0;
+		m_currentAnimation = 0;
+		m_isPlaying = false;
+		m_isLooping = true;
+		//m_animationContainer = animationContainer;
+		int index = 0;
+		for(Animation a : animationContainer)
+		{
+			if(index >=0 && index < names.length)
+			this.addAnimation(a, names[index]);
+			else
+			this.addAnimation(a);
+		}
+	}
+	
+	public void removeAllAnimations()
+	{
+		m_animationNames.clear();
+		m_animationContainer.clear();
+	}
+	
+	
+	public void addAnimation(Animation newAnimation) 
+	{
+		m_animationContainer.add(newAnimation);
+	}
+	
+	public void addAnimation(Animation newAnimation, String name)
+	{
+		m_animationContainer.add(newAnimation);
+		int index = m_animationContainer.indexOf(newAnimation);
+		m_animationNames.put(name, index);
+		if(index == -1)
+		{
+			System.out.println("ERREUR : \ndans Animator _ addAnimation : animation mal indexée.");
+		}
+	}
+	
+	public void setIsLooping(boolean newState)
 	{
 		m_isLooping = newState;
 	}
 	
-	boolean getIsLooping()
+	public boolean getIsLooping()
 	{
 		return m_isLooping;
 	}
 	
-	TextureRegion getCurrentFrame()
+	public TextureRegion getCurrentFrame()
 	{
 		if(m_isPlaying)
 		m_currentFrame = (float) m_timer.getElapsedTime();
@@ -51,12 +93,25 @@ public class Animator{
 		return m_animationContainer.get(m_currentAnimation).getKeyFrame(m_currentFrame, m_isLooping);
 	}
 	
-	int getCurrentAnimation()
+	public int getCurrentAnimation()
 	{
 		return m_currentAnimation;
 	}
 	
-	void changeAnimation(int animationIndex)
+	
+	public void changeAnimation(String animationName)
+	{
+		if(m_animationNames.containsKey(animationName))
+		{
+			m_currentAnimation = m_animationNames.get(animationName);
+		}
+		else
+		{
+			System.out.println("ERROR : \n Animator _ changeAnimation : animation non trouvée pour le nom donné");
+		}
+	}
+	
+	public void changeAnimation(int animationIndex)
 	{
 		m_currentAnimation = animationIndex;
 		if(m_currentAnimation < 0)
@@ -75,18 +130,18 @@ public class Animator{
 		}
 	}
 	
-	void play()
+	public void play()
 	{
 		m_isPlaying = true;
 		m_timer.restart();
 	}
-	void play(boolean isLooping)
+	public void play(boolean isLooping)
 	{
 		m_isLooping = isLooping;
 		m_isPlaying = true;
 		m_timer.restart();
 	}
-	void playAt(float animationSpeed)
+	public void playAt(float animationSpeed)
 	{
 		m_isPlaying = true;
 		m_timer.restart();
@@ -95,7 +150,7 @@ public class Animator{
 			a.setFrameDuration(animationSpeed);
 		}
 	}
-	void playAt(boolean isLooping, float animationSpeed)
+	public void playAt(boolean isLooping, float animationSpeed)
 	{
 		m_isLooping = isLooping;
 		m_isPlaying = true;
@@ -106,19 +161,19 @@ public class Animator{
 		}
 	}
 	
-	void stop()
+	public void stop()
 	{
 		m_isPlaying = false;
 		m_timer.restart();
 	}
-	void changeMode(Animation.PlayMode playMode)
+	public void changeMode(Animation.PlayMode playMode)
 	{
 		for(Animation a : m_animationContainer)
 		{
 			a.setPlayMode(playMode);
 		}
 	}
-	void changeSpeed(float animationSpeed)
+	public void changeSpeed(float animationSpeed)
 	{
 		for(Animation a : m_animationContainer)
 		{

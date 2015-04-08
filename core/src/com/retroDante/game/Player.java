@@ -51,7 +51,7 @@ public class Player extends Character implements  Controllable {
 		m_type = "player";
 		m_controller = new PlayerController();
 		
-		m_animator = new Animator(tileSet.getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator = new Animator(tileSet.getForAnimation(0,1,2), "idle", "walkRight", "walkLeft"); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(deltaAnim);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
