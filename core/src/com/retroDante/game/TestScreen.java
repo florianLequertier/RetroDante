@@ -24,6 +24,7 @@ public class TestScreen implements Screen, InputProcessor{
     Player player;
     List<Element2D> m_platformContainer = new ArrayList<Element2D>();
     Map map;
+    TriggerManager triggerManager;
     
     
 	
@@ -33,7 +34,7 @@ public class TestScreen implements Screen, InputProcessor{
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		
-		//camear : 
+		//camera : 
 		gameCamera = new GameCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
 		batch.setProjectionMatrix(gameCamera.combined);
 		
@@ -78,6 +79,19 @@ public class TestScreen implements Screen, InputProcessor{
     	platform.setPosition(new Vector2(200, 100));
     	m_platformContainer.add(platform);
     	
+    	
+    	//Triggers : 
+    	triggerManager = new TriggerManager();
+	    	TeleportTrigger trigger = new TeleportTrigger(new Vector2(0,500));
+	    	trigger.setPosition(new Vector2(0,200));
+	    	trigger.setDimension(new Vector2(200,200));
+    	triggerManager.addTrigger(trigger);
+    	
+    	triggerManager.save("test_save_triggerManager.txt");
+    	triggerManager = TriggerManager.load("test_save_triggerManager.txt");
+    	
+    	
+    	
     	Gdx.input.setInputProcessor(this);
     	
     	gameCamera.setPosition(player.getPosition());
@@ -85,7 +99,7 @@ public class TestScreen implements Screen, InputProcessor{
 		
 	}
 	
-	public void update(float delta)	{
+	private void update(float delta)	{
 		
 		List<Element2D> listCollider = new ArrayList<Element2D>();
 		listCollider.addAll(map.getColliders());
@@ -93,6 +107,42 @@ public class TestScreen implements Screen, InputProcessor{
 		
 		player.update(delta, listCollider);
 		
+		List<Character> listCharacter = new ArrayList<Character>();
+			listCharacter.add(player);
+		triggerManager.update(delta, listCharacter);
+		
+	}
+	
+	private void draw(SpriteBatch batch)
+	{
+		
+		batch.begin();
+		
+		font.draw(batch, "Bienvenue dans inGameScreen",50,Gdx.graphics.getHeight()-50);
+			
+			//arriere plan : 
+		     map.drawBackgroungWithParralax(batch);
+		     
+		     
+		     //plan du milieu : 
+		     player.draw(batch);
+		     
+		     for(Element2D e : m_platformContainer)
+		     {
+		    	 e.draw(batch);
+		     }
+		     
+		     //map.draw(batch);
+		     //map.drawWithParralax(batch); //version avec parralax
+		     map.drawMaingroundWithParralax(batch);
+		     
+	
+		     //plan avant : 
+		     map.drawForegroundWithParralax(batch);
+		 batch.end();
+		 
+		 triggerManager.draw(batch); //for debug ou creation de la map
+	     
 	}
 
 	@Override
@@ -112,35 +162,11 @@ public class TestScreen implements Screen, InputProcessor{
 		//update du rendu : 
 		 Gdx.gl.glClearColor(0.2f, 0.2f,0.2f, 1f);
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	         
-	     batch.begin();
-	        
-		     font.draw(batch, "Bienvenue dans inGameScreen",50,Gdx.graphics.getHeight()-50);
-		     
-		     
-		     //arriere plan : 
-		     map.drawBackgroungWithParralax(batch);
-		     
-		     
-		     //plan du milieu : 
-		     player.draw(batch);
-		     
-		     for(Element2D e : m_platformContainer)
-		     {
-		    	 e.draw(batch);
-		     }
-		     
-		     //map.draw(batch);
-		     //map.drawWithParralax(batch); //version avec parralax
-		     map.drawMaingroundWithParralax(batch);
-		     
-		     
-		     //plan avant : 
-		     map.drawForegroundWithParralax(batch);
-		     
-		     
+
+		     draw(batch);
+
 	     
-	     batch.end();
+
 		
 	}
 

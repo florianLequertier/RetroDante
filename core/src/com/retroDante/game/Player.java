@@ -11,12 +11,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.retroDante.game.Controllable.KeyStatus;
 
-public class Player extends Element2D implements Json.Serializable, Controllable {
-	
-	float m_life;
-	float m_speed;
-	boolean m_isDead;
-	boolean m_isGrounded;
+/**
+ * 
+ * Player représente le personnage controlé par le joueur. 
+ * Il etend Character et implement en plus Controllable (cf : Controllable) pour Le controller.
+ * Une caméra observe le joueur (design pattern observer) pour pouvoir le suivre. 
+ * 
+ * @author Florian
+ *
+ */
+public class Player extends Character implements  Controllable {
+
 	PlayerController m_controller;
 	GameCamera m_camera;
 	
@@ -27,12 +32,7 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	Player(Texture tex) 
 	{
 		super(tex);
-		this.makeSolidBody();
-		
-		m_life = 100.f;
-		m_speed = 60.f;
-		m_isDead = false;
-		
+		m_type = "player";
 		m_controller = new PlayerController();
 		
 	}
@@ -40,13 +40,7 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	Player(TileSetInfo tileSet, int spriteIndex) 
 	{
 		super(tileSet, spriteIndex);
-		this.makeSolidBody();
-		
 		m_type = "player";
-		m_life = 100.f;
-		m_speed = 60.f;
-		m_isDead = false;
-		
 		m_controller = new PlayerController();
 		
 	}
@@ -54,38 +48,26 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	Player(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
 	{
 		super(tileSet, spriteIndex);
-		this.makeSolidBody();
+		m_type = "player";
+		m_controller = new PlayerController();
 		
 		m_animator = new Animator(tileSet.getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(deltaAnim);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
-		
-		m_type = "player";
-		m_life = 100.f;
-		m_speed = 60.f;
-		m_isDead = false;
-		
-		m_controller = new PlayerController();
-		
+
 	}
 	
 	Player()
 	{
 		super( TileSetManager.getInstance().get("player"), 0);
-		this.makeSolidBody();
+		m_type = "player";
+		m_controller = new PlayerController();
 		
 		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(1.f);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
-		
-		m_type = "player";
-		m_life = 100.f;
-		m_speed = 60.f;
-		m_isDead = false;
-		
-		m_controller = new PlayerController();
 		
 	}
 	
@@ -99,21 +81,6 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	public void removeCamera()
 	{
 		m_camera = null;
-	}
-	
-	public void setLife(float life)
-	{
-		m_life = life;
-	}
-	
-	public float getLife()
-	{
-		return m_life;
-	}
-	
-	public void kill()
-	{
-		m_isDead = true;
 	}
 	
 	
@@ -225,7 +192,7 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	{
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
 		String fileString = file.readString();
-		System.out.println(fileString);
+		//System.out.println(fileString);
 		Json json = new Json();
 		Player player = json.fromJson(Player.class, fileString);
 		return player;
@@ -243,8 +210,6 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	public void write(Json json) {
 		json.writeObjectStart("player");
 			super.write(json);
-			json.writeValue("m_life", m_life);
-			json.writeValue("m_speed", m_speed);
 		json.writeObjectEnd();
 		
 	}
@@ -254,8 +219,6 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 		JsonValue playerData = jsonData.get("player");
 		super.read(json, playerData);
 		System.out.println("playerData = "+playerData);
-		m_speed = playerData.getFloat("m_speed");
-		m_life = playerData.getFloat("m_life");
 	}
 	
 	//autres methodes : 
@@ -263,7 +226,7 @@ public class Player extends Element2D implements Json.Serializable, Controllable
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("Player : \n").append("\n vie : ").append(m_life).append("\n vitesse : ").append(m_speed).append("\n position : ").append(getPosition().toString()).append("\n vitesse d'animation :  ").append(getAnimationSpeed());
+		builder.append("Player : \n").append(super.toString());
 		
 		return builder.toString();
 		

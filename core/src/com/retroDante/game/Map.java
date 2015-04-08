@@ -237,7 +237,7 @@ public class Map implements Drawable, Json.Serializable{
 			{
 				lay.write(json);
 			}
-		json.writeArrayEnd();
+		json.writeObjectEnd();
 		
 		json.writeObjectStart("mainground");
 			m_mainground.write(json);
@@ -248,7 +248,7 @@ public class Map implements Drawable, Json.Serializable{
 			{
 				lay.write(json);
 			}
-		json.writeArrayEnd();
+		json.writeObjectEnd();
 		
 	}
 
