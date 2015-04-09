@@ -33,11 +33,23 @@ public class DamageTrigger extends Trigger {
 		m_damageAmount = damageAmount;
 	}
 	
+	//setters / getters : 
+	
+	void setDamage(float damageAmount)
+	{
+		m_damageAmount = damageAmount;
+	}
+	
+	float getDamageAmount()
+	{
+		return m_damageAmount;
+	}
+	
 	@Override
 	public void triggerEventOn(Character target)
 	{
 		//m_effect.play(target.getPosition(), false);
-		target.sendDammage(m_damageAmount);
+		target.takeDamage(m_damageAmount);
 	}
 	
 	//serialisation : 

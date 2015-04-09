@@ -42,10 +42,12 @@ public enum CharacterState implements State<Character> {
 			if(character.checkAction("walk_left"))
 			{
 				character.flipLeft();
+				character.setVelocity( character.getVelocity().add(-character.getSpeed(), 0));
 			}
 			else if(character.checkAction("walk_right"))
 			{
 				character.flipRight();
+				character.setVelocity( character.getVelocity().add(character.getSpeed(), 0));
 			}
 			
 			if(character.getIsGrounded())

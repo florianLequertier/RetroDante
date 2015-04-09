@@ -134,9 +134,14 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		m_stateMachine = stateMachine;
 	}
 	
-	public void sendDammage(float damageAmount)
+	public void takeDamage(float damageAmount)
 	{
 		m_life -= damageAmount;
+		if(m_life<0)
+		{
+			m_isDead = true;
+			m_life = 0;
+		}
 	}
 	
 	public void setLife(float life)
