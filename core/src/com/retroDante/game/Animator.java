@@ -49,6 +49,7 @@ public class Animator{
 			this.addAnimation(a, names[index]);
 			else
 			this.addAnimation(a);
+			index++;
 		}
 	}
 	
@@ -107,7 +108,7 @@ public class Animator{
 		}
 		else
 		{
-			System.out.println("ERROR : \n Animator _ changeAnimation : animation non trouvée pour le nom donné");
+			System.out.println("ERROR : \n Animator _ changeAnimation : animation non trouvée pour le nom donné ("+animationName+")");
 		}
 	}
 	

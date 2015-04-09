@@ -3,8 +3,11 @@ package com.retroDante.game;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -17,13 +20,17 @@ import com.retroDante.game.Controllable.KeyStatus;
  * @author Florian
  *
  */
-public class Character extends Element2D implements Json.Serializable {
+public abstract class Character extends Element2D implements Json.Serializable, Controllable {
 	
 	
-	float m_life;
-	boolean m_isDead;
-	float m_speed;
-	boolean m_isGrounded;
+	protected float m_life;
+	protected boolean m_isDead;
+	protected float m_speed;
+	protected boolean m_isGrounded;
+	protected boolean m_rightDirection;
+	protected StateMachine<Character> m_stateMachine;
+	protected Controller m_controller;
+
 	
 	/**
 	 * Le character est un solidBody 
@@ -38,6 +45,8 @@ public class Character extends Element2D implements Json.Serializable {
 		m_life = 100.f;
 		m_speed = 60.f;
 		m_isDead = false;
+		m_rightDirection = true;
+		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
 		
 	}
 	
@@ -50,6 +59,8 @@ public class Character extends Element2D implements Json.Serializable {
 		m_life = 100.f;
 		m_speed = 60.f;
 		m_isDead = false;
+		m_rightDirection = true;
+		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
 		
 	}
 	
@@ -62,11 +73,13 @@ public class Character extends Element2D implements Json.Serializable {
 		m_life = 100.f;
 		m_speed = 60.f;
 		m_isDead = false;
+		m_rightDirection = true;
 		
 		m_animator = new Animator(tileSet.getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(deltaAnim);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
+		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
 			
 	}
 	
@@ -79,15 +92,47 @@ public class Character extends Element2D implements Json.Serializable {
 		m_life = 100.f;
 		m_speed = 60.f;
 		m_isDead = false;
+		m_rightDirection = true;
 
 		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(1.f);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
+		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
 		
 	}
 	
 	//setters/ getters : 
+	
+	public boolean getIsGrounded()
+	{
+		return m_isGrounded;
+	}
+	
+	public void setIsGrounded(boolean grounded)
+	{
+		m_isGrounded = grounded;
+	}
+	
+	public float getSpeed()
+	{
+		return m_speed;
+	}
+	
+	public void setSpeed(float speed)
+	{
+		m_speed = speed;
+	}
+	
+	public StateMachine<Character> getStateMachine()
+	{
+		return m_stateMachine;
+	}
+	
+	public void setStateMachine(StateMachine<Character> stateMachine)
+	{
+		m_stateMachine = stateMachine;
+	}
 	
 	public void sendDammage(float damageAmount)
 	{
@@ -107,6 +152,40 @@ public class Character extends Element2D implements Json.Serializable {
 	public void kill()
 	{
 		m_isDead = true;
+	}
+	
+	
+	//switch de direction
+	public void flipRight()
+	{
+		m_rightDirection = true;
+	}
+	public void flipLeft()
+	{
+		m_rightDirection = false;
+	}
+
+	
+	//Override drawable : 
+	
+	@Override
+	public void draw(SpriteBatch batch) {
+		if(m_texRegion.isFlipX() &&  m_rightDirection)
+		m_texRegion.flip(true, false);
+		else if(!m_texRegion.isFlipX() &&  !m_rightDirection)
+		m_texRegion.flip(true, false);
+		
+		super.draw(batch);
+	}
+	
+	public void drawWithParralax(SpriteBatch batch, float decalX, float decalY) {
+		if(m_texRegion.isFlipX() &&  m_rightDirection)
+		m_texRegion.flip(true, false);
+		else if(!m_texRegion.isFlipX() &&  !m_rightDirection)
+		m_texRegion.flip(true, false);
+		
+		super.drawWithParralax(batch, decalX, decalY);
+		
 	}
 	
 	//ne percute pas les murs : 
@@ -162,6 +241,12 @@ public class Character extends Element2D implements Json.Serializable {
 		
 		//réinitialisation : 
 		m_velocity = Vector2.Zero;
+	}
+	
+	//update state machine : 
+	public void updateStateMachine()
+	{
+		m_stateMachine.update();
 	}
 	
 	//loader Json : 

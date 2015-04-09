@@ -42,7 +42,7 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 	
 	protected String m_type;
 	private Texture m_visual;
-	private TextureRegion m_texRegion;
+	protected TextureRegion m_texRegion;
 	protected Animator m_animator;
 	private float m_animationSpeed;
 	
@@ -129,6 +129,16 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 	
 	
 	//setters et getters : 
+	
+	public Animator getAnimator()
+	{
+		return m_animator;
+	}
+	
+	public void setAnimator(Animator animator)
+	{
+		m_animator = animator;
+	}
 	
 	public Texture getVisual()
 	{

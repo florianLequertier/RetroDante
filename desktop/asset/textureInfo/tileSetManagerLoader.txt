@@ -1,7 +1,7 @@
 2
 player
-texture/badlogic.jpg
-textureInfo/bbb.txt
+texture/test_animation.png
+textureInfo/test_animation.txt
 
 platform
 texture/badlogic.jpg

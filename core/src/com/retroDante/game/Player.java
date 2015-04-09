@@ -22,7 +22,6 @@ import com.retroDante.game.Controllable.KeyStatus;
  */
 public class Player extends Character implements  Controllable {
 
-	PlayerController m_controller;
 	GameCamera m_camera;
 	
 	/**
@@ -51,7 +50,7 @@ public class Player extends Character implements  Controllable {
 		m_type = "player";
 		m_controller = new PlayerController();
 		
-		m_animator = new Animator(tileSet.getForAnimation(0,1,2), "idle", "walkRight", "walkLeft"); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator = new Animator(tileSet.getForAnimation(0,1,2), "idle", "walk", "jump"); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(deltaAnim);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
@@ -64,7 +63,7 @@ public class Player extends Character implements  Controllable {
 		m_type = "player";
 		m_controller = new PlayerController();
 		
-		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2), "idle", "walk", "jump"); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(1.f);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
@@ -113,17 +112,31 @@ public class Player extends Character implements  Controllable {
 		}
 	}
 	
+	@Override
+	public boolean checkAction(String stateName)
+	{
+		return m_controller.checkAction(stateName);
+	}
+	
+	@Override
+	public boolean checkActionOnce(String stateName)
+	{
+		return m_controller.checkActionOnce(stateName);
+	}
+	
 	//Override element2D :
 	@Override
 	public void update(float deltaTime, List<Element2D> others)
 	{
-		checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
 	}
 	@Override
 	public void update(float deltaTime)
 	{
-		checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
 	}
 	@Override

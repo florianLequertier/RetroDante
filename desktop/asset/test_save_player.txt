@@ -1,1 +1,1 @@
-{player:{m_colliderPosX:200,m_colliderPosY:200,m_colliderWidth:64,m_colliderHeight:64,m_type:player,m_animationSpeed:1,m_life:100,m_speed:60}}
+{player:{m_colliderPosX:200,m_colliderPosY:400,m_colliderWidth:64,m_colliderHeight:64,m_type:player,m_animationSpeed:1,m_life:100,m_speed:60}}
