@@ -9,23 +9,24 @@ public class Projectile extends Attack {
 	Projectile()
 	{
 		super();
-		m_visual.addConstantForce(new Force( new Vector2(1,0) ) );
+		m_trigger.addConstantForce(new Force( new Vector2(1,0) ) );
 	}
 	
 	Projectile(Vector2 initialForce)
 	{
 		super();
-		m_visual.addConstantForce(new Force( initialForce ) );
+		m_trigger.addConstantForce(new Force( initialForce ) );
 	}
 	
 	@Override
 	public boolean update(float deltaTime, List<Character> characters)
 	{
+		updateTrigger(deltaTime);
 		updateVisual(deltaTime);
 		
 		//On bouge de trigger avant d'entamer les test de collision
-		Vector2 newPosition = m_visual.getPosition();
-		m_trigger.setPosition(newPosition);
+		Vector2 newPosition = m_trigger.getPosition();
+		m_visual.setPosition(newPosition);
 		
 		applyDamageOn(characters);
 		

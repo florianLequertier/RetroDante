@@ -95,6 +95,30 @@ public class Rigidbody implements Json.Serializable{
 	}
 	
 	
+	public void update(float deltaTime)
+	{
+		this.updateForces(deltaTime);
+		updateMovement(deltaTime);
+	}
+	
+	public void updateMovement(float deltaTime)
+	{
+		m_velocity.add(getForceResult());//ajout des forces
+		m_velocity.scl( deltaTime);
+		move( m_velocity );
+
+		
+		//réinitialisation : 
+		m_velocity = Vector2.Zero;
+	}
+	
+	public void move(Vector2 deltaPos)
+	{
+		Vector2 position = new Vector2(this.m_collider.getX() + deltaPos.x, this.m_collider.getY() + deltaPos.y);
+		this.m_collider.setPosition( position );
+	}
+	
+	
 	//getters et setters : 
 	
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Attack implements Drawable {
 	
-	Element2D m_visual;
+	VisualEffect m_visual;
 	DamageTrigger m_trigger;
 	float m_lifeTime;
 	
@@ -31,6 +31,7 @@ public class Attack implements Drawable {
 	 */
 	public boolean update(float deltaTime, List<Character> characters)
 	{
+		updateTrigger(deltaTime);
 		updateVisual(deltaTime);
 		applyDamageOn(characters);
 		m_lifeTime -= deltaTime;
@@ -52,6 +53,11 @@ public class Attack implements Drawable {
 	public void applyDamageOn(Character character)
 	{
 		character.takeDamage(getDamage());
+	}
+	
+	public void updateTrigger(float deltaTime)
+	{
+		m_trigger.update(deltaTime);
 	}
 	
 	public void updateVisual(float deltaTime)

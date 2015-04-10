@@ -183,16 +183,16 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 		m_texRegion = m_animator.getCurrentFrame();
 	}
 	
-	public void updateMovement(float deltaTime)
-	{
-		m_velocity.add(getForceResult());//ajout des forces
-		m_velocity.scl( deltaTime);
-		move( m_velocity );
-
-		
-		//réinitialisation : 
-		m_velocity = Vector2.Zero;
-	}
+//	public void updateMovement(float deltaTime)
+//	{
+//		m_velocity.add(getForceResult());//ajout des forces
+//		m_velocity.scl( deltaTime);
+//		move( m_velocity );
+//
+//		
+//		//réinitialisation : 
+//		m_velocity = Vector2.Zero;
+//	}
 
 	public void updateMovement(float deltaTime, List<Element2D> others)
 	{
@@ -232,16 +232,17 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 		
 		
 	//Transformable : 
-	public Vector2 getPosition()
-	{
-		return new Vector2( m_collider.x, m_collider.y );
-	}
+//	public Vector2 getPosition()
+//	{
+//		return new Vector2( m_collider.x, m_collider.y );
+//	}
+//	
+//	public void setPosition(Vector2 pos)
+//	{
+//		this.m_collider.setPosition( pos );
+//	}
 	
-	public void setPosition(Vector2 pos)
-	{
-		this.m_collider.setPosition( pos );
-	}
-	
+	@Override
 	public void move(Vector2 deltaPos)
 	{
 		Vector2 position = new Vector2(this.m_collider.getX() + deltaPos.x, this.m_collider.getY() + deltaPos.y);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -25,7 +26,7 @@ public class TestScreen implements Screen, InputProcessor{
     List<Element2D> m_platformContainer = new ArrayList<Element2D>();
     Map map;
     TriggerManager triggerManager;
-    
+    AttackManager attackManager = AttackManager.getInstance();
     
 	
 	@Override
@@ -111,6 +112,13 @@ public class TestScreen implements Screen, InputProcessor{
 			listCharacter.add(player);
 		triggerManager.update(delta, listCharacter);
 		
+		if(Gdx.input.isKeyPressed(Input.Keys.E))
+		{
+			System.out.println("coucou");
+			attackManager.add(new BurningHearthquake(new Vector2(100,100)));
+		}
+		attackManager.update(delta, listCharacter);
+		
 	}
 	
 	private void draw(SpriteBatch batch)
@@ -135,6 +143,9 @@ public class TestScreen implements Screen, InputProcessor{
 		     //map.draw(batch);
 		     //map.drawWithParralax(batch); //version avec parralax
 		     map.drawMaingroundWithParralax(batch);
+		     
+		     attackManager.draw(batch);
+		     //attackManager.drawDebug(batch);
 		     
 	
 		     //plan avant : 
