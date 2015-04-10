@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javafx.scene.input.MouseButton;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 
@@ -22,6 +25,9 @@ public class PlayerController extends Controller {
 		
 		mappedKey.put(Keys.SPACE, "jump");
 			mappedEvent.put("jump", false);
+			
+		mappedButton.put(MouseButton.PRIMARY, "walk_left");
+			mappedEvent.put("attack", false);
 		
 	}
 	
@@ -43,6 +49,27 @@ public class PlayerController extends Controller {
 		}
 		else
 			return false;
+	}
+	
+	
+	void listenButtonDown(MouseButton buttoncode)
+	{
+		String eventName = mappedButton.get(buttoncode);
+		
+		if(eventName != null)
+		{
+			mappedEvent.put(eventName, true);
+		}
+	}
+	
+	void listenButtonUp(MouseButton buttoncode)
+	{
+		String eventName = mappedButton.get(buttoncode);
+		
+		if(eventName != null)
+		{
+			mappedEvent.put(eventName, false);
+		}
 	}
 	
 	void listenKeyDown(int keycode)

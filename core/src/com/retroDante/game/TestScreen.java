@@ -152,6 +152,7 @@ public class TestScreen implements Screen, InputProcessor{
 		     map.drawForegroundWithParralax(batch);
 		 batch.end();
 		 
+		 
 		 triggerManager.draw(batch); //for debug ou creation de la map
 	     
 	}

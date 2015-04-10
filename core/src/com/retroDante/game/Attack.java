@@ -10,6 +10,7 @@ public class Attack implements Drawable {
 	VisualEffect m_visual;
 	DamageTrigger m_trigger;
 	float m_lifeTime;
+	boolean m_fromEnemy;
 	
 	/**
 	 * Attack par defaut de 10, sans visuel, 5 seconde de lifeTime, dimensions : 32*32
@@ -19,6 +20,14 @@ public class Attack implements Drawable {
 		m_trigger = new DamageTrigger(10);
 		m_trigger.setDimension(new Vector2(32,32));
 		m_visual = null;
+		m_lifeTime = 5;
+	}
+	
+	public Attack(Attack other)
+	{
+		m_trigger = new DamageTrigger(other.m_trigger.getDamageAmount());
+		m_trigger.setDimension(other.getDimension());
+		m_visual = VisualEffectFactory.getInstance().create(other.getEffectName());
 		m_lifeTime = 5;
 	}
 	
@@ -67,6 +76,24 @@ public class Attack implements Drawable {
 	}
 	
 	//getters / setters 
+	
+	public String getEffectName()
+	{
+		if(m_visual == null)
+			return null;
+		else
+			return m_visual.getName();
+	}
+	
+	public boolean getFromEnemy()
+	{
+		return m_fromEnemy;
+	}
+	
+	public void setFromEnemy(boolean isEnemy)
+	{
+		m_fromEnemy = isEnemy;
+	}
 	
 	public void setDamage(float damageAmount)
 	{

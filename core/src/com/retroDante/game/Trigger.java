@@ -25,11 +25,13 @@ public abstract class Trigger extends Rigidbody implements Json.Serializable, Dr
 	
 	Trigger()
 	{
+		this.makeStaticBody();
 		m_color = Color.BLUE;
 	}
 	
 	Trigger(Color color)
 	{
+		this.makeStaticBody();
 		m_color = color;
 	}
 	

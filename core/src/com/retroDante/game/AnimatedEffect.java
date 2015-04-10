@@ -118,6 +118,8 @@ public class AnimatedEffect extends VisualEffect{
 		
 		super.update(deltaTime);
 		m_texRegion = m_animator.getCurrentFrame();
+		if(m_animator.isAnimationFinished())
+			m_isActive = false;
 		
 	}
 

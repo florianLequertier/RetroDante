@@ -56,6 +56,35 @@ public enum CharacterState implements State<Character> {
 			}	
 			
 		}
+	},
+	ATTACK()
+	{
+		@Override
+		public void enter(Character entity) {
+			entity.attack();
+			entity.getAnimator().changeAnimation("attack");
+		}
+		
+		@Override
+		public void update(Character character){
+			
+			if(character.checkAction("walk_left"))
+			{
+				character.flipLeft();
+				character.setVelocity( character.getVelocity().add(-character.getSpeed(), 0));
+			}
+			else if(character.checkAction("walk_right"))
+			{
+				character.flipRight();
+				character.setVelocity( character.getVelocity().add(character.getSpeed(), 0));
+			}
+			
+			if(character.getIsGrounded())
+			{
+				character.getStateMachine().changeState(IDLE);
+			}	
+			
+		}
 	};
 	
 	
@@ -85,6 +114,12 @@ public enum CharacterState implements State<Character> {
 			{
 				character.getStateMachine().changeState(JUMP);
 			}	
+			
+			noAction = false;
+		}
+		if(character.checkActionOnce("attack"))
+		{
+			character.getStateMachine().changeState(ATTACK);
 			
 			noAction = false;
 		}

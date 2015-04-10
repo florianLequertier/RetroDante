@@ -10,13 +10,14 @@ import com.badlogic.gdx.utils.Array;
 
 public class Animator{
 	
-	List<Animation> m_animationContainer = new ArrayList<Animation>();
-	HashMap<String, Integer> m_animationNames = new HashMap<String, Integer>();
+	private List<Animation> m_animationContainer = new ArrayList<Animation>();
+	private HashMap<String, Integer> m_animationNames = new HashMap<String, Integer>();
 	private Clock m_timer = new Clock();
-	int m_currentAnimation;
-	float m_currentFrame;
-	boolean m_isPlaying;
-	boolean m_isLooping;
+	private float m_elapsedTime;
+	private int m_currentAnimation;
+	private float m_currentFrame;
+	private boolean m_isPlaying;
+	private boolean m_isLooping;
 	
 	Animator(Animation animation)
 	{
@@ -25,6 +26,7 @@ public class Animator{
 		m_isPlaying = false;
 		m_isLooping = true;
 		m_animationContainer.add( animation );
+		m_elapsedTime = 0;
 	}
 	Animator(List<Animation> animationContainer)
 	{
@@ -33,6 +35,7 @@ public class Animator{
 		m_isPlaying = false;
 		m_isLooping = true;
 		m_animationContainer = animationContainer;
+		m_elapsedTime = 0;
 	}
 	
 	Animator(List<Animation> animationContainer, String... names)
@@ -41,6 +44,7 @@ public class Animator{
 		m_currentAnimation = 0;
 		m_isPlaying = false;
 		m_isLooping = true;
+		m_elapsedTime = 0;
 		//m_animationContainer = animationContainer;
 		int index = 0;
 		for(Animation a : animationContainer)
@@ -86,12 +90,46 @@ public class Animator{
 		return m_isLooping;
 	}
 	
+	/**
+	 * 
+	 * Retourne la frame actuelle de l'animation. Utilise le timer automatique (ne peut pas être ralenti). 
+	 * 
+	 * @param delta
+	 * @return
+	 */
 	public TextureRegion getCurrentFrame()
 	{
 		if(m_isPlaying)
-		m_currentFrame = (float) m_timer.getElapsedTime();
+			m_currentFrame = (float) m_timer.getElapsedTime();
 		
 		return m_animationContainer.get(m_currentAnimation).getKeyFrame(m_currentFrame, m_isLooping);
+	}
+	
+	/**
+	 * 
+	 * Retourne la frame actuelle de l'animation. Utilise le timer non automatique (peut être ralenti). 
+	 * 
+	 * @param delta
+	 * @return
+	 */
+	public TextureRegion getCurrentFrame(float delta)
+	{
+		m_elapsedTime += delta;
+		
+		if(m_isPlaying)
+			m_currentFrame = m_elapsedTime;
+		
+		return m_animationContainer.get(m_currentAnimation).getKeyFrame(m_currentFrame, m_isLooping);
+	}
+	
+	/**
+	 * retourne true si l'animation s'est terminé une premiere fois
+	 * 
+	 * @return
+	 */
+	public boolean isAnimationFinished()
+	{
+			return m_animationContainer.get(m_currentAnimation).isAnimationFinished(m_currentFrame);
 	}
 	
 	public int getCurrentAnimation()

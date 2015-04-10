@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 public abstract class VisualEffect implements Drawable, Iterable<VisualEffect> {
 	
+	protected String m_name;
 	protected VisualEffect m_child;
 	protected boolean m_isActive;
 	protected boolean m_isLooping;
@@ -14,6 +15,7 @@ public abstract class VisualEffect implements Drawable, Iterable<VisualEffect> {
 	
 	VisualEffect()
 	{
+		m_name = "noEffect";
 		m_child = null;
 		m_isActive = true;
 		m_isLooping = false;
@@ -47,6 +49,16 @@ public abstract class VisualEffect implements Drawable, Iterable<VisualEffect> {
 	
 	
 	//setters /getters : 
+	
+	public void setName(String name)
+	{
+		m_name = name;
+	}
+	
+	public String getName()
+	{
+		return m_name;
+	}
 	
 	public float getRemainingTime()
 	{

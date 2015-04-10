@@ -3,6 +3,8 @@ package com.retroDante.game;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.scene.input.MouseButton;
+
 
 /**
  * 
@@ -17,6 +19,7 @@ import java.util.Map;
 public abstract class Controller {
 
 	Map<Integer, String> mappedKey = new HashMap<Integer, String>(); // associe à chaque key, un evenement
+	Map<MouseButton, String> mappedButton = new HashMap<MouseButton, String>(); // associe à chaque button, un evenement
 	Map<String, Boolean> mappedEvent = new HashMap<String, Boolean>(); //associe à un evenement un booleen pour savoir si l'eveneement est en cours
 	
 	/**
@@ -53,6 +56,23 @@ public abstract class Controller {
 	 * @param keycode
 	 */
 	abstract void listenKeyUp(int keycode);
+	
+	/**
+	 * 
+	 * ecoute l'evennement de type button up dans le screen
+	 * 
+	 * @param keycode
+	 */
+	abstract void listenButtonUp(MouseButton buttoncode);
+	
+	
+		/**
+	 * 
+	 * ecoute l'evennement de type button down dans le screen
+	 * 
+	 * @param keycode
+	 */
+	abstract void listenButtonDown(MouseButton buttoncode);
 	
 
 }

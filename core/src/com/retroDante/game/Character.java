@@ -159,6 +159,12 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		m_isDead = true;
 	}
 	
+	//attack : 
+	public void attack()
+	{
+		//TODO 
+	}
+	
 	
 	//switch de direction
 	public void flipRight()
