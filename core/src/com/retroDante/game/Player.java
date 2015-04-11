@@ -2,14 +2,12 @@ package com.retroDante.game;
 
 import java.util.List;
 
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.retroDante.game.Controllable.KeyStatus;
 
 /**
  * 
@@ -22,7 +20,9 @@ import com.retroDante.game.Controllable.KeyStatus;
  */
 public class Player extends Character implements  Controllable {
 
-	GameCamera m_camera;
+	private GameCamera m_camera;
+	private AttackEmitter m_weapon;
+	private PlayerController m_controller;
 	
 	/**
 	 * Le player est un solidBody 
@@ -33,6 +33,7 @@ public class Player extends Character implements  Controllable {
 		super(tex);
 		m_type = "player";
 		m_controller = new PlayerController();
+		m_weapon = new AttackEmitter();
 		
 	}
 	
@@ -41,6 +42,7 @@ public class Player extends Character implements  Controllable {
 		super(tileSet, spriteIndex);
 		m_type = "player";
 		m_controller = new PlayerController();
+		m_weapon = new AttackEmitter();
 		
 	}
 	
@@ -50,10 +52,12 @@ public class Player extends Character implements  Controllable {
 		m_type = "player";
 		m_controller = new PlayerController();
 		
-		m_animator = new Animator(tileSet.getForAnimation(0,1,2), "idle", "walk", "jump"); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator = new Animator(tileSet.getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(deltaAnim);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
+		
+		m_weapon = new AttackEmitter();
 
 	}
 	
@@ -63,14 +67,27 @@ public class Player extends Character implements  Controllable {
 		m_type = "player";
 		m_controller = new PlayerController();
 		
-		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2), "idle", "walk", "jump"); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(1.f);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
 		
+		m_weapon = new AttackEmitter();
+		
 	}
 	
 	//setters/ getters : 
+	
+	
+	public void setController(PlayerController controller)
+	{
+		m_controller = controller;
+	}
+	
+	public PlayerController getController()
+	{
+		return m_controller;
+	}
 	
 	public void setCamera(GameCamera newCamera)
 	{
@@ -82,6 +99,47 @@ public class Player extends Character implements  Controllable {
 		m_camera = null;
 	}
 	
+	// gestion des armes : 
+	
+	public void changeWeapon(String weaponName)
+	{
+		m_weapon.changeAttack(weaponName);
+	}
+	
+	public void changeWeapon(Attack newAttack)
+	{
+		m_weapon.changeAttack(newAttack);
+	}
+	
+	/**
+	 * Création positionnement, puis ajout au manager, de l'attaque produite par l'attackEmitter du joueur.
+	 */
+	public void attack()
+	{
+		Attack attack = m_weapon.getAttackInstance();
+		if(m_rightDirection)
+		{
+			attack.setPosition(this.getPosition().add(70, 0));
+			attack.setDirection(Direction.Right);
+		}
+		else
+		{
+			attack.setPosition(this.getPosition().add(-6, 0));
+			attack.setDirection(Direction.Left);
+		}
+			
+		
+		AttackManager.getInstance().add(attack); // ajout à l'attackManager.
+		if(attack instanceof BurningHearthquake)
+		{
+			System.out.println("ATTACK REUSSIE");
+		}
+		else
+		{
+			System.out.println("ATTACK NON REUSSIE");
+		}
+		System.out.println("ATTACK !!!!!");
+	}
 	
 	//overrides Controllers : 
 	

@@ -11,7 +11,7 @@ import java.util.Set;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
-public class TileSetManager {
+public class TileSetManager implements DataSingleton<TileSetManager> {
 	
 	private Map<String,TileSetInfo> m_tileSetContainer;// = new HashMap<String,TileSetInfo>();
 	
@@ -22,13 +22,17 @@ public class TileSetManager {
 	}
 	
 	private static TileSetManager INSTANCE = new TileSetManager();
-	
 	public static TileSetManager getInstance()
 	{
 		return INSTANCE;
 	}
 	
 	//methode : 
+	@Override
+	public void clear()
+	{
+		m_tileSetContainer.clear();
+	}
 	
 	public void add(String name, TileSetInfo tileSet)
 	{

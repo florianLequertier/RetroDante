@@ -173,17 +173,20 @@ public class Animator{
 	{
 		m_isPlaying = true;
 		m_timer.restart();
+		m_currentFrame = 0;
 	}
 	public void play(boolean isLooping)
 	{
 		m_isLooping = isLooping;
 		m_isPlaying = true;
 		m_timer.restart();
+		m_currentFrame = 0;
 	}
 	public void playAt(float animationSpeed)
 	{
 		m_isPlaying = true;
 		m_timer.restart();
+		m_currentFrame = 0;
 		for(Animation a : m_animationContainer)
 		{
 			a.setFrameDuration(animationSpeed);
@@ -194,6 +197,7 @@ public class Animator{
 		m_isLooping = isLooping;
 		m_isPlaying = true;
 		m_timer.restart();
+		m_currentFrame = 0;
 		for(Animation a : m_animationContainer)
 		{
 			a.setFrameDuration(animationSpeed);

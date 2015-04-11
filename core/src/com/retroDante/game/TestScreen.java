@@ -7,15 +7,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Json;
-import com.retroDante.game.Controllable.KeyStatus;
 
 public class TestScreen implements Screen, InputProcessor{
 
@@ -23,10 +18,13 @@ public class TestScreen implements Screen, InputProcessor{
     private BitmapFont font;
     GameCamera gameCamera;
     Player player;
+    PlayerController playerController;
     List<Element2D> m_platformContainer = new ArrayList<Element2D>();
     Map map;
     TriggerManager triggerManager;
-    AttackManager attackManager = AttackManager.getInstance();
+    AttackManager attackManager = AttackManager.getInstance(); //singleton
+	TileSetManager tileSetManager = TileSetManager.getInstance(); //singleton
+	GameManager gameManager = GameManager.getInstance(); //Singleton
     
 	
 	@Override
@@ -40,7 +38,7 @@ public class TestScreen implements Screen, InputProcessor{
 		batch.setProjectionMatrix(gameCamera.combined);
 		
 
-		TileSetManager tileSetManager = TileSetManager.getInstance();
+		//TileSetManager tileSetManager = TileSetManager.getInstance();
 		tileSetManager.load(Gdx.files.getLocalStoragePath()+"/asset/"+"textureInfo/tileSetManagerLoader.txt");
 		System.out.println(tileSetManager.toString());
 		
@@ -51,9 +49,10 @@ public class TestScreen implements Screen, InputProcessor{
 		gameCamera.setParralaxTarget(map); //observe camera
 		
 		TileSetInfo playerTileSet = tileSetManager.get("player");
-    	player = new Player(playerTileSet, 0, 1);//new Texture(Gdx.files.internal("badlogic.jpg"))
+    	player = new Player(playerTileSet, 0, 0.2f);//new Texture(Gdx.files.internal("badlogic.jpg"))
     	player.setPosition(new Vector2(200, 400));
     	player.setCamera(gameCamera);
+    	playerController = player.getController();
     	
     	//test save player, OK : 
     	
@@ -100,7 +99,8 @@ public class TestScreen implements Screen, InputProcessor{
 		
 	}
 	
-	private void update(float delta)	{
+	private void update(float delta)	
+	{
 		
 		List<Element2D> listCollider = new ArrayList<Element2D>();
 		listCollider.addAll(map.getColliders());
@@ -154,32 +154,50 @@ public class TestScreen implements Screen, InputProcessor{
 		 
 		 
 		 triggerManager.draw(batch); //for debug ou creation de la map
+		 
+		 gameManager.togglePause();
 	     
 	}
 
 	@Override
 	public void render(float delta) {
 		
-		//System.out.println("framerate : "+delta);
+		//update du gameManager prioritaire
+		gameManager.update(delta);
+		
+		//evite un bug lors du deplacement de la fenetre
 		if(delta > 0.5)
 			return;
 		
 		//updateCamera
 		gameCamera.update();
 		batch.setProjectionMatrix(gameCamera.combined);
+		
 		//update de la logique :
-		update(delta);
+		if(gameManager.getGamePaused() == false)
+		{
+			if(!gameManager.getTimeIsDistorted())
+			{
+				if(gameManager.canUpdateFrame())
+				{
+					update(delta);
+				}
+			}
+			else
+			{
+				update(delta);
+			}
+		}
+
 		
 		
 		//update du rendu : 
-		 Gdx.gl.glClearColor(0.2f, 0.2f,0.2f, 1f);
-	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(0.2f, 0.2f,0.2f, 1f);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	        
+	    //commande de dessin : 
+		draw(batch);
 
-		     draw(batch);
-
-	     
-
-		
 	}
 
 	@Override
@@ -210,17 +228,21 @@ public class TestScreen implements Screen, InputProcessor{
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
+		attackManager.clear(); // AttackManager étant dans le stack, il ne faut pas oublier d'enlever les elements qu'elle contient lorsque l'on quitte le niveau.
+		tileSetManager.clear(); // idem
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		player.listenKey(KeyStatus.DOWN, keycode);
+		playerController.listenKeyDown(keycode);
+		//player.listenKey(KeyStatus.DOWN, keycode);
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		player.listenKey(KeyStatus.UP, keycode);
+		playerController.listenKeyUp(keycode);
+		//player.listenKey(KeyStatus.UP, keycode);
 		return false;
 	}
 
@@ -232,12 +254,14 @@ public class TestScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		playerController.listenButtonDown(button);
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		playerController.listenButtonUp(button);
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -1,9 +1,10 @@
 package com.retroDante.game;
 
 import com.badlogic.gdx.math.Vector2;
+
 import java.util.Iterator;
 
-public abstract class VisualEffect implements Drawable, Iterable<VisualEffect> {
+public abstract class VisualEffect implements Drawable, Iterable<VisualEffect>, Cloneable {
 	
 	protected String m_name;
 	protected VisualEffect m_child;
@@ -21,6 +22,20 @@ public abstract class VisualEffect implements Drawable, Iterable<VisualEffect> {
 		m_isLooping = false;
 		m_lifeTime = 5;
 		m_remainingTime = m_lifeTime;
+	}
+	
+	public Object clone(){
+		VisualEffect vis = null;
+		try{
+			vis = (VisualEffect)super.clone();
+		}catch(CloneNotSupportedException e){
+			e.printStackTrace(System.err);
+		}
+		
+		if(m_child != null)
+		vis.m_child = (VisualEffect) m_child.clone();
+		
+		return vis;
 	}
 	
 	

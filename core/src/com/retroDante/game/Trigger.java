@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.JsonValue;
  * @author florian
  *
  */
-public abstract class Trigger extends Rigidbody implements Json.Serializable, Drawable {
+public abstract class Trigger extends Rigidbody implements Json.Serializable, Drawable, Cloneable {
 	
 	//pour un affichage de debug : 
 	private ShapeRenderer m_visual = new ShapeRenderer();
@@ -33,6 +33,17 @@ public abstract class Trigger extends Rigidbody implements Json.Serializable, Dr
 	{
 		this.makeStaticBody();
 		m_color = color;
+	}
+	
+	public Object clone(){
+		Trigger tri = null;
+		try{
+			tri = (Trigger)super.clone();
+		}catch(CloneNotSupportedException e){
+			e.printStackTrace(System.err);
+		}
+		
+		return tri;		
 	}
 	
 	public String getType()

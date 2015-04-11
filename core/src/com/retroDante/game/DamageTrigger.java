@@ -33,6 +33,14 @@ public class DamageTrigger extends Trigger {
 		m_damageAmount = damageAmount;
 	}
 	
+	public Object clone(){
+		DamageTrigger tri = null;
+		
+		tri = (DamageTrigger)super.clone();
+
+		return tri;		
+	}
+	
 	//setters / getters : 
 	
 	void setDamage(float damageAmount)

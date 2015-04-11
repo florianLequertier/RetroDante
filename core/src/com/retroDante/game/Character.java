@@ -2,16 +2,13 @@ package com.retroDante.game;
 
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.retroDante.game.Controllable.KeyStatus;
 
 /**
  * 
@@ -29,7 +26,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	protected boolean m_isGrounded;
 	protected boolean m_rightDirection;
 	protected StateMachine<Character> m_stateMachine;
-	protected Controller m_controller;
+	
 
 	
 	/**
@@ -46,7 +43,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		m_speed = 60.f;
 		m_isDead = false;
 		m_rightDirection = true;
-		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
+		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
 		
 	}
 	
@@ -60,7 +57,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		m_speed = 60.f;
 		m_isDead = false;
 		m_rightDirection = true;
-		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
+		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
 		
 	}
 	
@@ -79,7 +76,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		setAnimationSpeed(deltaAnim);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
-		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
+		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
 			
 	}
 	
@@ -98,7 +95,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		setAnimationSpeed(1.f);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
-		m_stateMachine = new DefaultStateMachine(this, CharacterState.IDLE);
+		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
 		
 	}
 	
@@ -160,10 +157,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	}
 	
 	//attack : 
-	public void attack()
-	{
-		//TODO 
-	}
+	public abstract void attack();
 	
 	
 	//switch de direction

@@ -19,7 +19,7 @@ import javafx.scene.input.MouseButton;
 public abstract class Controller {
 
 	Map<Integer, String> mappedKey = new HashMap<Integer, String>(); // associe à chaque key, un evenement
-	Map<MouseButton, String> mappedButton = new HashMap<MouseButton, String>(); // associe à chaque button, un evenement
+	Map<Integer, String> mappedButton = new HashMap<Integer, String>(); // associe à chaque button, un evenement
 	Map<String, Boolean> mappedEvent = new HashMap<String, Boolean>(); //associe à un evenement un booleen pour savoir si l'eveneement est en cours
 	
 	/**
@@ -41,38 +41,39 @@ public abstract class Controller {
 	 */
 	abstract boolean checkActionOnce(String actionName);
 	
-	/**
-	 * 
-	 * ecoute l'evennement de type key down dans le screen
-	 * 
-	 * @param keycode
-	 */
-	abstract void listenKeyDown(int keycode);
 	
-	/**
-	 * 
-	 * ecoute l'evennement de type key up dans le screen
-	 * 
-	 * @param keycode
-	 */
-	abstract void listenKeyUp(int keycode);
-	
-	/**
-	 * 
-	 * ecoute l'evennement de type button up dans le screen
-	 * 
-	 * @param keycode
-	 */
-	abstract void listenButtonUp(MouseButton buttoncode);
-	
-	
-		/**
-	 * 
-	 * ecoute l'evennement de type button down dans le screen
-	 * 
-	 * @param keycode
-	 */
-	abstract void listenButtonDown(MouseButton buttoncode);
+//	/**
+//	 * 
+//	 * ecoute l'evennement de type key down dans le screen
+//	 * 
+//	 * @param keycode
+//	 */
+//	abstract void listenKeyDown(int keycode);
+//	
+//	/**
+//	 * 
+//	 * ecoute l'evennement de type key up dans le screen
+//	 * 
+//	 * @param keycode
+//	 */
+//	abstract void listenKeyUp(int keycode);
+//	
+//	/**
+//	 * 
+//	 * ecoute l'evennement de type button up dans le screen
+//	 * 
+//	 * @param keycode
+//	 */
+//	abstract void listenButtonUp(MouseButton buttoncode);
+//	
+//	
+//	/**
+//	 * 
+//	 * ecoute l'evennement de type button down dans le screen
+//	 * 
+//	 * @param keycode
+//	 */
+//	abstract void listenButtonDown(MouseButton buttoncode);
 	
 
 }

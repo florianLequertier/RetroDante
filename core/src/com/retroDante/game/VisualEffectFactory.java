@@ -20,12 +20,13 @@ public class VisualEffectFactory implements Factory<VisualEffect>{
 			effect.setPosition(new Vector2(0,0));
 			effect.setDimension(new Vector2(32,64));
 			effect.setAnimationSpeed(0.05f);
+			effect.setName("flameColumn");
 			
 			return effect;
 		}
 		else
 		{
-			System.out.println("ERREUR : VisualEffectFactory : le nom ne correspond a aucun effet");
+			System.out.println("ERREUR : VisualEffectFactory : le nom "+name+" ne correspond a aucun effet");
 			return null;
 		}
 	}

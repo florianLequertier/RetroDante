@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class BurningHearthquake extends Attack{
+public class BurningHearthquake extends Attack implements Cloneable{
 	
 	int m_step = 0;
 	int m_totalStep = 7;
@@ -63,6 +63,22 @@ public class BurningHearthquake extends Attack{
 		m_intitialAmountOfTime = m_lifeTime;
 	}
 	
+	BurningHearthquake(BurningHearthquake other)
+	{
+		super(other);
+		m_step = other.m_step;
+		m_totalStep = other.m_totalStep;
+		m_intitialAmountOfTime = other.m_intitialAmountOfTime;
+	}
+	
+	public Object clone(){
+		BurningHearthquake att = null;
+		
+		att = (BurningHearthquake) super.clone();
+
+		return att;
+	}
+	
 	
 	/**
 	 * Change la dimension du trigger, rajoute un effet
@@ -77,10 +93,11 @@ public class BurningHearthquake extends Attack{
 		if( (m_lifeTime/m_intitialAmountOfTime) < 1- m_step/( (float)m_totalStep * 2)  && (m_lifeTime/m_intitialAmountOfTime) >= m_step/( (float)m_totalStep ))
 		{
 			float decal = 30;
+			if(m_direction == Direction.Left)
+				decal *= -1;
 			
 			Vector2 currentDimension = m_trigger.getDimension();
-			m_trigger.setDimension( currentDimension.add(decal, 0) );
-			
+				m_trigger.setDimension( currentDimension.add(decal, 0) );
 			
 			Vector2 currentPosition = m_visual.getPosition();
 			AnimatedEffect effect = (AnimatedEffect) VisualEffectFactory.getInstance().create("flameColumn");

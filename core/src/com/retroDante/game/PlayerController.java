@@ -7,6 +7,7 @@ import java.util.Set;
 import javafx.scene.input.MouseButton;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 
 
@@ -26,11 +27,12 @@ public class PlayerController extends Controller {
 		mappedKey.put(Keys.SPACE, "jump");
 			mappedEvent.put("jump", false);
 			
-		mappedButton.put(MouseButton.PRIMARY, "walk_left");
+		mappedButton.put(Buttons.LEFT, "attack");
 			mappedEvent.put("attack", false);
 		
 	}
 	
+	@Override
 	boolean checkAction(String actionName)
 	{
 		if(mappedEvent.containsKey(actionName))
@@ -39,6 +41,7 @@ public class PlayerController extends Controller {
 			return false;
 	}
 	
+	@Override
 	boolean checkActionOnce(String actionName)
 	{
 		if(mappedEvent.containsKey(actionName))
@@ -51,8 +54,13 @@ public class PlayerController extends Controller {
 			return false;
 	}
 	
-	
-	void listenButtonDown(MouseButton buttoncode)
+	/**
+	 * 
+	 * ecoute l'evennement de type button down dans le screen
+	 * 
+	 * @param keycode
+	 */
+	void listenButtonDown(int buttoncode)
 	{
 		String eventName = mappedButton.get(buttoncode);
 		
@@ -62,7 +70,13 @@ public class PlayerController extends Controller {
 		}
 	}
 	
-	void listenButtonUp(MouseButton buttoncode)
+	/**
+	 * 
+	 * ecoute l'evennement de type button up dans le screen
+	 * 
+	 * @param keycode
+	 */
+	void listenButtonUp(int buttoncode)
 	{
 		String eventName = mappedButton.get(buttoncode);
 		
@@ -72,6 +86,12 @@ public class PlayerController extends Controller {
 		}
 	}
 	
+	/**
+	 * 
+	 * ecoute l'evennement de type key down dans le screen
+	 * 
+	 * @param keycode
+	 */
 	void listenKeyDown(int keycode)
 	{
 		String eventName = mappedKey.get(keycode);
@@ -82,6 +102,12 @@ public class PlayerController extends Controller {
 		}
 	}
 	
+	/**
+	 * 
+	 * ecoute l'evennement de type key up dans le screen
+	 * 
+	 * @param keycode
+	 */
 	void listenKeyUp(int keycode)
 	{
 		String eventName = mappedKey.get(keycode);
