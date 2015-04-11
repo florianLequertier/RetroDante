@@ -5,11 +5,13 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class TestScreen implements Screen, InputProcessor{
@@ -17,6 +19,7 @@ public class TestScreen implements Screen, InputProcessor{
 	private SpriteBatch batch;
     private BitmapFont font;
     GameCamera gameCamera;
+    HUDCamera hudCamera;
     Player player;
     PlayerController playerController;
     List<Element2D> m_platformContainer = new ArrayList<Element2D>();
@@ -36,6 +39,8 @@ public class TestScreen implements Screen, InputProcessor{
 		//camera : 
 		gameCamera = new GameCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
 		batch.setProjectionMatrix(gameCamera.combined);
+		hudCamera = new HUDCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
+		//hudCamera.translate(-Gdx.graphics.getWidth()*0.5f, -Gdx.graphics.getHeight()*0.5f);
 		
 
 		//TileSetManager tileSetManager = TileSetManager.getInstance();
@@ -96,6 +101,7 @@ public class TestScreen implements Screen, InputProcessor{
     	
     	gameCamera.setPosition(player.getPosition());
     	gameCamera.update(); //update camera
+    	
 		
 	}
 	
@@ -123,10 +129,11 @@ public class TestScreen implements Screen, InputProcessor{
 	
 	private void draw(SpriteBatch batch)
 	{
+		batch.setProjectionMatrix(gameCamera.combined);
 		
 		batch.begin();
 		
-		font.draw(batch, "Bienvenue dans inGameScreen",50,Gdx.graphics.getHeight()-50);
+		//font.draw(batch, "Bienvenue dans inGameScreen",50,Gdx.graphics.getHeight()-50);
 			
 			//arriere plan : 
 		     map.drawBackgroungWithParralax(batch);
@@ -150,13 +157,21 @@ public class TestScreen implements Screen, InputProcessor{
 	
 		     //plan avant : 
 		     map.drawForegroundWithParralax(batch);
+		     
+		     //HUD : 
+		     batch.setProjectionMatrix(hudCamera.combined);
+		     if(gameManager.getGamePaused())
+		     {
+		    	 font.setUseIntegerPositions(true);
+		    	 font.setScale(2, 2);
+		    	 font.draw(batch, "PAUSE", -30,0);//Gdx.graphics.getWidth() *0.5f - 130,Gdx.graphics.getHeight()*0.5f + 100);
+		     }
+		     
 		 batch.end();
 		 
-		 
+		 batch.setProjectionMatrix(gameCamera.combined);
 		 triggerManager.draw(batch); //for debug ou creation de la map
-		 
-		 gameManager.togglePause();
-	     
+
 	}
 
 	@Override
@@ -171,7 +186,6 @@ public class TestScreen implements Screen, InputProcessor{
 		
 		//updateCamera
 		gameCamera.update();
-		batch.setProjectionMatrix(gameCamera.combined);
 		
 		//update de la logique :
 		if(gameManager.getGamePaused() == false)
@@ -236,6 +250,10 @@ public class TestScreen implements Screen, InputProcessor{
 	public boolean keyDown(int keycode) {
 		playerController.listenKeyDown(keycode);
 		//player.listenKey(KeyStatus.DOWN, keycode);
+		
+		if(keycode == Keys.ESCAPE)
+		gameManager.togglePause();
+		
 		return false;
 	}
 
