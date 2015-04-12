@@ -13,6 +13,9 @@ import com.badlogic.gdx.Input.Keys;
 
 public class PlayerController extends Controller {
 
+	Map<Integer, String> mappedKey = new HashMap<Integer, String>(); // associe à chaque key, un evenement
+	Map<Integer, String> mappedButton = new HashMap<Integer, String>(); // associe à chaque button, un evenement
+	
 	PlayerController()
 	{
 		

@@ -3,54 +3,53 @@ package com.retroDante.game;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Controllable.KeyStatus;
+
 
 /**
  * 
- * Player représente le personnage controlé par le joueur. 
- * Il etend Character et implement en plus Controllable (cf : Controllable) pour Le controller.
- * Une caméra observe le joueur (design pattern observer) pour pouvoir le suivre. 
+ * Classe de base pour les ennemis du jeu. Les ennemis sont controllable pas un IAController
  * 
- * @author Florian
+ * @author florian
  *
  */
-public class Player extends Character {
+public class Enemy extends Character{
 
-	private GameCamera m_camera;
 	private AttackEmitter m_weapon;
-	private PlayerController m_controller;
+	private IAController m_controller;
 	
 	/**
 	 * Le player est un solidBody 
 	 */
 	
-	Player(Texture tex) 
+	Enemy(Texture tex) 
 	{
 		super(tex);
 		m_type = "player";
-		m_controller = new PlayerController();
+		m_controller = new IAController();
 		m_weapon = new AttackEmitter();
 		
 	}
 	
-	Player(TileSetInfo tileSet, int spriteIndex) 
+	Enemy(TileSetInfo tileSet, int spriteIndex) 
 	{
 		super(tileSet, spriteIndex);
 		m_type = "player";
-		m_controller = new PlayerController();
+		m_controller = new IAController();
 		m_weapon = new AttackEmitter();
 		
 	}
 	
-	Player(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
+	Enemy(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
 	{
 		super(tileSet, spriteIndex);
 		m_type = "player";
-		m_controller = new PlayerController();
+		m_controller = new IAController();
 		
 		m_animator = new Animator(tileSet.getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(deltaAnim);
@@ -61,11 +60,11 @@ public class Player extends Character {
 
 	}
 	
-	Player()
+	Enemy()
 	{
 		super( TileSetManager.getInstance().get("player"), 0);
 		m_type = "player";
-		m_controller = new PlayerController();
+		m_controller = new IAController();
 		
 		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(1.f);
@@ -79,24 +78,14 @@ public class Player extends Character {
 	//setters/ getters : 
 	
 	
-	public void setController(PlayerController controller)
+	public void setController(IAController controller)
 	{
 		m_controller = controller;
 	}
 	
-	public PlayerController getController()
+	public IAController getController()
 	{
 		return m_controller;
-	}
-	
-	public void setCamera(GameCamera newCamera)
-	{
-		m_camera = newCamera;
-	}
-	
-	public void removeCamera()
-	{
-		m_camera = null;
 	}
 	
 	// gestion des armes : 
@@ -142,15 +131,6 @@ public class Player extends Character {
 	}
 	
 	//overrides Controllers : 
-	
-//	@Override
-//	public void listenKey(KeyStatus status, int keycode) {
-//		
-//		if(status == KeyStatus.DOWN)
-//			m_controller.listenKeyDown(keycode);
-//		else if(status == KeyStatus.UP)
-//			m_controller.listenKeyUp(keycode);
-//	}
 	
 	@Override
 	public void checkController()
@@ -244,13 +224,6 @@ public class Player extends Character {
 			move( new Vector2(m_velocity.x, 0.f) );
 		if(!collideY)
 			move( new Vector2(0.f, m_velocity.y) );
-		
-		
-		//on bouge la camera si elle est présente : 
-		if(m_camera != null)
-		{
-			m_camera.follow( m_collider.getCenter(new Vector2(0,0)) );// getPosition().add( new Vector2(m_collider.getWidth()*0.5f, m_collider.getHeight()*0.5f) ) );
-		}
 			
 		
 		//réinitialisation : 
@@ -302,7 +275,8 @@ public class Player extends Character {
 		return builder.toString();
 		
 	}
+
 		
 	
-
+	
 }
