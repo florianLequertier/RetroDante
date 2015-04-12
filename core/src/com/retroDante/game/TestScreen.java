@@ -28,6 +28,7 @@ public class TestScreen implements Screen, InputProcessor{
     AttackManager attackManager = AttackManager.getInstance(); //singleton
 	TileSetManager tileSetManager = TileSetManager.getInstance(); //singleton
 	GameManager gameManager = GameManager.getInstance(); //Singleton
+	Enemy enemy; //test 
     
 	
 	@Override
@@ -102,6 +103,9 @@ public class TestScreen implements Screen, InputProcessor{
     	gameCamera.setPosition(player.getPosition());
     	gameCamera.update(); //update camera
     	
+    	
+    	enemy = new Enemy(); //test
+    	enemy.setPosition(new Vector2(400, 400));
 		
 	}
 	
@@ -113,6 +117,7 @@ public class TestScreen implements Screen, InputProcessor{
 		listCollider.addAll(m_platformContainer);
 		
 		player.update(delta, listCollider);
+		enemy.update(delta, listCollider, player.getPosition()); //test
 		
 		List<Character> listCharacter = new ArrayList<Character>();
 			listCharacter.add(player);
@@ -124,6 +129,7 @@ public class TestScreen implements Screen, InputProcessor{
 			attackManager.add(new BurningHearthquake(new Vector2(100,100)));
 		}
 		attackManager.update(delta, listCharacter);
+		
 		
 	}
 	
@@ -140,7 +146,6 @@ public class TestScreen implements Screen, InputProcessor{
 		     
 		     
 		     //plan du milieu : 
-		     player.draw(batch);
 		     
 		     for(Element2D e : m_platformContainer)
 		     {
@@ -150,6 +155,8 @@ public class TestScreen implements Screen, InputProcessor{
 		     //map.draw(batch);
 		     //map.drawWithParralax(batch); //version avec parralax
 		     map.drawMaingroundWithParralax(batch);
+		     player.draw(batch);
+		     enemy.draw(batch); //test
 		     
 		     attackManager.draw(batch);
 		     //attackManager.drawDebug(batch);
@@ -167,10 +174,14 @@ public class TestScreen implements Screen, InputProcessor{
 		    	 font.draw(batch, "PAUSE", -30,0);//Gdx.graphics.getWidth() *0.5f - 130,Gdx.graphics.getHeight()*0.5f + 100);
 		     }
 		     
+		     
+		     
 		 batch.end();
 		 
 		 batch.setProjectionMatrix(gameCamera.combined);
 		 triggerManager.draw(batch); //for debug ou creation de la map
+		 
+		
 
 	}
 

@@ -18,13 +18,13 @@ import com.badlogic.gdx.math.Vector2;
 public class IAController extends Controller {
 	
 	//critère qui determinerons le comportement de l'IA : 
-	Vector2 m_targetPosition; // position du joueur
-	Vector2 m_ownPosition; // position le L'ia
-	float m_ownLife; // vie de l'ia
-	float m_visibility; //vision de l'IA
-	float m_attackRange; //distance de l'attaque de l'ia
-	float m_lastTime; //temps correspondant à la derniere action effectuée
-	float m_currentTime; 
+	Vector2 m_targetPosition = new Vector2(0,0); // position du joueur
+	Vector2 m_ownPosition = new Vector2(0,0); // position le L'ia
+	float m_ownLife = 100; // vie de l'ia
+	float m_visibility = 100; //vision de l'IA
+	float m_attackRange = 10; //distance de l'attaque de l'ia
+	float m_lastTime = 0; //temps correspondant à la derniere action effectuée
+	float m_currentTime = 0; 
 	
 	//state machine pour la gestion des etats de l'ia
 	StateMachine<IAController> m_logicMachine;
@@ -113,7 +113,7 @@ public class IAController extends Controller {
 		m_visibility = visibility;
 	}
 	
-	public void setAttackRenge(float attackRange)
+	public void setAttackRange(float attackRange)
 	{
 		m_attackRange = attackRange;
 	}

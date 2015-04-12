@@ -88,7 +88,7 @@ public enum EnemyState implements State<IAController>{
 			}
 			else
 			{
-				if(vectorToTarget.y < 0) // vers la gauche ? 
+				if(vectorToTarget.x < 0) // vers la gauche ? 
 				{
 					character.putAction("walk_right", false); 
 					character.putAction("walk_left", true); //on marche vers la gauche 

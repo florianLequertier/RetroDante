@@ -30,7 +30,7 @@ public class Enemy extends Character{
 	Enemy(Texture tex) 
 	{
 		super(tex);
-		m_type = "player";
+		m_type = "enemy";
 		m_controller = new IAController();
 		m_weapon = new AttackEmitter();
 		
@@ -39,7 +39,7 @@ public class Enemy extends Character{
 	Enemy(TileSetInfo tileSet, int spriteIndex) 
 	{
 		super(tileSet, spriteIndex);
-		m_type = "player";
+		m_type = "enemy";
 		m_controller = new IAController();
 		m_weapon = new AttackEmitter();
 		
@@ -48,7 +48,7 @@ public class Enemy extends Character{
 	Enemy(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
 	{
 		super(tileSet, spriteIndex);
-		m_type = "player";
+		m_type = "enemy";
 		m_controller = new IAController();
 		
 		m_animator = new Animator(tileSet.getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
@@ -63,7 +63,7 @@ public class Enemy extends Character{
 	Enemy()
 	{
 		super( TileSetManager.getInstance().get("player"), 0);
-		m_type = "player";
+		m_type = "enemy";
 		m_controller = new IAController();
 		
 		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
@@ -162,11 +162,42 @@ public class Enemy extends Character{
 		return m_controller.checkActionOnce(stateName);
 	}
 	
+	//update 
+	public void update(float deltaTime, List<Element2D> others, Vector2 targetPosition)
+	{
+		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		m_controller.setTargetPosition(targetPosition);
+
+		m_controller.setAttackRange(100);
+		m_controller.setOwnLife(m_life);
+		m_controller.setOwnPosition(getPosition());
+		m_controller.setVisibility(10000000);
+		m_controller.update(deltaTime);
+		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
+		super.update(deltaTime, others);
+	}
+	public void update(float deltaTime, Vector2 targetPosition)
+	{
+		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		m_controller.setAttackRange(100);
+		m_controller.setOwnLife(m_life);
+		m_controller.setOwnPosition(getPosition());
+		m_controller.setVisibility(10000000);
+		m_controller.update(deltaTime);
+		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
+		super.update(deltaTime);
+	}
+	
 	//Override element2D :
 	@Override
 	public void update(float deltaTime, List<Element2D> others)
 	{
 		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		m_controller.setAttackRange(100);
+		m_controller.setOwnLife(m_life);
+		m_controller.setOwnPosition(getPosition());
+		m_controller.setVisibility(10000000);
+		m_controller.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
 	}
@@ -174,61 +205,15 @@ public class Enemy extends Character{
 	public void update(float deltaTime)
 	{
 		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		m_controller.setAttackRange(100);
+		m_controller.setOwnLife(m_life);
+		m_controller.setOwnPosition(getPosition());
+		m_controller.setVisibility(10000000);
+		m_controller.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
 	}
-	@Override
-	public void updateMovement(float deltaTime, List<Element2D> others)
-	{
-		m_velocity.add(getForceResult());//ajout des forces
-		m_velocity.scl( deltaTime);
-		
-		m_isGrounded = false;
-		Vector2 footPosition = new Vector2(m_collider.x + m_collider.width/2.f , m_collider.y - 10);
-
-		//collision ? 
-		boolean collideX = false;
-		boolean collideY = false;
-		
-		//collision ? 
-		for(Element2D e : others)
-		{
-			
-			if(!collideX)
-			{
-				//celon x : 
-				move( new Vector2(m_velocity.x, 0.f) );
-				if(this.collideWith(e))
-				{
-					collideX = true;
-				}
-				move( new Vector2(-m_velocity.x, 0.f) );
-			}
-			if(!collideY)
-			{
-				//celon y : 
-				move( new Vector2(0.f, m_velocity.y) );
-				if(this.collideWith(e))
-				{
-					collideY = true;
-					if(e.contains(footPosition)) //test pour savoir si le joueur a quelque chose sous ses pieds
-						m_isGrounded = true;
-				}
-				move( new Vector2(0.f, -m_velocity.y) );
-			}
-			if(collideX && collideY)
-				break;
-			
-		}
-		if(!collideX)
-			move( new Vector2(m_velocity.x, 0.f) );
-		if(!collideY)
-			move( new Vector2(0.f, m_velocity.y) );
-			
-		
-		//réinitialisation : 
-		m_velocity = Vector2.Zero;
-	}
+	
 	
 	//loader Json : 
 	
