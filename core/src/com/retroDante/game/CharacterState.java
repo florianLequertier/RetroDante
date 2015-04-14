@@ -88,7 +88,8 @@ public enum CharacterState implements State<Character> {
 				}
 				else
 				{
-					character.getStateMachine().changeState(JUMP);
+					character.getStateMachine().changeState(IDLE);
+					character.getAnimator().changeAnimation("jump");
 				}
 			}
 	

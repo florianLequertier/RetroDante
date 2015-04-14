@@ -217,37 +217,19 @@ public class Enemy extends Character{
 	
 	//loader Json : 
 	
-	static Player load(String filePath)
-	{
-		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
-		String fileString = file.readString();
-		//System.out.println(fileString);
-		Json json = new Json();
-		Player player = json.fromJson(Player.class, fileString);
-		return player;
-	}
-	void save(String filePath)
-	{
-		Json json = new Json();
-		String text = json.toJson(this);
-		System.out.println(text);
-		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);// internal(filePath);
-		file.writeString(text, false);
-	}
-	
 	@Override
 	public void write(Json json) {
-		json.writeObjectStart("player");
+		//json.writeObjectStart("enemy");
 			super.write(json);
-		json.writeObjectEnd();
+		//json.writeObjectEnd();
 		
 	}
 
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		JsonValue playerData = jsonData.get("player");
-		super.read(json, playerData);
-		System.out.println("playerData = "+playerData);
+		//JsonValue playerData = jsonData.get("enemy");
+		super.read(json, jsonData);
+		System.out.println("enemyData = "+jsonData);
 	}
 	
 	//autres methodes : 
@@ -255,7 +237,7 @@ public class Enemy extends Character{
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("Player : \n").append(super.toString());
+		builder.append("Enemy : \n").append(super.toString());
 		
 		return builder.toString();
 		

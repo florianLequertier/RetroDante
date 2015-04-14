@@ -101,6 +101,11 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	
 	//setters/ getters : 
 	
+	public boolean getIsDead()
+	{
+		return m_isDead;
+	}
+	
 	public boolean getIsGrounded()
 	{
 		return m_isGrounded;

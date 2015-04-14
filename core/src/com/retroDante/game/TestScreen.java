@@ -29,6 +29,7 @@ public class TestScreen implements Screen, InputProcessor{
 	TileSetManager tileSetManager = TileSetManager.getInstance(); //singleton
 	GameManager gameManager = GameManager.getInstance(); //Singleton
 	Enemy enemy; //test 
+	EnemyManager enemyManager;
     
 	
 	@Override
@@ -106,6 +107,12 @@ public class TestScreen implements Screen, InputProcessor{
     	
     	enemy = new Enemy(); //test
     	enemy.setPosition(new Vector2(400, 400));
+    	
+    	enemyManager = new EnemyManager();
+    	enemyManager.add(enemy);
+    	
+    	enemyManager.save("test_save_enemy.txt");
+    	enemyManager.load("test_save_enemy.txt");
 		
 	}
 	
@@ -117,7 +124,8 @@ public class TestScreen implements Screen, InputProcessor{
 		listCollider.addAll(m_platformContainer);
 		
 		player.update(delta, listCollider);
-		enemy.update(delta, listCollider, player.getPosition()); //test
+		//enemy.update(delta, listCollider, player.getPosition()); //test
+		enemyManager.update(delta, listCollider, player.getPosition());
 		
 		List<Character> listCharacter = new ArrayList<Character>();
 			listCharacter.add(player);
@@ -156,7 +164,8 @@ public class TestScreen implements Screen, InputProcessor{
 		     //map.drawWithParralax(batch); //version avec parralax
 		     map.drawMaingroundWithParralax(batch);
 		     player.draw(batch);
-		     enemy.draw(batch); //test
+		     //enemy.draw(batch); //test
+		     enemyManager.draw(batch);
 		     
 		     attackManager.draw(batch);
 		     //attackManager.drawDebug(batch);
