@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -28,15 +30,36 @@ public class HUDManager {
 	private Stage m_stage;
 	private Skin m_skin;
 	private HashMap<String, Table> m_tableComponent = new HashMap<String, Table>();
-	private InputProcessor m_inputHandler;
+	//private KeyboardListener m_keyListener;
 	
 	HUDManager()
 	{
 		//m_inputHandler = new InputProcessor();
 		//Gdx.input.setInputProcessor(m_stage);
 		
-		m_stage = new Stage();
+		//m_keyListener = new KeyboardListener(this);
 		
+		m_stage = new Stage();
+		m_stage.addListener(new InputListener(){
+			
+			public boolean keyDown(ChangeEvent event, int keycode){
+				
+				if(keycode == Keys.ESCAPE)
+				{
+					//gameManager.togglePause();
+					tooglePauseMenu();
+				}
+				
+				return false;
+			}
+		});
+		//m_stage.setKeyboardFocus(this);
+	
+//		if(keycode == Keys.ESCAPE)
+//		{
+//			//gameManager.togglePause();
+//			m_hudManager.tooglePauseMenu();
+//		}
 		
 		m_skin = new Skin();
 		// Generate a 1x1 white texture and store it in the skin named "white".
@@ -51,8 +74,8 @@ public class HUDManager {
 		// Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = m_skin.newDrawable("white", Color.DARK_GRAY);
-		textButtonStyle.down = m_skin.newDrawable("white", Color.DARK_GRAY);
-		textButtonStyle.checked = m_skin.newDrawable("white", Color.BLUE);
+		textButtonStyle.down = m_skin.newDrawable("white", Color.BLUE);
+		textButtonStyle.checked = m_skin.newDrawable("white", Color.DARK_GRAY);
 		textButtonStyle.over = m_skin.newDrawable("white", Color.LIGHT_GRAY);
 		textButtonStyle.font = m_skin.getFont("default");
 		m_skin.add("default", textButtonStyle);
@@ -70,7 +93,7 @@ public class HUDManager {
 			
 			
 			final TextButton button_quit = new TextButton("Quit", m_skin);
-			TextButton button_resume = new TextButton("Resume", m_skin);
+			final TextButton button_resume = new TextButton("Resume", m_skin);
 			
 			pauseMenu.add(button_quit).space(20).width(100).row();
 			pauseMenu.add(button_resume).space(20).width(100).row();
@@ -80,6 +103,7 @@ public class HUDManager {
 				@Override
 				public void changed (ChangeEvent event, Actor actor) {
 					
+					GameManager.getInstance().resetGameSession();
 					GameManager.getInstance().changeScreen("menu");
 					
 				}
@@ -100,14 +124,21 @@ public class HUDManager {
 	
 	public void closePauseMenu()
 	{
+		GameManager.getInstance().togglePause(); //unpause
 		m_stage.getRoot().removeActor(m_tableComponent.get("pauseMenu"));
+	}
+	
+	public void openPauseMenu()
+	{
+		GameManager.getInstance().togglePause(); //pause
+		m_stage.addActor(m_tableComponent.get("pauseMenu"));
 	}
 	
 	public void tooglePauseMenu()
 	{
 		if(!m_stage.getActors().contains(m_tableComponent.get("pauseMenu"), false)) //si le pauseMenu n'est pas dans le stage
 		{
-			m_stage.addActor(m_tableComponent.get("pauseMenu"));
+			openPauseMenu();
 		}
 		else
 		{
@@ -121,5 +152,16 @@ public class HUDManager {
 		
 	}
 	
+	public Stage getStage()
+	{
+		return m_stage;
+	}
 	
+	public void dispose()
+	{
+		m_stage.dispose();
+		m_skin.dispose();
+		m_tableComponent.clear();
+	}
+
 }

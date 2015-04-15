@@ -77,6 +77,18 @@ public class GameManager implements DataSingleton<GameManager>{
 		}
 	}
 	
+	/**
+	 * remise à 0 des conditions de jeu lorsque l'on quitte un screen (= un niveau) de jeu. 
+	 */
+	public void resetGameSession()
+	{
+		m_distortionFactor = 1;
+		m_gamePaused = false;
+		m_timeIsDistorted = false;;
+		m_savedTime = 0;
+		m_elapsedTime = 0;
+	}
+	
 	//getters / setters : 
 	
 	public void setSavedTime(float time)
@@ -128,13 +140,11 @@ public class GameManager implements DataSingleton<GameManager>{
 		return true;
 
 	}
-	
-	
 	@Override
 	public void clear() {
+		// TODO Auto-generated method stub
 		
 	}
-	
-	
+
 	
 }

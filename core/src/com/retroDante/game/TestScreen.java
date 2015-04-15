@@ -6,12 +6,12 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class TestScreen implements Screen, InputProcessor{
@@ -30,13 +30,13 @@ public class TestScreen implements Screen, InputProcessor{
 	GameManager gameManager = GameManager.getInstance(); //Singleton
 	Enemy enemy; //test 
 	EnemyManager enemyManager;
-	HUDManager hudManager;
+	HUDManager m_hudManager;
+	InputMultiplexer m_inputHandler;
     
 	
 	@Override
 	public void show() {
 
-		
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		
@@ -100,9 +100,6 @@ public class TestScreen implements Screen, InputProcessor{
     	triggerManager = TriggerManager.load("test_save_triggerManager.txt");
     	
     	
-    	
-    	Gdx.input.setInputProcessor(this);
-    	
     	gameCamera.setPosition(player.getPosition());
     	gameCamera.update(); //update camera
     	
@@ -114,11 +111,15 @@ public class TestScreen implements Screen, InputProcessor{
     	enemyManager.add(enemy);
     	
     	enemyManager.save("test_save_enemy.txt");
-    	enemyManager.load("test_save_enemy.txt");
+    	enemyManager = EnemyManager.load("test_save_enemy.txt");
     	
     	
     	//HUD manager : 
-    	hudManager = new HUDManager();
+    	m_hudManager = new HUDManager();
+    	
+    	//input handler : 
+    	m_inputHandler = new InputMultiplexer(m_hudManager.getStage(), this);
+       	Gdx.input.setInputProcessor(m_inputHandler);
 		
 	}
 	
@@ -191,7 +192,9 @@ public class TestScreen implements Screen, InputProcessor{
 		     
 		 batch.end();
 		 
-		 hudManager.draw();
+		 
+		 //le HUD possède son propre batch : 
+		 m_hudManager.draw();
 		     
 		
 		 
@@ -273,19 +276,21 @@ public class TestScreen implements Screen, InputProcessor{
 		
 		attackManager.clear(); // AttackManager étant dans le stack, il ne faut pas oublier d'enlever les elements qu'elle contient lorsque l'on quitte le niveau.
 		tileSetManager.clear(); // idem
+		
+		m_hudManager.dispose();
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		playerController.listenKeyDown(keycode);
+		//playerController.listenKeyDown(keycode);
 		//player.listenKey(KeyStatus.DOWN, keycode);
 		
 		
 		//pause du jeu : 
 		if(keycode == Keys.ESCAPE)
 		{
-			gameManager.togglePause();
-			hudManager.tooglePauseMenu();
+			//gameManager.togglePause();
+			m_hudManager.tooglePauseMenu();
 		}
 		
 		
@@ -295,7 +300,7 @@ public class TestScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode) {
-		playerController.listenKeyUp(keycode);
+		//playerController.listenKeyUp(keycode);
 		//player.listenKey(KeyStatus.UP, keycode);
 		return false;
 	}
@@ -308,14 +313,14 @@ public class TestScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		playerController.listenButtonDown(button);
+		//playerController.listenButtonDown(button);
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		playerController.listenButtonUp(button);
+		//playerController.listenButtonUp(button);
 		// TODO Auto-generated method stub
 		return false;
 	}
