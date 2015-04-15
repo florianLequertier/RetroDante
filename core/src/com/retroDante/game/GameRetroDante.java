@@ -12,11 +12,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameRetroDante extends Game {
 	
+	GameManager gameManager = GameManager.getInstance();
 	Screen testScreen;
 	
 	@Override
 	public void create () {
-		testScreen = new TestScreen();
+		gameManager.setGame(this);
+		
+		//testScreen = new TestScreen();
+		//this.setScreen(testScreen);
+		testScreen = new MenuScreen();
 		this.setScreen(testScreen);
 	}
 

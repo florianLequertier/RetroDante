@@ -1,5 +1,9 @@
 package com.retroDante.game;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
+
 /**
  * 
  * gere les pause inGame, la distorsion du temps, ainsi que l'etat global du jeu.
@@ -8,13 +12,15 @@ package com.retroDante.game;
  *
  */
 public class GameManager implements DataSingleton<GameManager>{
-
+	
+	Game m_game;
 	float m_distortionFactor;
 	boolean m_gamePaused;
 	boolean m_timeIsDistorted;
 	float m_fps;
 	float m_savedTime = 0;
 	float m_elapsedTime = 0;
+	InputMultiplexer m_inputHandler; 
 	//StateMachine m_gameState = new ReverseStateMachine();
 	
 	
@@ -24,10 +30,16 @@ public class GameManager implements DataSingleton<GameManager>{
 	}
 	private GameManager()
 	{
+		m_inputHandler = new InputMultiplexer();
 		m_distortionFactor = 1;
 		m_gamePaused = false;
 		m_timeIsDistorted = false;
 		m_fps = 0.016f; //60 images par secondes
+	}
+	
+	public void setGame(Game game)
+	{
+		m_game = game;
 	}
 	
 	public void distortTime(float distortFactor)
@@ -86,6 +98,35 @@ public class GameManager implements DataSingleton<GameManager>{
 	public boolean getTimeIsDistorted()
 	{
 		return m_timeIsDistorted;
+	}
+	
+	/**
+	 * 
+	 * fonction retournant une nouvelle scene de jeu en fonction du nom passé.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	boolean changeScreen(String name)
+	{
+		
+		if(m_game == null)
+			return false;
+		
+		
+		if(name == "test")
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new TestScreen());
+		}
+		else
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new MenuScreen());
+		}
+		
+		return true;
+
 	}
 	
 	

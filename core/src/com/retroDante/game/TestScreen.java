@@ -30,10 +30,12 @@ public class TestScreen implements Screen, InputProcessor{
 	GameManager gameManager = GameManager.getInstance(); //Singleton
 	Enemy enemy; //test 
 	EnemyManager enemyManager;
+	HUDManager hudManager;
     
 	
 	@Override
 	public void show() {
+
 		
 		batch = new SpriteBatch();
 		font = new BitmapFont();
@@ -113,6 +115,10 @@ public class TestScreen implements Screen, InputProcessor{
     	
     	enemyManager.save("test_save_enemy.txt");
     	enemyManager.load("test_save_enemy.txt");
+    	
+    	
+    	//HUD manager : 
+    	hudManager = new HUDManager();
 		
 	}
 	
@@ -180,12 +186,14 @@ public class TestScreen implements Screen, InputProcessor{
 		     {
 		    	 font.setUseIntegerPositions(true);
 		    	 font.setScale(2, 2);
-		    	 font.draw(batch, "PAUSE", -30,0);//Gdx.graphics.getWidth() *0.5f - 130,Gdx.graphics.getHeight()*0.5f + 100);
+		    	 font.draw(batch, "PAUSE", -45, 100);//Gdx.graphics.getWidth() *0.5f - 130,Gdx.graphics.getHeight()*0.5f + 100);
 		     }
 		     
-		     
-		     
 		 batch.end();
+		 
+		 hudManager.draw();
+		     
+		
 		 
 		 batch.setProjectionMatrix(gameCamera.combined);
 		 triggerManager.draw(batch); //for debug ou creation de la map
@@ -231,6 +239,7 @@ public class TestScreen implements Screen, InputProcessor{
 	        
 	    //commande de dessin : 
 		draw(batch);
+		
 
 	}
 
@@ -271,8 +280,15 @@ public class TestScreen implements Screen, InputProcessor{
 		playerController.listenKeyDown(keycode);
 		//player.listenKey(KeyStatus.DOWN, keycode);
 		
+		
+		//pause du jeu : 
 		if(keycode == Keys.ESCAPE)
-		gameManager.togglePause();
+		{
+			gameManager.togglePause();
+			hudManager.tooglePauseMenu();
+		}
+		
+		
 		
 		return false;
 	}
