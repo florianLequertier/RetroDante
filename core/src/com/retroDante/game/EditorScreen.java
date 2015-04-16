@@ -9,9 +9,13 @@ public class EditorScreen implements Screen {
 	
 	private Stage m_stage;
 	private EditorPicker m_editorPicker;
+	private TileSetManager m_tileSetManager = TileSetManager.getInstance();
 	
 	@Override
 	public void show() {
+		
+		m_tileSetManager.load(Gdx.files.getLocalStoragePath()+"/asset/"+"textureInfo/tileSetManagerLoader.txt");
+		System.out.println(m_tileSetManager.toString());
 		
 		m_stage = new Stage();
 		Gdx.input.setInputProcessor(m_stage);
@@ -53,6 +57,7 @@ public class EditorScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		m_tileSetManager.clear();
 		m_stage.dispose();		
 	}
 	

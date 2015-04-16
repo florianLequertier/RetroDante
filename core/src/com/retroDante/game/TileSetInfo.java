@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Map.Entry;
@@ -17,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-public class TileSetInfo {
+public class TileSetInfo implements Iterable {
 	
 	String m_name;
 	int m_spriteNumber;
@@ -135,6 +136,22 @@ public class TileSetInfo {
 		return m_texture;
 	}
 	
+	/**
+	 * total number of textureRegion
+	 * 
+	 * @return
+	 */
+	public int length()
+	{
+		int length = 0;
+		for(int i=0; i<m_textureRegion.length; i++)
+		{
+			length+=m_textureRegion[i].length;
+		}
+		
+		return length;
+	}
+	
 	
 	public String toString()
 	{
@@ -144,5 +161,10 @@ public class TileSetInfo {
 		
 		
 		return builder.toString();
+	}
+
+	@Override
+	public Iterator<TextureRegion> iterator() {		
+		return new TileSetIterator(this);
 	}
 }
