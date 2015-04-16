@@ -84,6 +84,13 @@ public class TileSetInfo implements Iterable {
 				index -= m_spriteNumber;
 			}
 		}
+		else if(index < 0 )
+		{
+			while(index < 0)
+			{
+				index += m_spriteNumber;
+			}
+		}
 		
 		
 		int indexRow = 0;
@@ -96,12 +103,11 @@ public class TileSetInfo implements Iterable {
 			
 			if(result >= 0)
 			{
-				indexRow++;
 				index -= m_spriteByLine[indexRow];
+				indexRow++;
 			}
 		}
 		indexColl = index;
-	
 		
 		return m_textureRegion[indexRow][indexColl];
 	}

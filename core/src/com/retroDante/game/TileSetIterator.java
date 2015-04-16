@@ -18,7 +18,8 @@ public class TileSetIterator implements Iterator<TextureRegion>{
 	
 	@Override
 	public boolean hasNext() {
-		return ( (m_index + 1) != m_owner.length() );
+		System.out.println("nombre de tiles dans le set : "+m_owner.length());
+		return ( m_index != m_owner.length() );
 	}
 
 	@Override

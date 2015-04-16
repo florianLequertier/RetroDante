@@ -1,4 +1,4 @@
-3
+4
 player
 texture/test_animation.png
 textureInfo/test_animation.txt
@@ -10,3 +10,7 @@ textureInfo/aaa.txt
 effect
 texture/effects.png
 textureInfo/effects.txt
+
+editorButton
+texture/editor/editorButton.png
+textureInfo/editor/editorButton.txt
