@@ -173,6 +173,11 @@ public class EditorPicker extends Table {
 		
 	}
 	
+	void setMouse(MouseEditor mouse)
+	{
+		m_editorMouse = mouse;
+	}
+	
 	void changeType(String name)
 	{
 		

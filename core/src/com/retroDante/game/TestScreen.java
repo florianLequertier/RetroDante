@@ -127,7 +127,7 @@ public class TestScreen implements Screen, InputProcessor{
     	m_hudManager = new HUDManager();
     	
     	//input handler : 
-    	m_inputHandler = new InputMultiplexer(m_hudManager.getStage(), this);
+    	m_inputHandler = new InputMultiplexer(m_hudManager.getStage(), playerController);
        	Gdx.input.setInputProcessor(m_inputHandler);
 		
 	}

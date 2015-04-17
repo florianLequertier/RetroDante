@@ -1,5 +1,8 @@
 package com.retroDante.game;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+
 
 /**
  * 
@@ -13,8 +16,8 @@ package com.retroDante.game;
  */
 public interface CanvasInterface {
 	
-	void save(); // sauvegarde le composant du canvas
-	void move(); //bouge le bouton
-	void draw(); //dessine le composant du canvas, puis le bouton par dessus
+	public void setPosition(Vector2 newPos); //bouge le bouton
+	void draw(Batch batch); //dessine le composant du canvas, puis le bouton par dessus
+	public void dropOnSceen();
 	
 }

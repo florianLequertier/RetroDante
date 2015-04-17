@@ -13,6 +13,7 @@ public class EditorScreen implements Screen {
 	private TileSetManager m_tileSetManager = TileSetManager.getInstance();
 	private Batch m_batch;
 	private MouseEditor m_mouse;
+	private EditorSceen m_sceen;
 	
 	@Override
 	public void show() {
@@ -22,19 +23,27 @@ public class EditorScreen implements Screen {
 		
 		m_stage = new Stage();
 		Gdx.input.setInputProcessor(m_stage);
-		
-		m_editorPicker = new EditorPicker();
-		m_stage.addActor(m_editorPicker);
-		
 		m_batch = m_stage.getBatch();
 		
 		m_mouse = new MouseEditor();
+		
+
+		
+		m_sceen = new EditorSceen();
+			m_stage.addActor(m_sceen);
+			m_sceen.setMouse(m_mouse);
+			
+		m_editorPicker = new EditorPicker();
+			m_stage.addActor(m_editorPicker);
+			m_editorPicker.setMouse(m_mouse);
+		
+		
 	}
 	
 	
 	private void update(float delta)
 	{
-		
+		m_mouse.update();
 	}
 	
 	private void draw()
@@ -42,12 +51,12 @@ public class EditorScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		
-		
-		
 		m_stage.act(Gdx.graphics.getDeltaTime());
 		m_stage.draw();
 		
-		m_mouse.draw();
+		m_batch.begin();
+			m_mouse.draw(m_batch);
+		m_batch.end();
 	}
 
 	@Override

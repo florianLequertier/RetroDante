@@ -10,12 +10,16 @@ import java.io.IOException;
 import java.util.List;
 
 
+
+
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 
@@ -242,12 +246,14 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 //		this.m_collider.setPosition( pos );
 //	}
 	
+	/*
 	@Override
 	public void move(Vector2 deltaPos)
 	{
 		Vector2 position = new Vector2(this.m_collider.getX() + deltaPos.x, this.m_collider.getY() + deltaPos.y);
 		this.m_collider.setPosition( position );
 	}
+	*/
 	
 
 	
@@ -259,12 +265,27 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 	public void draw(SpriteBatch batch) {
 		Vector2 position = new Vector2(this.m_collider.getX(), this.m_collider.getY());
 		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
+		//this.updateTransform();
+		//batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform() );
+	}
+	
+	@Override
+	public void draw(Batch batch) {
+		Vector2 position = new Vector2(this.m_collider.getX(), this.m_collider.getY());
+		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
+		//this.updateTransform();
+		//batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform() );
 	}
 	
 	public void drawWithParralax(SpriteBatch batch, float decalX, float decalY) {
 		
 		Vector2 position = new Vector2(this.m_collider.getX()+decalX, this.m_collider.getY() +decalY);
 		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
+		//this.updateTransform();
+		//Affine2 transfo = this.getTransform();//.preTranslate(decalX, decalY);
+		//batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, transfo );
+		
+		//System.out.println(transfo);
 		
 	}
 	
@@ -283,6 +304,7 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 		m_type = jsonData.getString("m_type");
 		setAnimationSpeed( jsonData.getFloat("m_animationSpeed") );
 	}
+
 	
 	
 	

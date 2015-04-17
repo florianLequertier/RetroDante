@@ -1,6 +1,16 @@
 package com.retroDante.game;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 /**
  * 
@@ -12,30 +22,62 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
  *
  * @param <T>
  */
-public class Canvas<T> extends Button implements CanvasInterface {
+public class Canvas<T extends Body> implements CanvasInterface {
+	
+	private static final Skin m_skin;
+	
+	static{
+		
+		m_skin = new Skin();
+		
+		// Generate a 1x1 white texture and store it in the skin named "white".
+		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
+		pixmap.setColor(Color.WHITE);
+		pixmap.fill();
+		m_skin.add("white", new Texture(pixmap));
+
+		
+		//boutons par defaut : 
+		ButtonStyle buttonStyle = new ButtonStyle();
+		buttonStyle.up = m_skin.newDrawable("white", 0 , 0 , 0 , 0);
+		buttonStyle.down = m_skin.newDrawable("white", 100, 20, 240, 80);
+		buttonStyle.checked = m_skin.newDrawable("white", 0 , 0 , 0 , 0);
+		buttonStyle.over = m_skin.newDrawable("white", 100, 20, 240, 20);
+		m_skin.add("default", buttonStyle);
+		
+	} //skin unique pour chaque canvas
 	
 	private T m_element;
+	private Button m_button;
 	
 	Canvas(T element)
 	{
+		m_button = new Button(m_skin);
 		m_element = element;
 	}
 
 	@Override
-	public void save() {
-		// TODO Auto-generated method stub
-		
+	public void setPosition(Vector2 newPos) 
+	{
+
+		m_button.setPosition(newPos.x, newPos.y);
+		if(m_element != null)
+			m_element.setPosition(newPos);
 	}
 
 	@Override
-	public void move() {
-		// TODO Auto-generated method stub
+	public void draw(Batch batch) 
+	{
+		if(m_element != null)
+			m_element.draw(batch);
 		
-	}
+		m_button.draw(batch, 1);
 
+	}
+	
 	@Override
-	public void draw() {
-		// TODO Auto-generated method stub
+	public void dropOnSceen()
+	{
 		
 	}
 }

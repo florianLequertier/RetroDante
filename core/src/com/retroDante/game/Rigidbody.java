@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 
 
-public class Rigidbody implements Json.Serializable{
+public abstract class Rigidbody extends Body implements Json.Serializable{
 	
 	protected Vector2 m_velocity = new Vector2(0,0);
 	protected Rectangle m_collider = new Rectangle(0,0,32,32);
@@ -43,14 +43,14 @@ public class Rigidbody implements Json.Serializable{
 	 * Utile pour la plupart des éléments non "static" du jeu (joueur, ennemis...)
 	 * 
 	 */
-	static Rigidbody SolidBody()
-	{
-		Rigidbody r = new Rigidbody();
-		r.setIsSolid(true);
-		r.addConstantForce(Force.Gravity());
-		
-		return r;
-	}
+//	static Rigidbody SolidBody()
+//	{
+//		Rigidbody r = new Rigidbody();
+//		r.setIsSolid(true);
+//		r.addConstantForce(Force.Gravity());
+//		
+//		return r;
+//	}
 	
 	/**
 	 * Cette fonction est une factory renvoyant un nouveau rigidbody avec : 
@@ -59,13 +59,13 @@ public class Rigidbody implements Json.Serializable{
 	 * Utile pour la plupart des éléments "static" du jeu (plateformes, sol, fond, ...)
 	 * 
 	 */
-	static Rigidbody StaticBody()
-	{
-		Rigidbody r = new Rigidbody();
-		r.setIsSolid(true);
-		
-		return r;
-	}
+//	static Rigidbody StaticBody()
+//	{
+//		Rigidbody r = new Rigidbody();
+//		r.setIsSolid(true);
+//		
+//		return r;
+//	}
 	
 	/**
 	 * Cette fonction fixe les paramétre de rigidbody pour qu'il devienne un SolidBody :
@@ -112,11 +112,43 @@ public class Rigidbody implements Json.Serializable{
 		m_velocity = Vector2.Zero;
 	}
 	
+	
+	//Body Overrides : 
+	
+	@Override
 	public void move(Vector2 deltaPos)
 	{
+		super.move(deltaPos);
+		
 		Vector2 position = new Vector2(this.m_collider.getX() + deltaPos.x, this.m_collider.getY() + deltaPos.y);
 		this.m_collider.setPosition( position );
 	}
+	@Override
+	public Vector2 getPosition() 
+	{
+		return new Vector2(m_collider.x, m_collider.y);
+	}
+	@Override
+	public void setPosition(Vector2 position) 
+	{
+		super.setPosition(position);
+		
+		this.m_collider.setPosition(position);
+	}
+	@Override
+	public Vector2 getDimension() 
+	{
+		return new Vector2(m_collider.width, m_collider.height);
+	}
+	@Override
+	public void setDimension(Vector2 dimension) 
+	{
+		super.setDimension(dimension);
+		
+		Vector2 position = new Vector2(this.m_collider.x,this.m_collider.y);
+		m_collider = new Rectangle(position.x, position.y, dimension.x, dimension.y);
+	}
+
 	
 	
 	//getters et setters : 
@@ -132,29 +164,13 @@ public class Rigidbody implements Json.Serializable{
 		return m_blockCursor;
 	}
 	
-	public Vector2 getPosition() {
-		return new Vector2(m_collider.x, m_collider.y);
-	}
-
-	public void setPosition(Vector2 position) {
-		this.m_collider.setPosition(position);
-	}
-
+	
 	public Vector2 getVelocity() {
 		return m_velocity;
 	}
 
 	public void setVelocity(Vector2 velocity) {
 		this.m_velocity = velocity;
-	}
-
-	public Vector2 getDimension() {
-		return new Vector2(m_collider.width, m_collider.height);
-	}
-
-	public void setDimension(Vector2 dimension) {
-		Vector2 position = new Vector2(this.m_collider.x,this.m_collider.y);
-		m_collider = new Rectangle(position.x, position.y, dimension.x, dimension.y);
 	}
 
 	public boolean isBlockCursor() {

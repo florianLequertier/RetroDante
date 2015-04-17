@@ -14,18 +14,28 @@ import com.badlogic.gdx.utils.Json;
  */
 public abstract class Body {
 	
-	private Vector2 m_dimension;
-	private Vector2 m_scaleFactor;
-	private Vector2 m_position;
-	private float m_rotation;
-	private Affine2 m_transform;
+	private Vector2 m_dimension = new Vector2(1,1);
+	private Vector2 m_scaleFactor = new Vector2(1,1);
+	private Vector2 m_position = new Vector2(0,0);
+	private float m_rotation = 0;
+	private Affine2 m_transform = new Affine2();
+	
+	Body()
+	{
+		m_dimension = new Vector2(1,1);
+		m_scaleFactor = new Vector2(1,1);
+		m_position = new Vector2(0,0);
+		m_rotation = 0;
+		m_transform = new Affine2();
+		m_transform.idt();
+	}
 	
 	public void updateTransform()
 	{
 		m_transform = m_transform.idt().translate(m_position).rotate(m_rotation).scale(m_scaleFactor);
 	}
 	
-	public void setDimensions(Vector2 dimension)
+	public void setDimension(Vector2 dimension)
 	{
 		m_dimension = dimension;
 		updateTransform();
@@ -42,6 +52,10 @@ public abstract class Body {
 		m_position = newPosition;
 		updateTransform();
 	}
+	public Vector2 getPosition()
+	{
+		return m_position;
+	}
 	public void setScale(Vector2 newScale)
 	{
 		m_scaleFactor = newScale;
@@ -51,6 +65,10 @@ public abstract class Body {
 	{
 		m_scaleFactor.add(deltaScale);
 		updateTransform();
+	}
+	public Vector2 getScale()
+	{
+		return m_scaleFactor;
 	}
 	public void setRotation(float newRotation)
 	{
@@ -62,6 +80,10 @@ public abstract class Body {
 		m_rotation += deltaRotation;
 		updateTransform();
 	}
+	public float getRotation()
+	{
+		return m_rotation;
+	}
 	
 	public Affine2 getTransform()
 	{
@@ -72,5 +94,7 @@ public abstract class Body {
 	{
 		return m_dimension;
 	}
+	
+	public abstract void draw(Batch batch);
 	
 }
