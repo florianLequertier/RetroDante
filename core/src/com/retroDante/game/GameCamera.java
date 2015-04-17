@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.retroDante.game.map.Map;
 
 public class GameCamera extends OrthographicCamera{
 	
@@ -67,7 +68,7 @@ public class GameCamera extends OrthographicCamera{
 		return m_maxSpeed;
 	}
 	
-	void follow(Vector2 target)
+	public void follow(Vector2 target)
 	{
 		Vector2 camPos = new Vector2(this.position.x, this.position.y );
 		Vector2 fromTo = target.mulAdd(camPos, -1);

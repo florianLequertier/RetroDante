@@ -112,7 +112,7 @@ public class TileSetInfo implements Iterable {
 		return m_textureRegion[indexRow][indexColl];
 	}
 	
-	List<Animation> getForAnimation(int... lineIndex)
+	public List<Animation> getForAnimation(int... lineIndex)
 	{
 		boolean outOfBounds = false;
 		

@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.trigger;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Drawable;
+import com.retroDante.game.Rigidbody;
+import com.retroDante.game.character.Character;
 
 /**
  * Trigger : classe abstraite (design pattern structure), représentant la classe de base des triggers. 

@@ -30,7 +30,7 @@ public class Rigidbody implements Json.Serializable{
 	 * isSolid == true;
 	 * 
 	 */
-	Rigidbody()
+	public Rigidbody()
 	{
 		setBlockCursor(true);
 		setIsSolid(true);

@@ -1,10 +1,13 @@
-package com.retroDante.game;
+package com.retroDante.game.map;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.retroDante.game.Element2D;
+import com.retroDante.game.TileSetInfo;
+import com.retroDante.game.TileSetManager;
 
-public class Platform extends Element2D{
+public class MapElement extends Element2D{
 	
-	Platform(Texture tex) 
+	public MapElement(Texture tex) 
 	{
 		super(tex);
 		this.makeStaticBody();
@@ -13,7 +16,7 @@ public class Platform extends Element2D{
 
 	}
 	
-	Platform(TileSetInfo tileSet, int spriteIndex) 
+	public MapElement(TileSetInfo tileSet, int spriteIndex) 
 	{
 		super(tileSet, spriteIndex);
 		this.makeStaticBody();
@@ -22,7 +25,7 @@ public class Platform extends Element2D{
 
 	}
 	
-	Platform() 
+	public MapElement() 
 	{
 		super(TileSetManager.getInstance().get("platform"), 0);
 		this.makeStaticBody();

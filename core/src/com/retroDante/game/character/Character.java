@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
 
 import java.util.List;
 
@@ -9,6 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Animator;
+import com.retroDante.game.Controllable;
+import com.retroDante.game.Element2D;
+import com.retroDante.game.TileSetInfo;
+import com.retroDante.game.TileSetManager;
 
 /**
  * 

@@ -19,7 +19,7 @@ import javafx.scene.input.MouseButton;
 public abstract class Controller {
 
 
-	Map<String, Boolean> mappedEvent = new HashMap<String, Boolean>(); //associe à un evenement un booleen pour savoir si l'eveneement est en cours
+	protected Map<String, Boolean> mappedEvent = new HashMap<String, Boolean>(); //associe à un evenement un booleen pour savoir si l'eveneement est en cours
 	
 	/**
 	 * 
@@ -28,7 +28,7 @@ public abstract class Controller {
 	 * @param actionName : nom de l'action à checker
 	 * @return
 	 */
-	abstract boolean checkAction(String actionName);
+	abstract public boolean checkAction(String actionName);
 	
 	/**
 	 * 
@@ -38,7 +38,7 @@ public abstract class Controller {
 	 * @param actionName : nom de l'action à checker
 	 * @return
 	 */
-	abstract boolean checkActionOnce(String actionName);
+	abstract public boolean checkActionOnce(String actionName);
 	
 	
 	

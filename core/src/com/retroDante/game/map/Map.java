@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.map;
 
 
 import java.util.ArrayList;
@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Drawable;
+import com.retroDante.game.Element2D;
+import com.retroDante.game.GameCamera;
 
 public class Map implements Drawable, Json.Serializable{
 
@@ -31,24 +34,24 @@ public class Map implements Drawable, Json.Serializable{
 	{
 		//mainground : 
 		Map map = new Map();
-		Platform p = new Platform();
+		MapElement p = new MapElement();
 		p.setPosition(new Vector2(400, 200));
 			map.addToMainground(p);
-		p = new Platform();
+		p = new MapElement();
 		p.setPosition(new Vector2(100, 20));
 			map.addToMainground(p);
-		p = new Platform();
+		p = new MapElement();
 		p.setPosition(new Vector2(10, 200));
 			map.addToMainground(p);
 		
 		//background : 
-		p = new Platform();
+		p = new MapElement();
 		p.setPosition(new Vector2(70, 450));
 			map.addToBackground(-1, p);
-		p = new Platform();
+		p = new MapElement();
 		p.setPosition(new Vector2(70, 350));
 			map.addToBackground(-2, p);
-		p = new Platform();
+		p = new MapElement();
 		p.setPosition(new Vector2(70, 250));
 			map.addToBackground(-3, p);
 		p.setPosition(new Vector2(70, 150));
@@ -127,7 +130,7 @@ public class Map implements Drawable, Json.Serializable{
 		m_mainground.removeElement(element);
 	}
 	
-	List<Element2D> getColliders()
+	public List<Element2D> getColliders()
 	{
 		return m_mainground.getElements();
 	}
@@ -213,7 +216,7 @@ public class Map implements Drawable, Json.Serializable{
 	
 	//serialisation : 
 	
-	static Map load(String filePath)
+	public static Map load(String filePath)
 	{
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
 		String fileString = file.readString();
@@ -221,7 +224,7 @@ public class Map implements Drawable, Json.Serializable{
 		Map map = json.fromJson(Map.class, fileString);
 		return map;
 	}
-	void save(String filePath)
+	public void save(String filePath)
 	{
 		Json json = new Json();
 		String text = json.toJson(this);
@@ -274,7 +277,7 @@ public class Map implements Drawable, Json.Serializable{
 				{
 					tempElement = tempContainer.get(j);
 					
-					Element2D newElement = json.fromJson(Platform.class, tempElement.toString());
+					Element2D newElement = json.fromJson(MapElement.class, tempElement.toString());
 					this.addToBackground(index, newElement);
 				}
 			}
@@ -287,7 +290,7 @@ public class Map implements Drawable, Json.Serializable{
 		{
 			tempElement = tempContainer.get(j);
 
-			Element2D newElement = json.fromJson(Platform.class, tempElement.toString());
+			Element2D newElement = json.fromJson(MapElement.class, tempElement.toString());
 			this.addToMainground( newElement);
 		}
 		
@@ -305,7 +308,7 @@ public class Map implements Drawable, Json.Serializable{
 				{
 					tempElement = tempContainer.get(j);
 					
-					Element2D newElement = json.fromJson(Platform.class, tempElement.toString());
+					Element2D newElement = json.fromJson(MapElement.class, tempElement.toString());
 					this.addToBackground(index, newElement);
 				}
 			}

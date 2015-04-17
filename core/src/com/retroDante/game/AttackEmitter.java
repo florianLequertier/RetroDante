@@ -13,22 +13,22 @@ public class AttackEmitter {
 	
 	Attack m_attackModel;
 	
-	AttackEmitter()
+	public AttackEmitter()
 	{
 		m_attackModel = new BurningHearthquake();
 	}
 	
-	void changeAttack(Attack newAttack)
+	public void changeAttack(Attack newAttack)
 	{
 		m_attackModel = newAttack;
 	}
 	
-	void changeAttack(String name)
+	public void changeAttack(String name)
 	{
 		m_attackModel = AttackFactory.getInstance().create("burningHearthquake");
 	}
 	
-	Attack getAttackInstance()
+	public Attack getAttackInstance()
 	{
 		return (Attack) m_attackModel.clone(); 
 	}

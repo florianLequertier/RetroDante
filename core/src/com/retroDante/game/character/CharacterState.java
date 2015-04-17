@@ -1,7 +1,8 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
 
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
+import com.retroDante.game.Force;
 
 public enum CharacterState implements State<Character> {
 

@@ -1,6 +1,7 @@
-package com.retroDante.game;
+package com.retroDante.game.trigger;
 
 import com.badlogic.gdx.graphics.Color;
+import com.retroDante.game.character.Character;
 
 
 /**

@@ -49,7 +49,7 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 	
 	//constructeurs et factories : 
 	
-	Element2D(Texture tex)
+	public Element2D(Texture tex)
 	{
 		m_animationSpeed = 60;
 		m_type = "element2D";
@@ -57,7 +57,7 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 		m_texRegion = new TextureRegion(m_visual, 0,0, (int)getUnit().x, (int)getUnit().y );
 		m_animator = new Animator( new Animation(900, m_texRegion));
 	}
-	Element2D(TileSetInfo tileSet, int spriteIndex)
+	public Element2D(TileSetInfo tileSet, int spriteIndex)
 	{
 		m_animationSpeed = 60;
 		m_type = "element2D";

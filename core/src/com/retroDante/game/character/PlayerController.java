@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.retroDante.game.Controller;
 
 
 public class PlayerController extends Controller implements InputProcessor {
@@ -37,7 +38,7 @@ public class PlayerController extends Controller implements InputProcessor {
 	}
 	
 	@Override
-	boolean checkAction(String actionName)
+	public boolean checkAction(String actionName)
 	{
 		if(mappedEvent.containsKey(actionName))
 			return mappedEvent.get(actionName);
@@ -46,7 +47,7 @@ public class PlayerController extends Controller implements InputProcessor {
 	}
 	
 	@Override
-	boolean checkActionOnce(String actionName)
+	public boolean checkActionOnce(String actionName)
 	{
 		if(mappedEvent.containsKey(actionName))
 		{

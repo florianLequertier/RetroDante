@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.character.Character;
+import com.retroDante.game.trigger.DamageTrigger;
 
 public class Attack implements Drawable, Cloneable {
 	

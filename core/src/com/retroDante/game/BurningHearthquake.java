@@ -3,6 +3,7 @@ package com.retroDante.game;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.trigger.DamageTrigger;
 
 public class BurningHearthquake extends Attack implements Cloneable{
 	

@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.trigger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Drawable;
+import com.retroDante.game.character.Character;
 
 public class TriggerManager implements Drawable, Json.Serializable {
 	
@@ -46,7 +48,7 @@ public class TriggerManager implements Drawable, Json.Serializable {
 	
 	//serialisation : 
 	
-	static TriggerManager load(String filePath)
+	public static TriggerManager load(String filePath)
 	{
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
 		String fileString = file.readString();
@@ -55,7 +57,7 @@ public class TriggerManager implements Drawable, Json.Serializable {
 		TriggerManager triggerManager = json.fromJson(TriggerManager.class, fileString);
 		return triggerManager;
 	}
-	void save(String filePath)
+	public void save(String filePath)
 	{
 		Json json = new Json();
 		String text = json.toJson(this);

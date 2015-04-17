@@ -1,8 +1,9 @@
-package com.retroDante.game;
+package com.retroDante.game.trigger;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.character.Character;
 
 /**
  * 
@@ -17,7 +18,7 @@ public class DamageTrigger extends Trigger {
 	//private VisualEffect m_effect;
 	private float m_damageAmount;
 	
-	DamageTrigger()
+	public DamageTrigger()
 	{
 		super(Color.ORANGE);
 		this.setType("damage");
@@ -25,7 +26,7 @@ public class DamageTrigger extends Trigger {
 		m_damageAmount = 30;
 	}
 	
-	DamageTrigger(float damageAmount)
+	public DamageTrigger(float damageAmount)
 	{
 		super(Color.ORANGE);
 		this.setType("damage");
@@ -43,12 +44,12 @@ public class DamageTrigger extends Trigger {
 	
 	//setters / getters : 
 	
-	void setDamage(float damageAmount)
+	public void setDamage(float damageAmount)
 	{
 		m_damageAmount = damageAmount;
 	}
 	
-	float getDamageAmount()
+	public float getDamageAmount()
 	{
 		return m_damageAmount;
 	}

@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
 
 import java.util.List;
 
@@ -8,6 +8,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Animator;
+import com.retroDante.game.Attack;
+import com.retroDante.game.AttackEmitter;
+import com.retroDante.game.AttackManager;
+import com.retroDante.game.BurningHearthquake;
+import com.retroDante.game.Direction;
+import com.retroDante.game.Element2D;
+import com.retroDante.game.Force;
+import com.retroDante.game.IAController;
+import com.retroDante.game.TileSetInfo;
+import com.retroDante.game.TileSetManager;
 import com.retroDante.game.Controllable.KeyStatus;
 
 
@@ -27,7 +38,7 @@ public class Enemy extends Character{
 	 * Le player est un solidBody 
 	 */
 	
-	Enemy(Texture tex) 
+	public Enemy(Texture tex) 
 	{
 		super(tex);
 		m_type = "enemy";
@@ -36,7 +47,7 @@ public class Enemy extends Character{
 		
 	}
 	
-	Enemy(TileSetInfo tileSet, int spriteIndex) 
+	public Enemy(TileSetInfo tileSet, int spriteIndex) 
 	{
 		super(tileSet, spriteIndex);
 		m_type = "enemy";
@@ -45,7 +56,7 @@ public class Enemy extends Character{
 		
 	}
 	
-	Enemy(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
+	public Enemy(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
 	{
 		super(tileSet, spriteIndex);
 		m_type = "enemy";
@@ -60,7 +71,7 @@ public class Enemy extends Character{
 
 	}
 	
-	Enemy()
+	public Enemy()
 	{
 		super( TileSetManager.getInstance().get("player"), 0);
 		m_type = "enemy";

@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Drawable;
+import com.retroDante.game.Element2D;
 
 public class MapLayout implements Drawable, Json.Serializable {
 	

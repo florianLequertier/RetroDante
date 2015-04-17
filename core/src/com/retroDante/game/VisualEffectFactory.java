@@ -11,6 +11,7 @@ public class VisualEffectFactory implements Factory<VisualEffect>{
 		return INSTANCE;
 	}
 	
+	@Override
 	public VisualEffect create(String name)
 	{
 		if(name == "flameColumn")

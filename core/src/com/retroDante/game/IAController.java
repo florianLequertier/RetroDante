@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.character.EnemyState;
 
 /**
  * 
@@ -29,7 +30,7 @@ public class IAController extends Controller {
 	//state machine pour la gestion des etats de l'ia
 	StateMachine<IAController> m_logicMachine;
 	
-	IAController()
+	public IAController()
 	{
 		
 		mappedEvent.put("walk_right", false);
@@ -51,7 +52,7 @@ public class IAController extends Controller {
 	}
 	
 	@Override
-	boolean checkAction(String actionName)
+	public boolean checkAction(String actionName)
 	{
 		if(mappedEvent.containsKey(actionName))
 			return mappedEvent.get(actionName);
@@ -60,7 +61,7 @@ public class IAController extends Controller {
 	}
 	
 	@Override
-	boolean checkActionOnce(String actionName)
+	public boolean checkActionOnce(String actionName)
 	{
 		if(mappedEvent.containsKey(actionName))
 		{

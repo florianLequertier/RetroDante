@@ -1,9 +1,10 @@
-package com.retroDante.game;
+package com.retroDante.game.trigger;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.character.Character;
 
 /**
  * 
@@ -19,14 +20,14 @@ public class TeleportTrigger extends Trigger {
 	//private VisualEffect m_effect;
 	private Vector2 m_teleportDestination;
 	
-	TeleportTrigger()
+	public TeleportTrigger()
 	{
 		super(Color.BLUE);
 		this.setType("teleport"); 
 		m_teleportDestination = new Vector2(0,0);
 	}
 	
-	TeleportTrigger(Vector2 teleportDestination)
+	public TeleportTrigger(Vector2 teleportDestination)
 	{
 		super(Color.BLUE);
 		this.setType("teleport");

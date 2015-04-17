@@ -13,6 +13,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.character.Character;
+import com.retroDante.game.character.Enemy;
+import com.retroDante.game.character.EnemyManager;
+import com.retroDante.game.character.Player;
+import com.retroDante.game.character.PlayerController;
+import com.retroDante.game.map.Map;
+import com.retroDante.game.map.MapElement;
+import com.retroDante.game.trigger.TeleportTrigger;
+import com.retroDante.game.trigger.TriggerManager;
 
 public class TestScreen implements Screen, InputProcessor{
 
@@ -84,7 +93,7 @@ public class TestScreen implements Screen, InputProcessor{
     	
     	//platforms : 
     	TileSetInfo platformTileSet = new TileSetInfo("texture/badlogic.jpg", "textureInfo/aaa.txt");
-    	Element2D platform = new Platform(platformTileSet, 0);
+    	Element2D platform = new MapElement(platformTileSet, 0);
     	platform.setPosition(new Vector2(200, 100));
     	m_platformContainer.add(platform);
     	

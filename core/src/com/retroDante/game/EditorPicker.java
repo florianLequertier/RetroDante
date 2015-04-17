@@ -29,6 +29,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.retroDante.game.character.EnemyFactory;
+import com.retroDante.game.map.MapFactory;
+import com.retroDante.game.trigger.TriggerFactory;
 
 public class EditorPicker extends Table {
 
@@ -38,10 +41,13 @@ public class EditorPicker extends Table {
 	private Table m_typePanel;
 	private HashMap<String, Table> m_elementsPanel;
 	private List<String> m_typeNames; //liste regroupant les noms des types d'elements modifiable dans l'editeur
+	private List<String> m_elementNames; //liste contenant le nom de tous les elements, dans l'ordre d'appel
 	private List<Integer> m_typeCount; //nombre d'element de chaque type. 
 	private int m_numberOfNames; // nombre de type 
+	private int m_numberOfElements; // nombre total d'elements 
 	private int m_currentTypeIndex; //index du type utilisé
 	private String m_currentTypeName; //nom du type utilisé
+	private MouseEditor m_editorMouse; 
 	
 	EditorPicker()
 	{
@@ -61,6 +67,7 @@ public class EditorPicker extends Table {
 		
 		m_typeNames = new ArrayList<String>();
 		m_typeCount = new ArrayList<Integer>();
+		m_elementNames = new ArrayList<String>();
 		
 		initAll();
 		
@@ -90,8 +97,9 @@ public class EditorPicker extends Table {
 	 */
 	void initAll()
 	{
-		initTypeNames("enemy", "player", "platform", "trigger");
-		initTypeCount(6,1,7,5);
+		initTypeNames("enemy", "platform", "trigger");
+		initTypeCount(8,7,5);
+		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "damageTrigger", "blocTrigger", "killTrigger", "bumpTrigger", "teleportTrigger"  );
 		
 		
 		setDefaultSkin();
@@ -119,6 +127,28 @@ public class EditorPicker extends Table {
 	}
 	
 	/**
+	 * Initialise le tableau contenant les noms de toute les d'objets instanciables dans l'editeur
+	 * 
+	 * @param names
+	 */
+	void initElementNames(String... names)
+	{
+		m_elementNames.clear();
+		
+		for(int i = 0; i < names.length; i++)
+		{
+			m_elementNames.add(names[i]);
+		}
+		
+		
+		if(names.length != m_numberOfElements)
+		{
+			System.out.println("ERROR : EditorPickup : initElementNames : le nombre d'elements passé à la fonction ne correspond pas au nombre d'elements à chercher dans le tileSet");
+		}
+		
+	}
+	
+	/**
 	 * Initialise le tableau contenant le compte des elements par type. 
 	 * Attention : Doit être appelé aprés initTypeCount()
 	 * 
@@ -127,10 +157,12 @@ public class EditorPicker extends Table {
 	void initTypeCount(int... countByType)
 	{
 		m_typeCount.clear();
+		m_numberOfElements = 0;
 		
 		for(int i = 0; i < countByType.length; i++)
 		{
 			m_typeCount.add(countByType[i]);
+			m_numberOfElements += countByType[i];
 		}
 		
 		//On verifie qu'on a bien passé un nombre de parametre égale à celui passé dans initTypeName
@@ -270,7 +302,7 @@ public class EditorPicker extends Table {
 		m_typeGroup.setMaxCheckCount(1);
 
 		
-		for(int typeIndex=0; typeIndex< m_typeNames.size(); typeIndex++)
+		for(int typeIndex=0, elementNumber = 0; typeIndex< m_typeNames.size(); typeIndex++)
 		{
 			String typeName = m_typeNames.get(typeIndex);
 			
@@ -290,14 +322,31 @@ public class EditorPicker extends Table {
 						tmpTable.add(button).space(5).maxSize(90, 70).minSize(80, 60);
 							tmpButtonGrp.add(button);
 						
-						button.addListener(new ChangeListener() {
+							
+							final String finalTypeName = typeName ;
+							final String finalElementName = m_elementNames.get(elementNumber) ;
+							button.addListener(new ChangeListener() {
 							@Override
 							public void changed (ChangeEvent event, Actor actor) {
-								//System.out.println("Clicked! Is checked: " + button.isChecked());
-								//button.setText("Good job!");
+								
+								if(finalTypeName.equals("enemy"))
+								{
+									m_editorMouse.changePlaceable(EnemyFactory.getInstance().create( finalElementName ));
+								}
+								else if(finalTypeName.equals("map"))
+								{
+									m_editorMouse.changePlaceable(MapFactory.getInstance().create( finalElementName ));
+								}
+								else if(finalTypeName.equals("trigger"))
+								{
+									m_editorMouse.changePlaceable(TriggerFactory.getInstance().create( finalElementName ));
+								}
+								
 							}
 
 						});
+							
+						elementNumber++;
 					}
 					else //bouton "vide" (trop de boutons affichés par rapport au nombre d'objets)
 					{

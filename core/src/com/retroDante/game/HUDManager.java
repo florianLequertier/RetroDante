@@ -119,7 +119,7 @@ public class HUDManager {
 	
 			});
 		
-		//menu de pause, fin : 
+		//menu de pause, fin
 	}
 	
 	public void closePauseMenu()

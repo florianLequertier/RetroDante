@@ -15,12 +15,12 @@ public class Force {
 	float m_decreaseFactor = -1.0f;
 	
 	
-	static Force Gravity()
+	public static Force Gravity()
 	{
 		return new Force(new Vector2(0.f, -GRAVITY_CONSTANT));
 	}
 	
-	static Force Jump()
+	public static Force Jump()
 	{
 		Force f = new Force(new Vector2(0.f, JUMP_CONSTANT), TypeOfForce.LINEAR);
 		f.m_decreaseFactor = -700.f;

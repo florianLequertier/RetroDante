@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
 
 import java.util.List;
 
@@ -8,6 +8,17 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.Animator;
+import com.retroDante.game.Attack;
+import com.retroDante.game.AttackEmitter;
+import com.retroDante.game.AttackManager;
+import com.retroDante.game.BurningHearthquake;
+import com.retroDante.game.Direction;
+import com.retroDante.game.Element2D;
+import com.retroDante.game.Force;
+import com.retroDante.game.GameCamera;
+import com.retroDante.game.TileSetInfo;
+import com.retroDante.game.TileSetManager;
 
 /**
  * 
@@ -28,7 +39,7 @@ public class Player extends Character {
 	 * Le player est un solidBody 
 	 */
 	
-	Player(Texture tex) 
+	public Player(Texture tex) 
 	{
 		super(tex);
 		m_type = "player";
@@ -37,7 +48,7 @@ public class Player extends Character {
 		
 	}
 	
-	Player(TileSetInfo tileSet, int spriteIndex) 
+	public Player(TileSetInfo tileSet, int spriteIndex) 
 	{
 		super(tileSet, spriteIndex);
 		m_type = "player";
@@ -46,7 +57,7 @@ public class Player extends Character {
 		
 	}
 	
-	Player(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
+	public Player(TileSetInfo tileSet, int spriteIndex, float deltaAnim)
 	{
 		super(tileSet, spriteIndex);
 		m_type = "player";

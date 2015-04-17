@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Drawable;
+import com.retroDante.game.Element2D;
 
 public class EnemyManager implements Drawable, Json.Serializable {
 
@@ -138,7 +140,7 @@ public class EnemyManager implements Drawable, Json.Serializable {
 	
 	//serialisation : 
 	
-	static EnemyManager load(String filePath)
+	public static EnemyManager load(String filePath)
 	{
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
 		String fileString = file.readString();
@@ -146,7 +148,7 @@ public class EnemyManager implements Drawable, Json.Serializable {
 		EnemyManager enemyManager = json.fromJson(EnemyManager.class, fileString);
 		return enemyManager;
 	}
-	void save(String filePath)
+	public void save(String filePath)
 	{
 		Json json = new Json();
 		String text = json.toJson(this);

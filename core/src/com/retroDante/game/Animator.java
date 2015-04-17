@@ -19,7 +19,7 @@ public class Animator{
 	private boolean m_isPlaying;
 	private boolean m_isLooping;
 	
-	Animator(Animation animation)
+	public Animator(Animation animation)
 	{
 		m_currentFrame = 0;
 		m_currentAnimation = 0;
@@ -28,7 +28,7 @@ public class Animator{
 		m_animationContainer.add( animation );
 		m_elapsedTime = 0;
 	}
-	Animator(List<Animation> animationContainer)
+	public Animator(List<Animation> animationContainer)
 	{
 		m_currentFrame = 0;
 		m_currentAnimation = 0;
@@ -38,7 +38,7 @@ public class Animator{
 		m_elapsedTime = 0;
 	}
 	
-	Animator(List<Animation> animationContainer, String... names)
+	public Animator(List<Animation> animationContainer, String... names)
 	{
 		m_currentFrame = 0;
 		m_currentAnimation = 0;

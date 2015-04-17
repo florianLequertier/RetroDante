@@ -1,10 +1,11 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
 
 import java.util.Random;
 
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.IAController;
 
 public enum EnemyState implements State<IAController>{
 
