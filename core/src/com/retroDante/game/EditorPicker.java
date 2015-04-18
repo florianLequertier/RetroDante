@@ -39,6 +39,8 @@ public class EditorPicker extends Table {
 	private Skin m_skin;
 	private ButtonGroup<TextButton> m_typeGroup;
 	private HashMap<String, ButtonGroup<TextButton> > m_elementsGroup;
+	private ButtonGroup<TextButton> m_layoutGroup;
+	private Table m_layoutPanel;
 	private Table m_typePanel;
 	private HashMap<String, Table> m_elementsPanel;
 	private List<String> m_typeNames; //liste regroupant les noms des types d'elements modifiable dans l'editeur
@@ -47,6 +49,7 @@ public class EditorPicker extends Table {
 	private int m_numberOfNames; // nombre de type 
 	private int m_numberOfElements; // nombre total d'elements 
 	private int m_currentTypeIndex; //index du type utilisé
+	private int m_layoutIndex; //index du layout utilisé
 	private String m_currentTypeName; //nom du type utilisé
 	private MouseEditor m_editorMouse; 
 	private HashMap<String, Factory<? extends Body> > m_factories; // toutes les factories permettant d'instancier les objets du jeu
@@ -66,6 +69,8 @@ public class EditorPicker extends Table {
 			m_typeGroup = new ButtonGroup<TextButton>();
 		m_elementsPanel = new HashMap<String, Table>();
 			m_elementsGroup = new HashMap<String, ButtonGroup<TextButton> >();
+		m_layoutPanel = new Table();
+			m_layoutGroup = new ButtonGroup<TextButton>();
 		
 		m_typeNames = new ArrayList<String>();
 		m_typeCount = new ArrayList<Integer>();
@@ -109,8 +114,15 @@ public class EditorPicker extends Table {
 		setDefaultSkin();
 		
 		initTypePanel();
-		this.row();
+			this.add(m_typePanel);
+			this.row();
+		initLayoutPanel(0, 0);
+			this.add(m_layoutPanel);
+			this.row();
 		initElementsPanel();
+			m_currentTypeIndex = 0;
+			m_currentTypeName = m_typeNames.get(0);
+			this.add(m_elementsPanel.get(m_typeNames.get(0)));
 	}
 	
 	/**
@@ -226,6 +238,11 @@ public class EditorPicker extends Table {
 		
 		this.add(m_elementsPanel.get(name));
 	}
+	
+	void changeLayout(int layoutIndex)
+	{
+		m_layoutIndex = layoutIndex;
+	}
 
 
 	/**
@@ -253,6 +270,13 @@ public class EditorPicker extends Table {
 					//button.setText("Good job!");
 					
 					changeType(nameSnap);
+					
+					if(nameSnap == "map")
+						initLayoutPanel(-3, 3);
+					else
+						initLayoutPanel(0, 0);
+					
+					
 					return false;
 				}
 
@@ -264,7 +288,44 @@ public class EditorPicker extends Table {
 			index++;
 		}
 		
-		this.add(m_typePanel);
+		//this.add(m_typePanel);
+	}
+	
+	/**
+	 * Initialise les boutons des layouts
+	 * les layout vont de min (inclu) à max (inclu)
+	 */
+	void initLayoutPanel(int min, int max)
+	{
+		m_layoutPanel.clear();
+		m_layoutGroup.clear();
+		
+		for(int i= min ; i<=max; i++) // 7 layouts au maximum
+		{
+			//création
+			final TextButton button = new TextButton("layout \n"+i, m_skin); //boutons de type default
+			
+			final int layoutIndex = i;
+			button.addListener(new InputListener() {
+				
+				@Override
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					//System.out.println("Clicked! Is checked: " + button.isChecked());
+					//button.setText("Good job!");
+					
+					changeLayout(layoutIndex);
+					return false;
+				}
+
+			});
+			
+			m_layoutPanel.add(button);
+				m_layoutGroup.add(button);
+		}
+		
+		m_layoutGroup.setChecked("layout \n0");
+		m_layoutIndex = 0;
+		//this.add(m_layoutPanel);
 	}
 	
 	void initElementsPanel()
@@ -297,13 +358,17 @@ public class EditorPicker extends Table {
 							
 							final String finalTypeName = typeName ;
 							final String finalElementName = m_elementNames.get(elementNumber) ;
-							button.addListener(new ChangeListener() {
+							button.addListener(new /*ChangeListener()*/ InputListener() {
 							@Override
-							public void changed (ChangeEvent event, Actor actor) {
+							//public void changed (ChangeEvent event, Actor actor) 
+							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								
 								if(m_factories.containsKey(finalTypeName))
 								{
-									m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName);
+									if(finalTypeName == "trigger")
+										m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName, m_layoutIndex, 3 );
+									else
+										m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName, m_layoutIndex, 1 );
 								}
 								else
 								{
@@ -324,6 +389,7 @@ public class EditorPicker extends Table {
 //									m_editorMouse.changePlaceable(TriggerFactory.getInstance().create( finalElementName ));
 //								}
 								
+								return false;
 							}
 
 						});
@@ -350,10 +416,10 @@ public class EditorPicker extends Table {
 				m_elementsGroup.put(typeName, tmpButtonGrp);
 		}
 		
-		//ajoute la premiere table de la map à this
-		m_currentTypeIndex = 0;
-		m_currentTypeName = m_typeNames.get(0);
-		this.add(m_elementsPanel.get(m_typeNames.get(0)));
+//		//ajoute la premiere table de la map à this
+//		m_currentTypeIndex = 0;
+//		m_currentTypeName = m_typeNames.get(0);
+//		this.add(m_elementsPanel.get(m_typeNames.get(0)));
 	}
 	
 	

@@ -21,8 +21,16 @@ public interface CanvasInterface {
 	public void draw(Batch batch, boolean onlyButton); //dessine le composant du canvas, puis le bouton par dessus
 	public void dropOnSceen();
 	public <T extends Body> void attachOn(Manager<T> manager);
-	public <T extends Body> void attachOn(Manager<T> manager, int index);
+//	public <T extends Body> void attachOn(Manager<T> manager, int index);
 	public String getType();
 	public void setType(String type);
+	public void setLayout(int layout);
+	public int getLayout();
+	public void setRemainActions(int remainActions);
+	public int getRemainActions();
+	public void setMaxActions(int remainActions);
+	public int getMaxActions();
+	public void resizeAction(Vector2 position);
+	public void additionnalAction();
 
 }

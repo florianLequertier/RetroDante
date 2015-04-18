@@ -25,10 +25,14 @@ public class MouseEditor {
 		update();
 	}
 	
-	
 	public <T extends Body> void changePlaceable( T element, String type)
 	{
-		m_currentPlaceable = new Canvas<T>(element, type);
+		m_currentPlaceable = new Canvas<T>(element, type, 0 , 1);
+	}
+	
+	public <T extends Body> void changePlaceable( T element, String type, int layout, int remainActions)
+	{
+		m_currentPlaceable = new Canvas<T>(element, type, layout, remainActions);
 	}
 	
 	/**
@@ -39,7 +43,7 @@ public class MouseEditor {
 		m_position.x = Gdx.input.getX();
 		m_position.y = -Gdx.input.getY() + Gdx.graphics.getHeight();
 		
-		if(m_currentPlaceable != null)
+		if( (m_currentPlaceable != null) && (m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions()) ) 
 		{
 			m_currentPlaceable.setPosition(m_position);
 		}
@@ -63,8 +67,14 @@ public class MouseEditor {
 	{
 		if(m_currentPlaceable != null)
 		{
-			canvasContainer.add(m_currentPlaceable);
-			m_currentPlaceable = null;
+			if(m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions())// Aucune action n'a encore été traité : On l'attache 
+			{
+				canvasContainer.add(m_currentPlaceable);
+			}
+			else if(m_currentPlaceable.getRemainActions() == 0) // Toutes les action efféctuées : On le retire de la souris
+			{
+				m_currentPlaceable = null;
+			}
 		}
 	}
 	
@@ -76,14 +86,36 @@ public class MouseEditor {
 	public void attachCanvasOn(Manager<? extends Body> manager)
 	{
 		if(m_currentPlaceable != null)
-		m_currentPlaceable.attachOn(manager);
+		{
+			
+			if(m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions()) // Aucune action n'a encore été traité : On l'attache au manager quelque soit son type
+			{
+				m_currentPlaceable.attachOn(manager);
+			}
+			else
+			{
+				if(m_currentPlaceable.getType().equals("trigger")) // si c'est un trigger, on poursuit les autres étapes
+				{
+					if(m_currentPlaceable.getRemainActions() == 2) //resize
+					{
+						m_currentPlaceable.resizeAction(m_position);
+					}
+					else if(m_currentPlaceable.getRemainActions() == 1) 
+					{
+						m_currentPlaceable.additionnalAction();
+					}
+				}
+			}
+
+		}
+
 	}
 	
-	public void attachCanvasOn(Manager<? extends Body> manager, int index)
-	{
-		if(m_currentPlaceable != null)
-		m_currentPlaceable.attachOn(manager, index);
-	}
+//	public void attachCanvasOn(Manager<? extends Body> manager, int index)
+//	{
+//		if(m_currentPlaceable != null)
+//		m_currentPlaceable.attachOn(manager, index);
+//	}
 	
 	public String getCanvasType()
 	{
