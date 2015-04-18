@@ -68,13 +68,12 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	}
 
 	@Override
-	public void draw(Batch batch) 
+	public void draw(Batch batch, boolean onlyButton) 
 	{
-		if(m_element != null)
+		if(m_element != null && onlyButton == false)
 			m_element.draw(batch);
 		
 		m_button.draw(batch, 1);
-
 	}
 	
 	@Override
@@ -94,6 +93,8 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		if(m_element != null)
 		manager.add((T)m_element);
+		
+		System.out.println("attache au manager de l'element du canvas de type : "+m_type);
 	}
 	
 	@Override
@@ -101,6 +102,12 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		if(m_element != null)
 		manager.add((T)m_element, index);
+	}
+	
+	@Override 
+	public Vector2 getPosition()
+	{
+		return new Vector2(m_button.getX(), m_button.getY());
 	}
 	
 	@Override

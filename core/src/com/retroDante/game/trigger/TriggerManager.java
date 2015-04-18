@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -12,7 +13,7 @@ import com.retroDante.game.Drawable;
 import com.retroDante.game.Manager;
 import com.retroDante.game.character.Character;
 
-public class TriggerManager extends Manager<Trigger> implements Drawable, Json.Serializable {
+public class TriggerManager extends Manager<Trigger> implements Json.Serializable {
 	
 	List<Trigger> m_triggerContainer = new ArrayList<Trigger>();
 	
@@ -50,7 +51,7 @@ public class TriggerManager extends Manager<Trigger> implements Drawable, Json.S
 
 	//à utiliser pour le debugging, ou lors de la création de map. 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		
 		for(Trigger t : m_triggerContainer)
 		{
@@ -128,6 +129,12 @@ public class TriggerManager extends Manager<Trigger> implements Drawable, Json.S
 			this.add(newTrigger);
 		}
 			
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "nombre de triggers dans triggerManager = "+m_triggerContainer.size();
 	}
 	
 }

@@ -77,19 +77,6 @@ public abstract class Trigger extends Rigidbody implements Json.Serializable, Dr
 	}
 	
 	@Override 
-	public void draw(SpriteBatch batch)
-	{
-		batch.end();
-		
-		m_visual.setProjectionMatrix( batch.getProjectionMatrix() );
-		 m_visual.begin(ShapeType.Line);
-			 m_visual.setColor(m_color);
-			 m_visual.rect(m_collider.x, m_collider.y, m_collider.width, m_collider.height);
-		 m_visual.end();
-		 
-		 batch.begin();
-	}
-	@Override 
 	public void draw(Batch batch)
 	{
 		batch.end();

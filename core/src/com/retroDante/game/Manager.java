@@ -1,6 +1,6 @@
 package com.retroDante.game;
 
-public abstract class Manager<T extends Body> {
+public abstract class Manager<T extends Body> implements Drawable {
 	
 	public abstract void add(T element, int index );
 	

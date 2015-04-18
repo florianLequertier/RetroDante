@@ -2,6 +2,7 @@ package com.retroDante.game;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.retroDante.game.character.Character;
@@ -169,7 +170,7 @@ public class Attack implements Drawable, Cloneable {
 	
 	//drawable : 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		m_visual.draw(batch);
 	}
 	//pour le debug : 

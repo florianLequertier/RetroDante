@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
@@ -15,7 +16,7 @@ import com.retroDante.game.Element2D;
 import com.retroDante.game.GameCamera;
 import com.retroDante.game.Manager;
 
-public class Map extends Manager<Element2D> implements Drawable, Json.Serializable{
+public class Map extends Manager<Element2D> implements Json.Serializable{
 
 	List<MapLayout> m_backgrounds;
 	List<MapLayout> m_foregrounds;
@@ -177,7 +178,7 @@ public class Map extends Manager<Element2D> implements Drawable, Json.Serializab
 	
 	//Override drawable : 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		
 		for(MapLayout layout : m_backgrounds)
 		{
@@ -352,6 +353,14 @@ public class Map extends Manager<Element2D> implements Drawable, Json.Serializab
 					this.addToBackground(index, newElement);
 				}
 			}
+	}
+	
+	
+	@Override
+	public String toString()
+	{
+		int size = m_backgrounds.size() + m_foregrounds.size() + 1;
+		return "nombre de l'ayout dans la map = "+size;
 	}
 
 	

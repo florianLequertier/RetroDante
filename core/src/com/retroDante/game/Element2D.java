@@ -23,7 +23,7 @@ import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 
-public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
+public class Element2D extends Rigidbody implements Json.Serializable{
 	
 	/*Vector2 m_position = new Vector2(0,0);
 	Vector2 m_velocity = new Vector2(0,0);
@@ -260,14 +260,6 @@ public class Element2D extends Rigidbody implements Json.Serializable, Drawable{
 
 	
 	//Drawable : 
-	
-	@Override
-	public void draw(SpriteBatch batch) {
-		Vector2 position = new Vector2(this.m_collider.getX(), this.m_collider.getY());
-		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
-		//this.updateTransform();
-		//batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform() );
-	}
 	
 	@Override
 	public void draw(Batch batch) {

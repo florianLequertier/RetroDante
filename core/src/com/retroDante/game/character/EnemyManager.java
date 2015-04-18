@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
@@ -14,7 +15,7 @@ import com.retroDante.game.Drawable;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.Manager;
 
-public class EnemyManager extends Manager<Enemy> implements  Drawable, Json.Serializable {
+public class EnemyManager extends Manager<Enemy> implements  Json.Serializable {
 
 	private List<Enemy> m_container = new ArrayList<Enemy>();
 	
@@ -139,7 +140,7 @@ public class EnemyManager extends Manager<Enemy> implements  Drawable, Json.Seri
 	
 	
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		
 		for(Enemy e : m_container)
 		{
@@ -198,6 +199,13 @@ public class EnemyManager extends Manager<Enemy> implements  Drawable, Json.Seri
 			this.add(enemy);
 
 		}
+	}
+	
+	
+	@Override
+	public String toString()
+	{
+		return "nombre d'enemies dans le enemyManager = "+m_container.size();
 	}
 	
 }

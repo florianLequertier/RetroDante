@@ -52,7 +52,7 @@ public class MouseEditor {
 	{
 		if(m_currentPlaceable != null)
 		{
-			m_currentPlaceable.draw(batch);
+			m_currentPlaceable.draw(batch, false);
 		}
 	}
 	
@@ -75,11 +75,13 @@ public class MouseEditor {
 	 */
 	public void attachCanvasOn(Manager<? extends Body> manager)
 	{
+		if(m_currentPlaceable != null)
 		m_currentPlaceable.attachOn(manager);
 	}
 	
 	public void attachCanvasOn(Manager<? extends Body> manager, int index)
 	{
+		if(m_currentPlaceable != null)
 		m_currentPlaceable.attachOn(manager, index);
 	}
 	
@@ -92,6 +94,29 @@ public class MouseEditor {
 			System.out.println("WARRNING : MouseEditor : getCanvasType : aucun canvas attaché à la souris");
 			return "error";
 		}
+	}
+	
+	public void setCanvasPosition(Vector2 newPosition)
+	{
+		m_currentPlaceable.setPosition(newPosition);
+	}
+	
+	public Vector2 getCanvasPosition()
+	{
+		return m_currentPlaceable.getPosition();
+	}
+	
+	/**
+	 * return true si le canvas n'est pas null, ie la souris transporte un element à placer dans la scène
+	 * 
+	 * @return
+	 */
+	public boolean hasCanvas()
+	{
+		if(m_currentPlaceable != null)
+			return true;
+		else
+			return false;
 	}
 	
 	

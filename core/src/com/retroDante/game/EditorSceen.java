@@ -5,9 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -19,20 +24,23 @@ import com.retroDante.game.character.Player;
 import com.retroDante.game.map.Map;
 import com.retroDante.game.trigger.TriggerManager;
 
-public class EditorSceen extends Table{
+public class EditorSceen extends Table implements Drawable{
 
 	private MouseEditor m_mouseEditor; 
 	private List<CanvasInterface> m_canvasContainer;
 	private Player m_player; 
 	private HashMap<String, Manager<? extends Body> > m_managers;
+	private OrthographicCamera m_sceenCamera;
 	
 	EditorSceen()
 	{
 		m_canvasContainer = new ArrayList<CanvasInterface>();
 		m_managers = new HashMap<String, Manager<? extends Body> >();
+		m_sceenCamera = new OrthographicCamera();
 		
 		this.setFillParent(true);
 		this.setPosition(0,0);
+		//this.setSize(500,500);
 		this.align(Align.center);
 		this.debug();
 		this.setTouchable(Touchable.enabled);
@@ -48,6 +56,26 @@ public class EditorSceen extends Table{
 			}
 			
 		});
+		
+//		this.addListener( new InputListener(){
+//			@Override
+//			public boolean keyDown(InputEvent event, int keycode){
+//				
+//				if(keycode == Keys.Q || keycode == Keys.A)
+//					m_sceenCamera.translate(new Vector2(-1,0) );
+//				if(keycode == Keys.Z || keycode == Keys.W)
+//					m_sceenCamera.translate(new Vector2(0,1) );
+//				if(keycode == Keys.D)
+//					m_sceenCamera.translate(new Vector2(1,0) );
+//				if(keycode == Keys.S)
+//					m_sceenCamera.translate(new Vector2(0,-1) );
+//				
+//				System.out.println("La camera est maintenant en ("+m_sceenCamera.position.x+", "+m_sceenCamera.position.y+")" );
+//				
+//				return false;
+//            }
+//			
+//		});
 		
 		initAll();
 	}
@@ -78,9 +106,11 @@ public class EditorSceen extends Table{
 	
 	public void dropCanvasOnSceen()
 	{
-		if(m_mouseEditor != null)
+		if(m_mouseEditor != null && m_mouseEditor.hasCanvas())
 		{
-
+			Vector2 positionDrop = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f, m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f ).add( m_mouseEditor.getCanvasPosition());
+			m_mouseEditor.setCanvasPosition( positionDrop );
+			
 			String canvasType = m_mouseEditor.getCanvasType();
 			if(m_managers.containsKey(canvasType))
 			{
@@ -92,11 +122,23 @@ public class EditorSceen extends Table{
 			}
 			
 			m_mouseEditor.dropCanvasOn(m_canvasContainer);
+			
+			System.out.println("canvas droppé à la position : "+ positionDrop.toString() +" dans le manager "+canvasType+" ce manager contient alors "+m_managers.get(canvasType).toString() );
 		}
 		else
 		{
 			System.out.println("WARNING : EditorSceen : dropCanvasOnSceen : le pointeur vers la mouseEditor n'a pas été initialisé.");
 		}
+	}
+	
+	/**
+	 * set la camera de la scene
+	 * 
+	 * @param camera
+	 */
+	public void setCamera(OrthographicCamera camera)
+	{
+		m_sceenCamera = camera;
 	}
 	
 	/**
@@ -132,9 +174,26 @@ public class EditorSceen extends Table{
 		
 		for(CanvasInterface canvas : m_canvasContainer)
 		{
-			canvas.draw(batch);
+			canvas.draw(batch, true);
 		}
 		
 		super.draw(batch, alpha);
 	}
+
+	@Override
+	public void draw(Batch batch) {
+		
+		Matrix4 tempProj = batch.getProjectionMatrix();
+		
+		batch.setProjectionMatrix(m_sceenCamera.combined);
+			for(Entry<String, Manager<? extends Body> > entity : m_managers.entrySet() )
+			{
+				entity.getValue().draw(batch);
+			}
+			
+		batch.setProjectionMatrix(tempProj);
+		
+	}
+	
+	
 }

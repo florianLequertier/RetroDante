@@ -17,11 +17,12 @@ import com.badlogic.gdx.math.Vector2;
 public interface CanvasInterface {
 	
 	public void setPosition(Vector2 newPos); //bouge le bouton
-	public void draw(Batch batch); //dessine le composant du canvas, puis le bouton par dessus
+	public Vector2 getPosition();
+	public void draw(Batch batch, boolean onlyButton); //dessine le composant du canvas, puis le bouton par dessus
 	public void dropOnSceen();
 	public <T extends Body> void attachOn(Manager<T> manager);
 	public <T extends Body> void attachOn(Manager<T> manager, int index);
 	public String getType();
 	public void setType(String type);
-	
+
 }

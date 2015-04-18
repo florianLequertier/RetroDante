@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.retroDante.game.character.Character;
 
@@ -65,7 +66,7 @@ public class AttackManager implements Drawable {
 	
 	//drawable : 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		
 		for(Attack attack : m_attackContainer)
 		{

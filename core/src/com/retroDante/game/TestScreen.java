@@ -199,6 +199,9 @@ public class TestScreen implements Screen, InputProcessor{
 		    	 font.draw(batch, "PAUSE", -45, 100);//Gdx.graphics.getWidth() *0.5f - 130,Gdx.graphics.getHeight()*0.5f + 100);
 		     }
 		     
+		     batch.setProjectionMatrix(gameCamera.combined);
+			 triggerManager.draw(batch); //for debug ou creation de la map
+		     
 		 batch.end();
 		 
 		 
@@ -207,8 +210,7 @@ public class TestScreen implements Screen, InputProcessor{
 		     
 		
 		 
-		 batch.setProjectionMatrix(gameCamera.combined);
-		 triggerManager.draw(batch); //for debug ou creation de la map
+		
 		 
 		
 

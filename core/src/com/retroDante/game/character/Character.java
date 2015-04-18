@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
@@ -184,7 +185,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	//Override drawable : 
 	
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(Batch batch) {
 		if(m_texRegion.isFlipX() &&  m_rightDirection)
 		m_texRegion.flip(true, false);
 		else if(!m_texRegion.isFlipX() &&  !m_rightDirection)

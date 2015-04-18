@@ -3,6 +3,7 @@ package com.retroDante.game;
 import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -134,7 +135,7 @@ public class AnimatedEffect extends VisualEffect{
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch)
+	public void draw(Batch batch)
 	{
 		
 		if(m_child != null)
