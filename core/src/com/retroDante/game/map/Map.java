@@ -13,8 +13,9 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Drawable;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.GameCamera;
+import com.retroDante.game.Manager;
 
-public class Map implements Drawable, Json.Serializable{
+public class Map extends Manager<Element2D> implements Drawable, Json.Serializable{
 
 	List<MapLayout> m_backgrounds;
 	List<MapLayout> m_foregrounds;
@@ -22,7 +23,7 @@ public class Map implements Drawable, Json.Serializable{
 
 	
 	//constructeur : 
-	Map()
+	public Map()
 	{
 		m_backgrounds = new ArrayList<MapLayout>();
 		m_foregrounds = new ArrayList<MapLayout>();
@@ -61,6 +62,42 @@ public class Map implements Drawable, Json.Serializable{
 		return map;
 	}
 	
+	
+	//Override manager : 
+	@Override
+	public void add(Element2D element, int index)
+	{
+		if(index > 0 )
+		{
+			addToForeground(index, element);
+		}
+		else if(index < 0 )
+		{
+			addToBackground(index, element);
+		}
+		else
+		{
+			addToMainground(element);
+		}
+	}
+	
+	@Override
+	public boolean remove(Element2D element, int index)
+	{
+		if(index > 0 )
+		{
+			return removeToForeground(index, element);
+		}
+		else if(index < 0 )
+		{
+			return removeToBackground(index, element);
+		}
+		else
+		{
+			return removeToMainground(element);
+		}
+	}
+	
 	//ajout à la map : 
 	void addToForeground(int index, Element2D element)
 	{
@@ -68,13 +105,13 @@ public class Map implements Drawable, Json.Serializable{
 		{
 			if(layout.getIndex() == index)
 			{
-				layout.addElement(element);
+				layout.add(element);
 				return;
 			}
 		}
 		MapLayout newLayout = new MapLayout();
 		newLayout.setIndex(index);
-		newLayout.addElement(element);
+		newLayout.add(element);
 		m_foregrounds.add(newLayout);
 	}
 	
@@ -84,50 +121,51 @@ public class Map implements Drawable, Json.Serializable{
 		{
 			if(layout.getIndex() == index)
 			{
-				layout.addElement(element);
+				layout.add(element);
 				return;
 			}
 		}
 		MapLayout newLayout = new MapLayout();
 		newLayout.setIndex(index);
-		newLayout.addElement(element);
+		newLayout.add(element);
 		m_backgrounds.add(newLayout);
 	}
 	
 	void addToMainground(Element2D element)
 	{
-		m_mainground.addElement(element);
+		m_mainground.add(element);
 	}
 	
 	//suppression de la map : 
-	void removeToForeground(int index, Element2D element)
+	boolean removeToForeground(int index, Element2D element)
 	{
 		for(MapLayout layout : m_foregrounds)
 		{
 			if(layout.getIndex() == index)
 			{
-				layout.removeElement(element);
-				return;
+				return layout.remove(element);
 			}
 		}
-
+		
+		return false;
 	}
 	
-	void removeToBackground(int index, Element2D element)
+	boolean removeToBackground(int index, Element2D element)
 	{
 		for(MapLayout layout : m_backgrounds)
 		{
 			if(layout.getIndex() == index)
 			{
-				layout.removeElement(element);
-				return;
+				return layout.remove(element);
 			}
 		}
+		
+		return false;
 	}
 	
-	void removeToMainground(int index, Element2D element)
+	boolean removeToMainground(Element2D element)
 	{
-		m_mainground.removeElement(element);
+		return m_mainground.remove(element);
 	}
 	
 	public List<Element2D> getColliders()
@@ -224,6 +262,8 @@ public class Map implements Drawable, Json.Serializable{
 		Map map = json.fromJson(Map.class, fileString);
 		return map;
 	}
+	
+	@Override
 	public void save(String filePath)
 	{
 		Json json = new Json();

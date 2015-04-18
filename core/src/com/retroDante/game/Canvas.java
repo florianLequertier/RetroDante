@@ -47,13 +47,15 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		
 	} //skin unique pour chaque canvas
 	
+	private String m_type;
 	private T m_element;
 	private Button m_button;
 	
-	Canvas(T element)
+	Canvas(T element, String type)
 	{
 		m_button = new Button(m_skin);
 		m_element = element;
+		m_type = type;
 	}
 
 	@Override
@@ -73,6 +75,32 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		
 		m_button.draw(batch, 1);
 
+	}
+	
+	@Override
+	public void setType(String type)
+	{
+		m_type = type;
+	}
+	@Override
+	public String getType()
+	{
+		return m_type;
+	}
+	
+
+	@Override
+	public <T extends Body> void attachOn(Manager<T> manager)
+	{
+		if(m_element != null)
+		manager.add((T)m_element);
+	}
+	
+	@Override
+	public <T extends Body> void attachOn(Manager<T> manager, int index)
+	{
+		if(m_element != null)
+		manager.add((T)m_element, index);
 	}
 	
 	@Override

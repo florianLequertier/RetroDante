@@ -9,11 +9,30 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Drawable;
+import com.retroDante.game.Manager;
 import com.retroDante.game.character.Character;
 
-public class TriggerManager implements Drawable, Json.Serializable {
+public class TriggerManager extends Manager<Trigger> implements Drawable, Json.Serializable {
 	
 	List<Trigger> m_triggerContainer = new ArrayList<Trigger>();
+	
+	public TriggerManager()
+	{
+		
+	}
+	
+	//Override Manager : 
+	@Override
+	public void add(Trigger trigger, int index)
+	{
+		m_triggerContainer.add(trigger);
+	}
+	@Override
+	public boolean remove(Trigger trigger, int index)
+	{
+		return m_triggerContainer.remove(trigger);
+	}
+	
 	
 	public void update(float deltaTime, List<Character> targets)
 	{
@@ -28,13 +47,7 @@ public class TriggerManager implements Drawable, Json.Serializable {
 			}
 		}
 	}
-	
-	public void addTrigger(Trigger trigger)
-	{
-		m_triggerContainer.add(trigger);
-	}
-	
-	
+
 	//à utiliser pour le debugging, ou lors de la création de map. 
 	@Override
 	public void draw(SpriteBatch batch) {
@@ -47,7 +60,6 @@ public class TriggerManager implements Drawable, Json.Serializable {
 	}
 	
 	//serialisation : 
-	
 	public static TriggerManager load(String filePath)
 	{
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
@@ -57,6 +69,7 @@ public class TriggerManager implements Drawable, Json.Serializable {
 		TriggerManager triggerManager = json.fromJson(TriggerManager.class, fileString);
 		return triggerManager;
 	}
+	@Override
 	public void save(String filePath)
 	{
 		Json json = new Json();
@@ -112,7 +125,7 @@ public class TriggerManager implements Drawable, Json.Serializable {
 			}
 
 			
-			this.addTrigger(newTrigger);
+			this.add(newTrigger);
 		}
 			
 	}

@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Drawable;
 import com.retroDante.game.Element2D;
+import com.retroDante.game.Manager;
 
 public class MapLayout implements Drawable, Json.Serializable {
 	
@@ -36,20 +37,23 @@ public class MapLayout implements Drawable, Json.Serializable {
 			System.out.println("maxIndex : "+s_maxIndex);
 		}
 	}
+
+
+	public void add(Element2D element)
+	{
+		m_container.add(element);
+	}
+
+	public boolean remove(Element2D element)
+	{
+		return m_container.remove(element);
+	}
+	
+	//getters / setters  :
 	
 	public int getIndex()
 	{
 		return m_index;
-	}
-	
-	void addElement(Element2D element)
-	{
-		m_container.add(element);
-	}
-	
-	void removeElement(Element2D element)
-	{
-		m_container.remove(element);
 	}
 	
 	List<Element2D> getElements()

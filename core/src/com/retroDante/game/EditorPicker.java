@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -48,6 +49,7 @@ public class EditorPicker extends Table {
 	private int m_currentTypeIndex; //index du type utilisé
 	private String m_currentTypeName; //nom du type utilisé
 	private MouseEditor m_editorMouse; 
+	private HashMap<String, Factory<? extends Body> > m_factories; // toutes les factories permettant d'instancier les objets du jeu
 	
 	EditorPicker()
 	{
@@ -68,6 +70,8 @@ public class EditorPicker extends Table {
 		m_typeNames = new ArrayList<String>();
 		m_typeCount = new ArrayList<Integer>();
 		m_elementNames = new ArrayList<String>();
+		
+		m_factories = new HashMap<String, Factory<? extends Body> >();
 		
 		initAll();
 		
@@ -97,10 +101,10 @@ public class EditorPicker extends Table {
 	 */
 	void initAll()
 	{
-		initTypeNames("enemy", "platform", "trigger");
+		initTypeNames("enemy", "map", "trigger");
 		initTypeCount(8,7,5);
 		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "damageTrigger", "blocTrigger", "killTrigger", "bumpTrigger", "teleportTrigger"  );
-		
+		initFactories();
 		
 		setDefaultSkin();
 		
@@ -150,7 +154,7 @@ public class EditorPicker extends Table {
 	
 	/**
 	 * Initialise le tableau contenant le compte des elements par type. 
-	 * Attention : Doit être appelé aprés initTypeCount()
+	 * Attention : Doit être appelé aprés initTypeNames()
 	 * 
 	 * @param countByType
 	 */
@@ -171,6 +175,28 @@ public class EditorPicker extends Table {
 			System.out.println("ERROR : EditorPicker : initTypeCount() : initTypeCount appelé avant initTypeNames, ou les nombre d'arguments passé aux deux fonction n'est pas le même");  
 		}
 		
+	}
+	
+	/**
+	 * initialise toutes les factories 
+	 */
+	void initFactories()
+	{
+		for(int i = 0; i < m_typeNames.size(); i++)
+		{
+			if(m_typeNames.get(i).equals("enemy"))
+			{
+				m_factories.put("enemy", EnemyFactory.getInstance());
+			}
+			else if(m_typeNames.get(i).equals("map"))
+			{
+				m_factories.put("map", MapFactory.getInstance());
+			}
+			else if(m_typeNames.get(i).equals("trigger"))
+			{
+				m_factories.put("trigger", TriggerFactory.getInstance());
+			}
+		}
 	}
 	
 	void setMouse(MouseEditor mouse)
@@ -238,65 +264,6 @@ public class EditorPicker extends Table {
 			index++;
 		}
 		
-		/*
-		final TextButton button_enemies = new TextButton("11111111", m_skin);
-		final TextButton button_map = new TextButton("2", m_skin);
-		final TextButton button_triggers = new TextButton("3", m_skin);
-		final TextButton button_player = new TextButton("3", m_skin);
-		
-		m_typePanel.defaults().space(5).maxSize(90, 70).minSize(80, 60);
-		m_typePanel.add(button_enemies);
-			m_typeGroup.add(button_enemies);
-		m_typePanel.add(button_map);
-			m_typeGroup.add(button_map);
-		m_typePanel.add(button_triggers);
-			m_typeGroup.add(button_triggers);
-		m_typePanel.add(button_player);
-			m_typeGroup.add(button_player);
-
-
-
-		button_enemies.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Clicked! Is checked: " + button_enemies.isChecked());
-				button_enemies.setText("Good job!");
-
-			}
-
-		});
-		button_map.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Clicked! Is checked: " + button_map.isChecked());
-				button_map.setText("Good job!");
-
-			}
-
-		});
-		button_triggers.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Clicked! Is checked: " + button_triggers.isChecked());
-				button_triggers.setText("Good job!");
-
-			}
-
-		});
-		button_player.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Clicked! Is checked: " + button_player.isChecked());
-				button_player.setText("Good job!");
-
-			}
-
-		}); */
-		
 		this.add(m_typePanel);
 	}
 	
@@ -334,18 +301,28 @@ public class EditorPicker extends Table {
 							@Override
 							public void changed (ChangeEvent event, Actor actor) {
 								
-								if(finalTypeName.equals("enemy"))
+								if(m_factories.containsKey(finalTypeName))
 								{
-									m_editorMouse.changePlaceable(EnemyFactory.getInstance().create( finalElementName ));
+									m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName);
 								}
-								else if(finalTypeName.equals("map"))
+								else
 								{
-									m_editorMouse.changePlaceable(MapFactory.getInstance().create( finalElementName ));
+									System.out.println("ERROR : EditorPicker : initElementsPanel : Aucune factory trouvée pour la clef : \""+finalTypeName);
 								}
-								else if(finalTypeName.equals("trigger"))
-								{
-									m_editorMouse.changePlaceable(TriggerFactory.getInstance().create( finalElementName ));
-								}
+		
+								
+//								if(finalTypeName.equals("enemy"))
+//								{
+//									m_editorMouse.changePlaceable(EnemyFactory.getInstance().create( finalElementName ));
+//								}
+//								else if(finalTypeName.equals("map"))
+//								{
+//									m_editorMouse.changePlaceable(MapFactory.getInstance().create( finalElementName ));
+//								}
+//								else if(finalTypeName.equals("trigger"))
+//								{
+//									m_editorMouse.changePlaceable(TriggerFactory.getInstance().create( finalElementName ));
+//								}
 								
 							}
 

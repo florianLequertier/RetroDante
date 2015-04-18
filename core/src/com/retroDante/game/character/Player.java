@@ -72,7 +72,7 @@ public class Player extends Character {
 
 	}
 	
-	Player()
+	public Player()
 	{
 		super( TileSetManager.getInstance().get("player"), 0);
 		m_type = "player";
@@ -270,7 +270,7 @@ public class Player extends Character {
 	
 	//loader Json : 
 	
-	static Player load(String filePath)
+	public static Player load(String filePath)
 	{
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
 		String fileString = file.readString();
@@ -279,7 +279,7 @@ public class Player extends Character {
 		Player player = json.fromJson(Player.class, fileString);
 		return player;
 	}
-	void save(String filePath)
+	public void save(String filePath)
 	{
 		Json json = new Json();
 		String text = json.toJson(this);

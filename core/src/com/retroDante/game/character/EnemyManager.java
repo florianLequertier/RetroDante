@@ -12,26 +12,37 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Drawable;
 import com.retroDante.game.Element2D;
+import com.retroDante.game.Manager;
 
-public class EnemyManager implements Drawable, Json.Serializable {
+public class EnemyManager extends Manager<Enemy> implements  Drawable, Json.Serializable {
 
 	private List<Enemy> m_container = new ArrayList<Enemy>();
 	
 	
-	public void add(Enemy enemy)
+	public EnemyManager()
+	{
+		
+	}
+	
+	
+	//Override Manager : 
+	@Override
+	public void add(Enemy enemy, int index )
 	{
 		m_container.add(enemy);
 	}
 	
+	@Override
+	public boolean remove (Enemy enemy, int index)
+	{
+		return m_container.remove(enemy);
+	}
+
 	public Enemy remove(int index)
 	{
 		return m_container.remove(index);
 	}
-	
-	public boolean remove (Enemy enemy)
-	{
-		return m_container.remove(enemy);
-	}
+
 	
 	//update 
 	public void update(float deltaTime, List<Element2D> others, Vector2 targetPosition)
@@ -148,6 +159,8 @@ public class EnemyManager implements Drawable, Json.Serializable {
 		EnemyManager enemyManager = json.fromJson(EnemyManager.class, fileString);
 		return enemyManager;
 	}
+	
+	@Override
 	public void save(String filePath)
 	{
 		Json json = new Json();

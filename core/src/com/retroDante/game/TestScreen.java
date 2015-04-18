@@ -103,7 +103,7 @@ public class TestScreen implements Screen, InputProcessor{
 	    	TeleportTrigger trigger = new TeleportTrigger(new Vector2(0,500));
 	    	trigger.setPosition(new Vector2(0,200));
 	    	trigger.setDimension(new Vector2(200,200));
-    	triggerManager.addTrigger(trigger);
+    	triggerManager.add(trigger);
     	
     	triggerManager.save("test_save_triggerManager.txt");
     	triggerManager = TriggerManager.load("test_save_triggerManager.txt");

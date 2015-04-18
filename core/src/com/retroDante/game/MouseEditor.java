@@ -26,9 +26,9 @@ public class MouseEditor {
 	}
 	
 	
-	public <T extends Body> void changePlaceable( T element)
+	public <T extends Body> void changePlaceable( T element, String type)
 	{
-		m_currentPlaceable = new Canvas<T>(element);
+		m_currentPlaceable = new Canvas<T>(element, type);
 	}
 	
 	/**
@@ -65,6 +65,32 @@ public class MouseEditor {
 		{
 			canvasContainer.add(m_currentPlaceable);
 			m_currentPlaceable = null;
+		}
+	}
+	
+	/**
+	 * ajoute l'element présent dans le canvas à un manager
+	 * 
+	 * @param manager
+	 */
+	public void attachCanvasOn(Manager<? extends Body> manager)
+	{
+		m_currentPlaceable.attachOn(manager);
+	}
+	
+	public void attachCanvasOn(Manager<? extends Body> manager, int index)
+	{
+		m_currentPlaceable.attachOn(manager, index);
+	}
+	
+	public String getCanvasType()
+	{
+		if(m_currentPlaceable != null)
+			return m_currentPlaceable.getType();
+		else
+		{
+			System.out.println("WARRNING : MouseEditor : getCanvasType : aucun canvas attaché à la souris");
+			return "error";
 		}
 	}
 	
