@@ -10,9 +10,11 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.retroDante.game.character.Character;
 import com.retroDante.game.character.Enemy;
 import com.retroDante.game.character.EnemyManager;
@@ -25,7 +27,8 @@ import com.retroDante.game.trigger.TriggerManager;
 
 public class TestScreen implements Screen, InputProcessor{
 
-	private SpriteBatch batch;
+	private Stage m_stage;
+	private Batch batch;
     private BitmapFont font;
     GameCamera gameCamera;
     HUDCamera hudCamera;
@@ -45,9 +48,11 @@ public class TestScreen implements Screen, InputProcessor{
 	
 	@Override
 	public void show() {
-
-		batch = new SpriteBatch();
+		
+		m_stage = new Stage();
+		batch = m_stage.getBatch();//new SpriteBatch();
 		font = new BitmapFont();
+		
 		
 		//camera : 
 		gameCamera = new GameCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
@@ -60,7 +65,7 @@ public class TestScreen implements Screen, InputProcessor{
 		tileSetManager.load(Gdx.files.getLocalStoragePath()+"/asset/"+"textureInfo/tileSetManagerLoader.txt");
 		System.out.println(tileSetManager.toString());
 		
-		//test map save : OK (magie avec plateform !!! )
+		//test map save : OK 
 		map = Map.createMapTest();
 		map.save("test_save_map.txt");
 		map = Map.load("test_save_map.txt");
@@ -125,6 +130,7 @@ public class TestScreen implements Screen, InputProcessor{
     	
     	//HUD manager : 
     	m_hudManager = new HUDManager();
+    	m_stage.addActor(m_hudManager);
     	
     	//input handler : 
     	m_inputHandler = new InputMultiplexer(m_hudManager.getStage(), playerController);
@@ -157,7 +163,7 @@ public class TestScreen implements Screen, InputProcessor{
 		
 	}
 	
-	private void draw(SpriteBatch batch)
+	private void draw(Batch batch)
 	{
 		batch.setProjectionMatrix(gameCamera.combined);
 		
@@ -206,7 +212,7 @@ public class TestScreen implements Screen, InputProcessor{
 		 
 		 
 		 //le HUD possède son propre batch : 
-		 m_hudManager.draw();
+		 //m_hudManager.draw();
 		     
 		
 		 

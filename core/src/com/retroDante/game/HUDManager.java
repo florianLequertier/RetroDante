@@ -25,22 +25,31 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
-public class HUDManager {
+public class HUDManager extends Table{
 	
-	private Stage m_stage;
+	//private Stage m_stage;
 	private Skin m_skin;
-	private HashMap<String, Table> m_tableComponent = new HashMap<String, Table>();
+	private Table m_pauseMenu;
+	//private HashMap<String, Table> m_tableComponent = new HashMap<String, Table>();
 	//private KeyboardListener m_keyListener;
 	
 	HUDManager()
 	{
+		super();
+		
+		
+		this.setFillParent(false);
+		this.setPosition(280,0);
+		this.setSize(350,500);
+		this.align(Align.center);
+		
 		//m_inputHandler = new InputProcessor();
 		//Gdx.input.setInputProcessor(m_stage);
 		
 		//m_keyListener = new KeyboardListener(this);
 		
-		m_stage = new Stage();
-		m_stage.addListener(new InputListener(){
+		//m_stage = new Stage();
+		this.addListener(new InputListener(){
 			
 			public boolean keyDown(ChangeEvent event, int keycode){
 				
@@ -84,19 +93,19 @@ public class HUDManager {
 		//initialisation de la map de components stockant tout les HUDs pouvant potentiellement être appelés
 		
 		//menu de pause, debut : 
-			Table pauseMenu = new Table();
-			pauseMenu.setFillParent(true);
-			pauseMenu.setPosition(0,0);
-			pauseMenu.align(Align.center);
-			m_tableComponent.put("pauseMenu", pauseMenu);
+			Table m_pauseMenu = new Table();
+			m_pauseMenu.setFillParent(true);
+			m_pauseMenu.setPosition(0,0);
+			m_pauseMenu.align(Align.center);
+			//m_tableComponent.put("pauseMenu", pauseMenu);
 			//m_stage.addActor(pauseMenu);
 			
 			
 			final TextButton button_quit = new TextButton("Quit", m_skin);
 			final TextButton button_resume = new TextButton("Resume", m_skin);
 			
-			pauseMenu.add(button_quit).space(20).width(100).row();
-			pauseMenu.add(button_resume).space(20).width(100).row();
+			m_pauseMenu.add(button_quit).space(20).width(100).row();
+			m_pauseMenu.add(button_resume).space(20).width(100).row();
 			
 			
 			button_quit.addListener(new ChangeListener() {
@@ -118,6 +127,9 @@ public class HUDManager {
 				}
 	
 			});
+		m_pauseMenu.setName("pauseMenu");
+		
+		//this.add(pauseMenu);
 		
 		//menu de pause, fin
 	}
@@ -125,18 +137,20 @@ public class HUDManager {
 	public void closePauseMenu()
 	{
 		GameManager.getInstance().togglePause(); //unpause
-		m_stage.getRoot().removeActor(m_tableComponent.get("pauseMenu"));
+		this.add(m_pauseMenu);
+		//m_stage.getRoot().removeActor(m_tableComponent.get("pauseMenu"));
 	}
 	
 	public void openPauseMenu()
 	{
 		GameManager.getInstance().togglePause(); //pause
-		m_stage.addActor(m_tableComponent.get("pauseMenu"));
+		this.removeActor(m_pauseMenu);
+		//m_stage.addActor(m_tableComponent.get("pauseMenu"));
 	}
 	
 	public void tooglePauseMenu()
 	{
-		if(!m_stage.getActors().contains(m_tableComponent.get("pauseMenu"), false)) //si le pauseMenu n'est pas dans le stage
+		if(this.findActor("pauseMenu") == null) //(!m_stage.getActors().contains(m_tableComponent.get("pauseMenu"), false)) //si le pauseMenu n'est pas dans le stage
 		{
 			openPauseMenu();
 		}
@@ -145,7 +159,7 @@ public class HUDManager {
 			closePauseMenu();
 		}
 	}
-
+	/*
 	public void draw() {
 		
 		m_stage.draw();
@@ -155,13 +169,13 @@ public class HUDManager {
 	public Stage getStage()
 	{
 		return m_stage;
-	}
+	}*/
 	
 	public void dispose()
 	{
-		m_stage.dispose();
+		//m_stage.dispose();
 		m_skin.dispose();
-		m_tableComponent.clear();
+		//m_tableComponent.clear();
 	}
 
 }

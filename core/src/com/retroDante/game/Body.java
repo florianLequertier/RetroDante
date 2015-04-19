@@ -2,8 +2,10 @@ package com.retroDante.game;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
 /**
  * 
@@ -12,7 +14,7 @@ import com.badlogic.gdx.utils.Json;
  * @author florian
  *
  */
-public abstract class Body {
+public abstract class Body implements Json.Serializable {
 	
 	private Vector2 m_dimension = new Vector2(1,1);
 	private Vector2 m_scaleFactor = new Vector2(1,1);
@@ -96,5 +98,36 @@ public abstract class Body {
 	}
 	
 	public abstract void draw(Batch batch);
+	
+	@Override
+	public void write(Json json) {
+		
+		//save de la position de l'entitée : 
+		json.writeValue("m_positionX", m_position.x);
+		json.writeValue("m_positionY", m_position.y);
+		json.writeValue("m_dimensionW", m_dimension.x);
+		json.writeValue("m_dimensionH", m_dimension.y);
+		json.writeValue("m_rotation", m_rotation);
+		json.writeValue("m_scaleFactorX", m_scaleFactor.x);
+		json.writeValue("m_scaleFactorY", m_scaleFactor.y);
+
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		System.out.println("read in Rigidbody : "+jsonData.child().toString());
+		//load de la position de l'entitée : 
+		float posX = jsonData.getFloat("m_positionX");
+		float posY = jsonData.getFloat("m_positionY");
+		m_position = new Vector2(posX, posY);
+		float width = jsonData.getFloat("m_dimensionW");
+		float height = jsonData.getFloat("m_dimensionH");
+		m_dimension = new Vector2(width, height);
+		m_rotation = jsonData.getFloat("m_rotation");
+		float scaleX = jsonData.getFloat("m_scaleFactorX");
+		float scaleY = jsonData.getFloat("m_scaleFactorY");
+		m_scaleFactor = new Vector2(scaleX, scaleY);
+		
+	}
 	
 }

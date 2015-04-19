@@ -92,7 +92,7 @@ public class MapLayout implements Drawable, Json.Serializable {
 		}	
 	}
 	
-	public void drawWithParralax(SpriteBatch batch) {
+	public void drawWithParralax(Batch batch) {
 		
 		for(Element2D element : m_container)
 		{

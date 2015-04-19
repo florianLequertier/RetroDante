@@ -263,21 +263,22 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	
 	@Override
 	public void draw(Batch batch) {
-		Vector2 position = new Vector2(this.m_collider.getX(), this.m_collider.getY());
-		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
-		//this.updateTransform();
-		//batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform() );
+		//Vector2 position = new Vector2(this.m_collider.getX(), this.m_collider.getY());
+		//batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
+		this.updateTransform();
+		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform() );
 	}
 	
-	public void drawWithParralax(SpriteBatch batch, float decalX, float decalY) {
+	public void drawWithParralax(Batch batch, float decalX, float decalY) {
 		
-		Vector2 position = new Vector2(this.m_collider.getX()+decalX, this.m_collider.getY() +decalY);
-		batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
-		//this.updateTransform();
-		//Affine2 transfo = this.getTransform();//.preTranslate(decalX, decalY);
-		//batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, transfo );
+		//Vector2 position = new Vector2(this.m_collider.getX()+decalX, this.m_collider.getY() +decalY);
+		//batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
 		
-		//System.out.println(transfo);
+		this.updateTransform();
+		Affine2 transfo = this.getTransform().preTranslate(decalX, decalY);
+		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, transfo );
+		
+		System.out.println(transfo);
 		
 	}
 	

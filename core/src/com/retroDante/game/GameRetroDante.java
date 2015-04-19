@@ -20,9 +20,9 @@ public class GameRetroDante extends Game {
 		gameManager.setGame(this);
 		
 		//testScreen = new TestScreen();
-		//testScreen = new MenuScreen();
+		testScreen = new MenuScreen();
 		//testScreen = new UITestScreen();
-		testScreen = new EditorScreen();
+		//testScreen = new EditorScreen();
 		
 		this.setScreen(testScreen);
 	}

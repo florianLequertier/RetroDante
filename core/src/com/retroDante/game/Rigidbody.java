@@ -297,7 +297,7 @@ public abstract class Rigidbody extends Body implements Json.Serializable{
 		@Override
 		public void write(Json json) {
 			
-			//save de la position de l'entitée : 
+			super.write(json);
 			json.writeValue("m_colliderPosX", m_collider.getX());
 			json.writeValue("m_colliderPosY", m_collider.getY());
 			json.writeValue("m_colliderWidth", m_collider.getWidth());
@@ -307,7 +307,8 @@ public abstract class Rigidbody extends Body implements Json.Serializable{
 
 		@Override
 		public void read(Json json, JsonValue jsonData) {
-			System.out.println("read in Rigidbody : "+jsonData.child().toString());
+			super.read(json, jsonData);
+			//System.out.println("read in Rigidbody : "+jsonData.child().toString());
 			//load de la position de l'entitée : 
 			float posX = jsonData.getFloat("m_colliderPosX");
 			float posY = jsonData.getFloat("m_colliderPosY");

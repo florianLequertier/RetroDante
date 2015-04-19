@@ -192,7 +192,7 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 	}
 	
 	//parrallax : 
-	public void drawWithParralax(SpriteBatch batch) {
+	public void drawWithParralax(Batch batch) {
 		
 		for(MapLayout layout : m_backgrounds)
 		{
@@ -204,7 +204,7 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 			layout.drawWithParralax(batch);
 		}
 	} 
-	public void drawBackgroungWithParralax(SpriteBatch batch) {
+	public void drawBackgroungWithParralax(Batch batch) {
 		
 		for(MapLayout layout : m_backgrounds)
 		{
@@ -212,12 +212,12 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		}
 		
 	}
-	public void drawMaingroundWithParralax(SpriteBatch batch) {
+	public void drawMaingroundWithParralax(Batch batch) {
 		
 		m_mainground.draw(batch);
 		
 	}
-	public void drawForegroundWithParralax(SpriteBatch batch) {
+	public void drawForegroundWithParralax(Batch batch) {
 
 		for(MapLayout layout : m_foregrounds)
 		{
