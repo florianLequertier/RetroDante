@@ -2,6 +2,8 @@ package com.retroDante.game;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.retroDante.game.trigger.Trigger;
 
 
 /**
@@ -19,7 +21,6 @@ public interface CanvasInterface {
 	public void setPosition(Vector2 newPos); //bouge le bouton
 	public Vector2 getPosition();
 	public void draw(Batch batch, boolean onlyButton); //dessine le composant du canvas, puis le bouton par dessus
-	public void dropOnSceen();
 	public <T extends Body> void attachOn(Manager<T> manager);
 //	public <T extends Body> void attachOn(Manager<T> manager, int index);
 	public String getType();
@@ -30,7 +31,11 @@ public interface CanvasInterface {
 	public int getRemainActions();
 	public void setMaxActions(int remainActions);
 	public int getMaxActions();
-	public void resizeAction(Vector2 position);
-	public void additionnalAction();
+	public void resizeAction(Vector2 position, boolean decreaseAction);
+	public void additionnalAction(boolean decreaseAction);
+	public boolean applyDropStrategy(Vector2 worldPosition);
+	public void updateDropStrategy(Vector2 worldPosition);
+	public Trigger getCollider();
+	public <T extends Body> void removeOn(Manager<T> manager);
 
 }

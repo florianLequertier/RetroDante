@@ -28,24 +28,25 @@ public class EditorScreen implements Screen {
 		m_stage = new Stage();
 		
 		m_camera = new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
-		m_batch = m_stage.getBatch();
-		InputMultiplexer inputHandler = new InputMultiplexer();
-			inputHandler.addProcessor(m_stage);
-			inputHandler.addProcessor(m_camera);
-			Gdx.input.setInputProcessor(inputHandler);
-			
+					
 			
 		m_mouse = new MouseEditor();
 		
 		m_sceen = new EditorSceen();
-			m_stage.addActor(m_sceen);
+			//m_stage.addActor(m_sceen);
 			m_sceen.setMouse(m_mouse);
 			m_sceen.setCamera(m_camera);
 		
 		m_editorPicker = new EditorPicker();
 			m_stage.addActor(m_editorPicker);
 			m_editorPicker.setMouse(m_mouse);
+			
+		m_batch = m_stage.getBatch();
+			InputMultiplexer inputHandler = new InputMultiplexer();
+				inputHandler.addProcessor(m_stage);
+				inputHandler.addProcessor(m_camera);
+				inputHandler.addProcessor(m_sceen);
+				Gdx.input.setInputProcessor(inputHandler);
 		
 		
 	}
@@ -55,6 +56,7 @@ public class EditorScreen implements Screen {
 	{
 		m_mouse.update();
 		m_camera.updateMovements();
+		m_sceen.update(delta);
 	}
 	
 	private void draw()

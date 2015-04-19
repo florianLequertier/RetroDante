@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 
 /**
@@ -23,6 +24,11 @@ public class MouseEditor {
 	public MouseEditor()
 	{
 		update();
+	}
+	
+	public <T extends Body> void changePlaceable(CanvasInterface canvas)
+	{
+		m_currentPlaceable = canvas;
 	}
 	
 	public <T extends Body> void changePlaceable( T element, String type)
@@ -63,19 +69,25 @@ public class MouseEditor {
 	/**
 	 * Le Canvas est laché dans la scène.
 	 */
-	public void dropCanvasOn( List<CanvasInterface> canvasContainer)
+	public boolean dropCanvasOn( List<CanvasInterface> canvasContainer)
 	{
-		if(m_currentPlaceable != null)
-		{
-			if(m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions())// Aucune action n'a encore été traité : On l'attache 
-			{
-				canvasContainer.add(m_currentPlaceable);
-			}
-			else if(m_currentPlaceable.getRemainActions() == 0) // Toutes les action efféctuées : On le retire de la souris
-			{
-				m_currentPlaceable = null;
-			}
-		}
+		if(m_currentPlaceable == null)
+		return false;
+		
+//		if(m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions())// Aucune action n'a encore été traité : On l'attache 
+//		{
+//			canvasContainer.add(m_currentPlaceable);
+//			return true;
+//		}
+		//else if(m_currentPlaceable.getRemainActions() == 0) // Toutes les action efféctuées : On le retire de la souris
+		//{
+		//	m_currentPlaceable = null;
+		//}
+		canvasContainer.add(m_currentPlaceable);
+		//screenTable.add(m_currentPlaceable.getButton());
+		
+		return true;
+
 	}
 	
 	/**
@@ -85,29 +97,46 @@ public class MouseEditor {
 	 */
 	public void attachCanvasOn(Manager<? extends Body> manager)
 	{
-		if(m_currentPlaceable != null)
-		{
-			
-			if(m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions()) // Aucune action n'a encore été traité : On l'attache au manager quelque soit son type
-			{
-				m_currentPlaceable.attachOn(manager);
-			}
-			else
-			{
-				if(m_currentPlaceable.getType().equals("trigger")) // si c'est un trigger, on poursuit les autres étapes
-				{
-					if(m_currentPlaceable.getRemainActions() == 2) //resize
-					{
-						m_currentPlaceable.resizeAction(m_position);
-					}
-					else if(m_currentPlaceable.getRemainActions() == 1) 
-					{
-						m_currentPlaceable.additionnalAction();
-					}
-				}
-			}
+		if(m_currentPlaceable == null)
+			return;
 
+		if(m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions()) // Aucune action n'a encore été traité : On l'attache au manager quelque soit son type
+		{
+			m_currentPlaceable.attachOn(manager);
 		}
+		
+	}
+	
+	/**
+	 * Retire l'element du manager
+	 * 
+	 * @param manager
+	 */
+	public void removeCanvasOn(Manager<? extends Body> manager)
+	{
+		if(m_currentPlaceable == null)
+			return;
+
+		m_currentPlaceable.removeOn(manager);	
+	}
+	
+	public void applyDropStrategy(Vector2 worldPosition)
+	{
+		if(m_currentPlaceable == null)
+			return;
+		
+		if(m_currentPlaceable.applyDropStrategy(worldPosition))
+		{
+			m_currentPlaceable = null;
+		}
+	}
+	
+	public void updateDropStrategy(Vector2 worldPosition)
+	{
+		if(m_currentPlaceable == null)
+			return;
+		
+		m_currentPlaceable.updateDropStrategy(worldPosition);
 
 	}
 	
@@ -151,6 +180,27 @@ public class MouseEditor {
 			return false;
 	}
 	
+	/**
+	 * Test d'égalité entre le canvas de la souris et celui passé en parametre
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public boolean testCanvasEquality(CanvasInterface other)
+	{
+		if(m_currentPlaceable == null)
+			return false;
+		
+		if(m_currentPlaceable.equals(other))
+		{
+			//System.out.println("canvas egaux");
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	
 	

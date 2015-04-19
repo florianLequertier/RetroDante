@@ -19,7 +19,7 @@ import com.retroDante.game.character.Character;
  * @author florian
  *
  */
-public abstract class Trigger extends Rigidbody implements Json.Serializable, Drawable, Cloneable {
+public class Trigger extends Rigidbody implements Json.Serializable, Drawable, Cloneable {
 	
 	//pour un affichage de debug : 
 	private ShapeRenderer m_visual = new ShapeRenderer();
@@ -27,13 +27,13 @@ public abstract class Trigger extends Rigidbody implements Json.Serializable, Dr
 	private String m_type; //type de trigger.
 	//private VisualEffect m_effect;
 	
-	Trigger()
+	public Trigger()
 	{
 		this.makeStaticBody();
 		m_color = Color.BLUE;
 	}
 	
-	Trigger(Color color)
+	public Trigger(Color color)
 	{
 		this.makeStaticBody();
 		m_color = color;

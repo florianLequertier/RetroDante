@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.retroDante.game.trigger.Trigger;
 
 /**
  * 
@@ -50,15 +53,27 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	
 	private String m_type;
 	private T m_element;
-	private Button m_button;
+	//private Button m_button;
+	private Trigger m_collider;
 	private int m_layout;
 	private int m_remainActions = 0;
 	private int m_maxActions = 0;
 	
 	Canvas(T element, String type, int layout, int remainActions)
 	{
-		m_button = new Button(m_skin);
+//		m_button = new Button(m_skin);
+//		m_button.setSize(100, 100);
+//		m_button.addListener(new InputListener() {
+//			@Override
+//			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+//				System.out.println("appuie sur un button de la scene");
+//				return false;
+//			}
+//		});
+		
 		m_element = element;
+		m_collider = new Trigger(Color.GREEN);
+		m_collider.setDimension(m_element.getDimension());
 		m_type = type;
 		m_layout = layout;
 		m_remainActions = remainActions;
@@ -69,7 +84,8 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	public void setPosition(Vector2 newPos) 
 	{
 
-		m_button.setPosition(newPos.x, newPos.y);
+		//m_button.setPosition(newPos.x, newPos.y);
+		m_collider.setPosition(newPos);
 		if(m_element != null)
 			m_element.setPosition(newPos);
 	}
@@ -80,7 +96,8 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		if(m_element != null && onlyButton == false)
 			m_element.draw(batch);
 		
-		m_button.draw(batch, 1);
+		//m_button.draw(batch, 1);
+		m_collider.draw(batch);
 	}
 	
 	@Override
@@ -123,6 +140,11 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		m_maxActions = maxActions;
 	}
+	@Override
+	public Trigger getCollider()
+	{
+		return m_collider;
+	}
 	
 
 	@Override
@@ -142,6 +164,24 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		System.out.println("attache au manager de l'element du canvas de type : "+m_type);
 	}
 	
+	@Override
+	public <T extends Body> void removeOn(Manager<T> manager)
+	{
+		if(m_element != null)
+		{
+			if(m_type.equals("map") )
+				manager.remove((T)m_element, m_layout);
+			else
+				manager.remove((T)m_element);
+			
+			m_remainActions = m_maxActions;
+		}
+		
+		
+		System.out.println("attache au manager de l'element du canvas de type : "+m_type);
+	}
+	
+	
 //	@Override
 //	public <T extends Body> void attachOn(Manager<T> manager, int index)
 //	{
@@ -152,30 +192,99 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	@Override 
 	public Vector2 getPosition()
 	{
-		return new Vector2(m_button.getX(), m_button.getY());
+		return m_collider.getPosition();
 	}
 	
 	@Override
-	public void resizeAction(Vector2 position)
+	public void resizeAction(Vector2 position, boolean decreaseAction)
 	{
 		Vector2 A = m_element.getPosition();
 		Vector2 B = position;//new Vector2( Gdx.input.getX(), Gdx.input.getY() );
-		Vector2 dimension = A.mulAdd(B, -1);
+		Vector2 dimension = B.mulAdd(A, -1);
 		
 		m_element.setDimension(dimension);
+		//m_button.setSize(dimension.x, dimension.y );
+		m_collider.setDimension(dimension);
 		
+		if(decreaseAction)
 		m_remainActions--;
 	}
 	@Override
-	public void additionnalAction()
+	public void additionnalAction(boolean decreaseAction)
 	{
 		System.out.println("TODO : additionnalAction");
+		
+		if(decreaseAction)
 		m_remainActions--;
 	}
 	
+	
+	/**
+	 * return true si la strategie de drop a fini de dropper l'objet. On peut alors enlever l'objet à la souris
+	 */
 	@Override
-	public void dropOnSceen()
-	{
+	public boolean applyDropStrategy(Vector2 worldPosition) {
+		
+		if(m_type.equals("trigger")) // si c'est un trigger, on poursuit les autres étapes
+		{
+			if(m_remainActions == 2) //resize
+			{
+				this.resizeAction(worldPosition, true);
+			}
+			else if(m_remainActions == 1) 
+			{
+				this.additionnalAction(true);
+			}
+		}
+		
+		return m_remainActions==0;
 		
 	}
+	
+	/**
+	 * update de la strategy de drop lors du mouvement de la souris
+	 * 
+	 * @param worldPosition
+	 */
+	@Override
+	public void updateDropStrategy(Vector2 worldPosition)
+	{
+		if(m_type.equals("trigger")) // si c'est un trigger, on poursuit les autres étapes
+		{
+			if(m_remainActions == 2) //resize
+			{
+				this.resizeAction(worldPosition, false);
+			}
+			else if(m_remainActions == 1) 
+			{
+				this.additionnalAction(false);
+			}
+		}
+	}
+	
+	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other == this)
+			return true;
+		
+		if(other instanceof Canvas)
+		{
+			Canvas<? extends Body> canvas = (Canvas<? extends Body>)other;
+			if(this.m_element.equals(canvas.m_element))
+				return true;
+		}
+		/*else if(other instanceof CanvasInterface)
+		{
+			CanvasInterface canvasInter = (CanvasInterface)other;
+			if(this.m_element.equals(canvasInter.m_element))
+				return true;
+		}*/
+
+		
+		return false;
+	}
+
+
 }
