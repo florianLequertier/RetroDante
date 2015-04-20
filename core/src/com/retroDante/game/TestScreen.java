@@ -42,7 +42,7 @@ public class TestScreen implements Screen, InputProcessor{
 	GameManager gameManager = GameManager.getInstance(); //Singleton
 	Enemy enemy; //test 
 	EnemyManager enemyManager;
-	HUDManager m_hudManager;
+	HUDGame m_hudManager;
 	InputMultiplexer m_inputHandler;
     
 	
@@ -129,12 +129,16 @@ public class TestScreen implements Screen, InputProcessor{
     	
     	
     	//HUD manager : 
-    	m_hudManager = new HUDManager();
-    	m_stage.addActor(m_hudManager);
+    	m_hudManager = new HUDGame(m_stage);
+    	//m_stage.addActor(m_hudManager);
     	
     	//input handler : 
-    	m_inputHandler = new InputMultiplexer(m_hudManager.getStage(), playerController);
-       	Gdx.input.setInputProcessor(m_inputHandler);
+    	//m_inputHandler = new InputMultiplexer(m_stage, playerController);
+    	InputMultiplexer inputHandler = new InputMultiplexer();
+			inputHandler.addProcessor(m_stage);
+			inputHandler.addProcessor(playerController);
+		Gdx.input.setInputProcessor(inputHandler);
+       	//Gdx.input.setInputProcessor(m_inputHandler);
 		
 	}
 	
@@ -204,13 +208,19 @@ public class TestScreen implements Screen, InputProcessor{
 		    	 font.setScale(2, 2);
 		    	 font.draw(batch, "PAUSE", -45, 100);//Gdx.graphics.getWidth() *0.5f - 130,Gdx.graphics.getHeight()*0.5f + 100);
 		     }
+		     //m_hudManager.act(Gdx.graphics.getDeltaTime());
+		     //m_hudManager.draw(batch);
 		     
 		     batch.setProjectionMatrix(gameCamera.combined);
 			 triggerManager.draw(batch); //for debug ou creation de la map
 		     
+			 
+			 
+			 
 		 batch.end();
 		 
-		 
+		m_stage.act(Gdx.graphics.getDeltaTime());
+		m_stage.draw();
 		 //le HUD possède son propre batch : 
 		 //m_hudManager.draw();
 		     

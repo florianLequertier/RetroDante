@@ -17,6 +17,7 @@ public class EditorScreen implements Screen {
 	private Batch m_batch;
 	private MouseEditor m_mouse;
 	private EditorSceen m_sceen;
+	private HUDEditor m_hud;
 	private EditorCamera m_camera;
 	
 	@Override
@@ -26,6 +27,8 @@ public class EditorScreen implements Screen {
 		System.out.println(m_tileSetManager.toString());
 		
 		m_stage = new Stage();
+		
+		
 		
 		m_camera = new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 					
@@ -37,17 +40,23 @@ public class EditorScreen implements Screen {
 			m_sceen.setMouse(m_mouse);
 			m_sceen.setCamera(m_camera);
 		
-		m_editorPicker = new EditorPicker();
-			m_stage.addActor(m_editorPicker);
-			m_editorPicker.setMouse(m_mouse);
+		m_hud = new HUDEditor(m_stage, m_sceen, m_mouse); //créé aussi l'editor Picker	
+		
+//		m_editorPicker = new EditorPicker();
+//			m_stage.addActor(m_editorPicker);
+//			m_editorPicker.setMouse(m_mouse);
 			
+			
+			
+		
+		
 		m_batch = m_stage.getBatch();
 			InputMultiplexer inputHandler = new InputMultiplexer();
 				inputHandler.addProcessor(m_stage);
 				inputHandler.addProcessor(m_camera);
 				inputHandler.addProcessor(m_sceen);
 				Gdx.input.setInputProcessor(inputHandler);
-		
+
 		
 	}
 	

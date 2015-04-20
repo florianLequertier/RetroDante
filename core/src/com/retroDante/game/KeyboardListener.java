@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class KeyboardListener extends Actor implements InputProcessor{
 	
-	private HUDManager m_owner;
+	private HUDGame m_owner;
 	
-	KeyboardListener(HUDManager owner)
+	KeyboardListener(HUDGame owner)
 	{
 		m_owner = owner;
 	}

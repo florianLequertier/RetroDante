@@ -131,6 +131,11 @@ public class GameManager implements DataSingleton<GameManager>{
 			m_game.getScreen().dispose();
 			m_game.setScreen(new TestScreen());
 		}
+		else if(name == "editor")
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new EditorScreen());
+		}
 		else
 		{
 			m_game.getScreen().dispose();

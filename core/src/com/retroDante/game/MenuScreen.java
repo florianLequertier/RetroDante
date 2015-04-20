@@ -69,7 +69,7 @@ public class MenuScreen implements Screen {
 		
 		
 		final TextButton button01 = new TextButton("Play", m_skin);
-		TextButton button02 = new TextButton("test01", m_skin);
+		TextButton button02 = new TextButton("Editor", m_skin);
 		TextButton button03 = new TextButton("test02", m_skin);
 		
 		table.add(button01).space(20).width(100).row();
@@ -80,9 +80,18 @@ public class MenuScreen implements Screen {
 		button01.addListener(new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Clicked! Is checked: " + button01.isChecked());
-				button01.setText("Good job!");
+				button01.setChecked(false);
+				
 				GameManager.getInstance().changeScreen("test");
+			}
+
+		});
+		button02.addListener(new ChangeListener() {
+			@Override
+			public void changed (ChangeEvent event, Actor actor) {
+				button01.setChecked(false);
+				
+				GameManager.getInstance().changeScreen("editor");
 			}
 
 		});

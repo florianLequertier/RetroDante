@@ -226,11 +226,11 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	 */
 	public void save(String folderPath)
 	{
-		m_player.save(folderPath+"/player.txt");
+		m_player.save("editorSave/"+folderPath+"/player.txt");
 		
 		for(Entry<String, Manager<? extends Body> > entry : m_managers.entrySet() )
 		{
-			String filePath = folderPath+"/"+entry.getKey()+".txt";
+			String filePath = "editorSave/"+folderPath+"/"+entry.getKey()+".txt";
 			entry.getValue().save(filePath);
 		}
 	}
@@ -261,6 +261,7 @@ public class EditorSceen extends InputAdapter implements Drawable{
 		Matrix4 tempProj = batch.getProjectionMatrix();
 		
 		batch.setProjectionMatrix(m_sceenCamera.combined);
+			m_player.draw(batch);
 			for(Entry<String, Manager<? extends Body> > entity : m_managers.entrySet() )
 			{
 				entity.getValue().draw(batch);

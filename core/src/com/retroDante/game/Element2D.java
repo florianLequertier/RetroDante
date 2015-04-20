@@ -278,8 +278,6 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 		Affine2 transfo = this.getTransform().preTranslate(decalX, decalY);
 		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, transfo );
 		
-		System.out.println(transfo);
-		
 	}
 	
 	
