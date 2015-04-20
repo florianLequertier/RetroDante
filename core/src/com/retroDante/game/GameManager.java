@@ -21,6 +21,7 @@ public class GameManager implements DataSingleton<GameManager>{
 	float m_savedTime = 0;
 	float m_elapsedTime = 0;
 	InputMultiplexer m_inputHandler; 
+	private StoryChapter m_currentChapter; // chapitre actuel de l'histoire (ne sert que lors du mode histoire)
 	//StateMachine m_gameState = new ReverseStateMachine();
 	
 	
@@ -131,6 +132,11 @@ public class GameManager implements DataSingleton<GameManager>{
 			m_game.getScreen().dispose();
 			m_game.setScreen(new TestScreen());
 		}
+		else if(name == "game")
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new GameScreen(StoryChapter.Tutorial));
+		}
 		else if(name == "editor")
 		{
 			m_game.getScreen().dispose();
@@ -145,6 +151,88 @@ public class GameManager implements DataSingleton<GameManager>{
 		return true;
 
 	}
+	/**
+	 * 
+	 * fonction chargeant une nouvelle scene 
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public boolean changeScreen(String name, String loadFolder)
+	{
+		
+		if(m_game == null || loadFolder == "")
+			return false;
+		
+		if(name == "editor")
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new EditorScreen());
+		}
+		else if(name == "game")
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new GameScreen(loadFolder));
+		}
+		else
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new MenuScreen());
+		}
+		
+		return true;
+
+	}
+	
+	/**
+	 * 
+	 * fonction chargeant une nouvelle scene, correspondant forcement à une partie "histoire" 
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public boolean changeScreen(StoryChapter chapter)
+	{
+		
+		if(m_game == null)
+			return false;
+
+		m_game.getScreen().dispose();
+		m_game.setScreen(new GameScreen(chapter));
+		
+		return true;
+
+	}
+	
+	public void quitGame()
+	{
+		m_game.dispose();
+	}
+	
+	public void setCurrentChapter(StoryChapter chapter)
+	{
+		m_currentChapter = chapter;
+	}
+	
+	public StoryChapter getCurrentChapter()
+	{
+		return m_currentChapter;
+	}
+	
+	public void nextChapter()
+	{
+		if(m_currentChapter.hasNextChapter())
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new GameScreen(m_currentChapter.nextChapter()));
+		}
+		else
+		{
+			m_game.getScreen().dispose();
+			m_game.setScreen(new MenuScreen());
+		}
+	}
+	
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub

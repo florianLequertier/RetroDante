@@ -19,11 +19,22 @@ public class MouseEditor {
 	
 	private CanvasInterface m_currentPlaceable;
 	private Vector2 m_position = new Vector2(); //position de la souris 
+	private boolean m_isVisible = true;;
 	
 	
 	public MouseEditor()
 	{
 		update();
+	}
+	
+	public void setVisibility(boolean newState)
+	{
+		m_isVisible = newState;
+	}
+	
+	public boolean getVisibility()
+	{
+		return m_isVisible;
 	}
 	
 	public <T extends Body> void changePlaceable(CanvasInterface canvas)
@@ -60,7 +71,7 @@ public class MouseEditor {
 	 */
 	public void draw(Batch batch)
 	{
-		if(m_currentPlaceable != null)
+		if(m_currentPlaceable != null && m_isVisible)
 		{
 			m_currentPlaceable.draw(batch, false);
 		}

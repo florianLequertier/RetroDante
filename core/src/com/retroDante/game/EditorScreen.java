@@ -28,8 +28,6 @@ public class EditorScreen implements Screen {
 		
 		m_stage = new Stage();
 		
-		
-		
 		m_camera = new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 					
 			

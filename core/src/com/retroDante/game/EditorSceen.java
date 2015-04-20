@@ -93,6 +93,8 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	void initAll()
 	{
 		m_player = new Player();
+		m_canvasContainer.add( new Canvas<Player>( m_player , "player") );
+		
 		initManagers();
 	}
 	
@@ -159,13 +161,21 @@ public class EditorSceen extends InputAdapter implements Drawable{
 				}
 
 			}
+			else if(canvasType == "player")
+			{
+				
+				m_mouseEditor.setCanvasPosition( positionDrop );
+				m_mouseEditor.dropCanvasOn(m_canvasContainer);
+				m_mouseEditor.applyDropStrategy(positionDrop);
+				m_lastDroppedIndice = -1;
+			}
 			else
 			{
 				System.out.println("ERROR : EditorSceen : dropCanvasOnSceen : aucun manager ne correspond au type de canvas : "+canvasType+" le'element du canvas ne peut pas s'attacher à un manager");
 			}
 			
 			
-			System.out.println("canvas droppé à la position : "+ positionDrop.toString() +" dans le manager "+canvasType+" ce manager contient alors "+m_managers.get(canvasType).toString() );
+			//System.out.println("canvas droppé à la position : "+ positionDrop.toString() +" dans le manager "+canvasType+" ce manager contient alors "+m_managers.get(canvasType).toString() );
 		}
 		else if(!m_mouseEditor.hasCanvas())
 		{
@@ -187,10 +197,18 @@ public class EditorSceen extends InputAdapter implements Drawable{
 						System.out.println("canvas removed");
 					}
 					
-					m_mouseEditor.removeCanvasOn(m_managers.get(canvasType));
-					m_lastDroppedIndice = -1;
 					
-					
+					if(canvasType == "player")
+					{
+						m_lastDroppedIndice = -1;
+						
+					}
+					else
+					{
+						m_mouseEditor.removeCanvasOn(m_managers.get(canvasType));
+						m_lastDroppedIndice = -1;
+					}
+	
 					break;
 				}
 				

@@ -59,6 +59,27 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	private int m_remainActions = 0;
 	private int m_maxActions = 0;
 	
+	Canvas(T element, String type)
+	{
+//		m_button = new Button(m_skin);
+//		m_button.setSize(100, 100);
+//		m_button.addListener(new InputListener() {
+//			@Override
+//			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+//				System.out.println("appuie sur un button de la scene");
+//				return false;
+//			}
+//		});
+		
+		m_element = element;
+		m_collider = new Trigger(Color.GREEN);
+		m_collider.setDimension(m_element.getDimension());
+		m_type = type;
+		m_layout = 0;
+		m_remainActions = 0;
+		m_maxActions = 0;
+	}
+	
 	Canvas(T element, String type, int layout, int remainActions)
 	{
 //		m_button = new Button(m_skin);

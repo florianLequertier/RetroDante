@@ -15,7 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -59,6 +61,16 @@ public class MenuScreen implements Screen {
 		textButtonStyle.over = m_skin.newDrawable("white", Color.LIGHT_GRAY);
 		textButtonStyle.font = m_skin.getFont("default");
 		m_skin.add("default", textButtonStyle);
+		
+		TextFieldStyle textFieldStyle = new TextFieldStyle();
+		textFieldStyle.font = m_skin.getFont("default");
+		textFieldStyle.focusedBackground = m_skin.newDrawable("white", Color.LIGHT_GRAY);
+		textFieldStyle.background = m_skin.newDrawable("white", Color.DARK_GRAY);
+		textFieldStyle.disabledBackground = m_skin.newDrawable("white", Color.DARK_GRAY);
+		textFieldStyle.fontColor = Color.WHITE;
+		textFieldStyle.selection = m_skin.newDrawable("white", Color.BLUE);
+		textFieldStyle.cursor = m_skin.newDrawable("white", Color.WHITE);
+		m_skin.add("default", textFieldStyle);
 
 
 		Table table = new Table();
@@ -68,30 +80,64 @@ public class MenuScreen implements Screen {
 		m_stage.addActor(table);
 		
 		
-		final TextButton button01 = new TextButton("Play", m_skin);
-		TextButton button02 = new TextButton("Editor", m_skin);
-		TextButton button03 = new TextButton("test02", m_skin);
+		final TextField textField_load = new TextField("Save", m_skin);
+			textField_load.setText("nom de la map");
+		final TextButton button_test = new TextButton("Test", m_skin);
+			button_test.setText("map test");
+		final TextButton button_play = new TextButton("Play", m_skin);
+		final TextButton button_load = new TextButton("Load", m_skin);
+		final TextButton button_editor = new TextButton("Editor", m_skin);
+		final TextButton button_quit = new TextButton("Quit", m_skin);
 		
-		table.add(button01).space(20).width(100).row();
-		table.add(button02).space(20).width(100).row();
-		table.add(button03).space(20).width(100).row();
+		table.add(button_test).space(20).width(100).row();
+		table.add(button_play).space(20).width(100).row();
+		table.add(textField_load).space(20).width(100).row();
+		table.add(button_load).space(20).width(100).row();
+		table.add(button_editor).space(20).width(100).row();
+		table.add(button_quit).space(20).width(100).row();
 		
-		
-		button01.addListener(new ChangeListener() {
+		button_test.addListener(new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
-				button01.setChecked(false);
+				button_test.setChecked(false);
 				
 				GameManager.getInstance().changeScreen("test");
 			}
 
 		});
-		button02.addListener(new ChangeListener() {
+		button_play.addListener(new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
-				button01.setChecked(false);
+				button_play.setChecked(false);
+				
+				GameManager.getInstance().changeScreen("game");
+			}
+
+		});
+		button_load.addListener(new ChangeListener() {
+			@Override
+			public void changed (ChangeEvent event, Actor actor) {
+				button_load.setChecked(false);
+				
+				GameManager.getInstance().changeScreen("game", "editorSave/"+textField_load.getText());
+			}
+
+		});
+		button_editor.addListener(new ChangeListener() {
+			@Override
+			public void changed (ChangeEvent event, Actor actor) {
+				button_play.setChecked(false);
 				
 				GameManager.getInstance().changeScreen("editor");
+			}
+
+		});
+		button_quit.addListener(new ChangeListener() {
+			@Override
+			public void changed (ChangeEvent event, Actor actor) {
+				button_quit.setChecked(false);
+				
+				GameManager.getInstance().quitGame();
 			}
 
 		});
