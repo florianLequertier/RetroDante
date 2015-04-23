@@ -28,7 +28,11 @@ public class TriggerFactory implements Factory<Trigger> {
 		}
 		else if(name.equals("teleportTrigger"))
 		{
-			return new KillTrigger();
+			return new TeleportTrigger();
+		}
+		else if(name.equals("nextLevel"))
+		{
+			return new NextLevel();
 		}
 		else
 		{

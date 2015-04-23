@@ -18,7 +18,7 @@ public class KillTrigger extends Trigger {
 	
 	KillTrigger()
 	{
-		super(Color.RED);
+		super(Color.RED, 2);
 		this.setType("kill");
 	}
 	

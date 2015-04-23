@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.Editor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.retroDante.game.Body;
+import com.retroDante.game.Canvas;
+import com.retroDante.game.CanvasInterface;
+import com.retroDante.game.Drawable;
+import com.retroDante.game.Manager;
 import com.retroDante.game.character.EnemyManager;
 import com.retroDante.game.character.Player;
 import com.retroDante.game.map.Map;
@@ -33,47 +38,34 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	private List<CanvasInterface> m_canvasContainer;
 	private Player m_player; 
 	private HashMap<String, Manager<? extends Body> > m_managers;
-	private OrthographicCamera m_sceenCamera;
+	private EditorCamera m_sceenCamera;
 	private int m_lastDroppedIndice;
 	
 	EditorSceen()
 	{
 		m_canvasContainer = new ArrayList<CanvasInterface>();
 		m_managers = new HashMap<String, Manager<? extends Body> >();
-		m_sceenCamera = new OrthographicCamera();
+		m_sceenCamera = new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		m_lastDroppedIndice = -1;
 		
-//		this.setFillParent(true);
-//		this.setPosition(0,0);
-//		//this.setSize(500,500);
-//		this.align(Align.center);
-//		this.debug();
-//		this.setTouchable(Touchable.enabled);
-//		this.defaults().space(5).maxSize(90, 70).minSize(80, 60);
-			
-
-		
-//		this.addListener( new InputListener(){
-//			@Override
-//			public boolean keyDown(InputEvent event, int keycode){
-//				
-//				if(keycode == Keys.Q || keycode == Keys.A)
-//					m_sceenCamera.translate(new Vector2(-1,0) );
-//				if(keycode == Keys.Z || keycode == Keys.W)
-//					m_sceenCamera.translate(new Vector2(0,1) );
-//				if(keycode == Keys.D)
-//					m_sceenCamera.translate(new Vector2(1,0) );
-//				if(keycode == Keys.S)
-//					m_sceenCamera.translate(new Vector2(0,-1) );
-//				
-//				System.out.println("La camera est maintenant en ("+m_sceenCamera.position.x+", "+m_sceenCamera.position.y+")" );
-//				
-//				return false;
-//            }
-//			
-//		});
 		
 		initAll();
+		
+		m_sceenCamera.setParralaxTarget((Map) m_managers.get("map")); //observe camera
+	}
+	
+	EditorSceen(String FolderPath)
+	{
+		this();
+		loadRessources(FolderPath);
+	}
+
+	private void loadRessources(String folderPath)
+	{
+		m_player = Player.load(folderPath+"/player.txt");		
+		m_managers.put("enemy", EnemyManager.load(folderPath+"/enemy.txt"));
+		m_managers.put("map", Map.load(folderPath+"/map.txt"));
+		m_managers.put("trigger", TriggerManager.load(folderPath+"/trigger.txt"));
 	}
 
 	
@@ -96,6 +88,11 @@ public class EditorSceen extends InputAdapter implements Drawable{
 		m_canvasContainer.add( new Canvas<Player>( m_player , "player") );
 		
 		initManagers();
+	}
+	
+	EditorCamera getCamera()
+	{
+		return m_sceenCamera;
 	}
 	
 	
@@ -154,6 +151,7 @@ public class EditorSceen extends InputAdapter implements Drawable{
 					{
 						m_lastDroppedIndice = m_canvasContainer.size()-1;
 					}
+					m_mouseEditor.applyDropStrategy(positionDrop);
 				}
 				else
 				{
@@ -163,7 +161,7 @@ public class EditorSceen extends InputAdapter implements Drawable{
 			}
 			else if(canvasType == "player")
 			{
-				
+				m_player = (Player) m_mouseEditor.getPlaceable();
 				m_mouseEditor.setCanvasPosition( positionDrop );
 				m_mouseEditor.dropCanvasOn(m_canvasContainer);
 				m_mouseEditor.applyDropStrategy(positionDrop);
@@ -200,6 +198,7 @@ public class EditorSceen extends InputAdapter implements Drawable{
 					
 					if(canvasType == "player")
 					{
+						m_player = null;
 						m_lastDroppedIndice = -1;
 						
 					}
@@ -222,7 +221,7 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	 * 
 	 * @param camera
 	 */
-	public void setCamera(OrthographicCamera camera)
+	public void setCamera(EditorCamera camera)
 	{
 		m_sceenCamera = camera;
 	}
@@ -279,10 +278,20 @@ public class EditorSceen extends InputAdapter implements Drawable{
 		Matrix4 tempProj = batch.getProjectionMatrix();
 		
 		batch.setProjectionMatrix(m_sceenCamera.combined);
-			m_player.draw(batch);
+		
+			if(m_player != null)
+				m_player.draw(batch);
+			
 			for(Entry<String, Manager<? extends Body> > entity : m_managers.entrySet() )
 			{
-				entity.getValue().draw(batch);
+				if(entity.getValue() instanceof Map)
+				{
+					((Map) entity.getValue()).drawWithParralax(batch);
+				}
+				else
+				{
+					entity.getValue().draw(batch);
+				}
 			}
 			
 			for(CanvasInterface canvas : m_canvasContainer)

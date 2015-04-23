@@ -15,6 +15,7 @@ import com.retroDante.game.Drawable;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.GameCamera;
 import com.retroDante.game.Manager;
+import com.retroDante.game.Editor.EditorCamera;
 
 public class Map extends Manager<Element2D> implements Json.Serializable{
 
@@ -249,6 +250,31 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 			float newParralaxDecalY = ( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
 			
 			layout.setParralaxDecal( new Vector2(newParralaxDecalX, newParralaxDecalY) );
+
+		}
+	}
+	
+	public void updateParralax(EditorCamera camera)
+	{
+		int maxIndex = MapLayout.getMaxIndex();
+		
+		for(MapLayout layout : m_backgrounds)
+		{
+			
+			float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+			float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+			
+			layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
+
+		}
+		
+		
+		for(MapLayout layout : m_foregrounds)
+		{
+			float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+			float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+			
+			layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
 
 		}
 	}

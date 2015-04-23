@@ -1,6 +1,8 @@
 package com.retroDante.game.trigger;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -22,16 +24,26 @@ public class TeleportTrigger extends Trigger {
 	
 	public TeleportTrigger()
 	{
-		super(Color.BLUE);
+		super(Color.BLUE, 3);
 		this.setType("teleport"); 
 		m_teleportDestination = new Vector2(0,0);
 	}
 	
 	public TeleportTrigger(Vector2 teleportDestination)
 	{
-		super(Color.BLUE);
+		super(Color.BLUE, 3);
 		this.setType("teleport");
 		m_teleportDestination = teleportDestination;
+	}
+	
+	public void setTeleportDestination(Vector2 teleportDestination)
+	{
+		m_teleportDestination = teleportDestination;
+	}
+	
+	public Vector2 getTeleportDestination()
+	{
+		return m_teleportDestination;
 	}
 	
 	
@@ -40,6 +52,22 @@ public class TeleportTrigger extends Trigger {
 	{
 		//m_effect.play(target.getPosition(), false);
 		target.setPosition(m_teleportDestination);
+	}
+	
+	@Override
+	public void draw(Batch batch)
+	{
+		batch.end();
+		
+		m_visual.setProjectionMatrix( batch.getProjectionMatrix() );
+		
+		 m_visual.begin(ShapeType.Line);
+			 m_visual.setColor(m_color);
+			 m_visual.rect(m_collider.x, m_collider.y, m_collider.width, m_collider.height);
+			 m_visual.line(m_collider.x, m_collider.y, m_teleportDestination.x, m_teleportDestination.y);
+		 m_visual.end();
+		 
+		 batch.begin();
 	}
 	
 	//serialisation : 

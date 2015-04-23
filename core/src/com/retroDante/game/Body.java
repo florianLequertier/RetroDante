@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.retroDante.game.Editor.Editable;
 
 /**
  * 
@@ -14,7 +15,7 @@ import com.badlogic.gdx.utils.JsonValue;
  * @author florian
  *
  */
-public abstract class Body implements Json.Serializable {
+public abstract class Body implements Json.Serializable, Editable {
 	
 	private Vector2 m_dimension = new Vector2(1,1);
 	private Vector2 m_scaleFactor = new Vector2(1,1);

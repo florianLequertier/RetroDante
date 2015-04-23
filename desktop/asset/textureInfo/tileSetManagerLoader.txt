@@ -1,7 +1,7 @@
 5
 player
-texture/test_animation.png
-textureInfo/test_animation.txt
+texture/player.png
+textureInfo/player.txt
 
 platform
 texture/badlogic.jpg

@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.Editor;
 
 import java.util.HashMap;
 
@@ -8,6 +8,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.retroDante.game.StoryChapter;
+import com.retroDante.game.TileSetManager;
 
 public class EditorScreen implements Screen {
 	
@@ -19,6 +21,19 @@ public class EditorScreen implements Screen {
 	private EditorSceen m_sceen;
 	private HUDEditor m_hud;
 	private EditorCamera m_camera;
+    private String folderPath; //chemin vers le dossier source des ressources de cette map.
+	
+    
+    public EditorScreen()
+    {
+    	
+    }
+    
+    EditorScreen(String loadPath)
+	{
+		folderPath = loadPath;
+	}
+	
 	
 	@Override
 	public void show() {
@@ -28,7 +43,7 @@ public class EditorScreen implements Screen {
 		
 		m_stage = new Stage();
 		
-		m_camera = new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
 					
 			
 		m_mouse = new MouseEditor();
@@ -36,7 +51,9 @@ public class EditorScreen implements Screen {
 		m_sceen = new EditorSceen();
 			//m_stage.addActor(m_sceen);
 			m_sceen.setMouse(m_mouse);
-			m_sceen.setCamera(m_camera);
+			//m_sceen.setCamera(m_camera);
+			
+		m_camera = m_sceen.getCamera();//new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		m_hud = new HUDEditor(m_stage, m_sceen, m_mouse); //créé aussi l'editor Picker	
 		

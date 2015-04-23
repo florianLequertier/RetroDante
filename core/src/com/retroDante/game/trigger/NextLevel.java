@@ -8,7 +8,7 @@ public class NextLevel extends Trigger {
 	
 	NextLevel()
 	{
-		super(Color.MAGENTA);
+		super(Color.MAGENTA, 2);
 	}
 	
 	@Override

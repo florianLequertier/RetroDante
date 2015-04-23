@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.Editor;
 
 import java.util.List;
 
@@ -6,6 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.retroDante.game.Body;
+import com.retroDante.game.Canvas;
+import com.retroDante.game.CanvasInterface;
+import com.retroDante.game.Manager;
 
 
 /**
@@ -99,6 +103,14 @@ public class MouseEditor {
 		
 		return true;
 
+	}
+
+	Body getPlaceable()
+	{
+		if(m_currentPlaceable != null)
+			return m_currentPlaceable.getElement();
+		else 
+			return null;
 	}
 	
 	/**

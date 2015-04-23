@@ -32,10 +32,11 @@ public interface CanvasInterface {
 	public void setMaxActions(int remainActions);
 	public int getMaxActions();
 	public void resizeAction(Vector2 position, boolean decreaseAction);
-	public void additionnalAction(boolean decreaseAction);
+	public void additionnalAction(boolean decreaseAction, Vector2 worldPosition);
 	public boolean applyDropStrategy(Vector2 worldPosition);
 	public void updateDropStrategy(Vector2 worldPosition);
 	public Trigger getCollider();
 	public <T extends Body> void removeOn(Manager<T> manager);
+	public Body getElement();
 
 }

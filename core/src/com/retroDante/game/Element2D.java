@@ -12,6 +12,7 @@ import java.util.List;
 
 
 
+
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.graphics.Texture;
@@ -49,6 +50,7 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	protected TextureRegion m_texRegion;
 	protected Animator m_animator;
 	private float m_animationSpeed;
+	private int m_constructorStep = 1;
 	
 	
 	//constructeurs et factories : 
@@ -256,7 +258,17 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	*/
 	
 
-	
+	//Editable : 
+	@Override
+	public int getConstructorStep()
+	{
+		return m_constructorStep;
+	}
+	@Override
+	public void setConstructorStep(int constructorStep)
+	{
+		m_constructorStep = constructorStep;
+	}
 
 	
 	//Drawable : 

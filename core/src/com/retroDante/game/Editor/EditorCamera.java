@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.Editor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.map.Map;
 
 public class EditorCamera extends OrthographicCamera implements InputProcessor{
 	
@@ -18,6 +19,10 @@ public class EditorCamera extends OrthographicCamera implements InputProcessor{
 	}
 	
 	private List<Direction> m_directions;
+	private Vector2 m_currentTranslation;
+	private Map m_parralaxTarget = null;
+	float m_maxSpeed = 2.f;
+	float m_currentSpeed = 1.f;
 	
 	EditorCamera()
 	{
@@ -31,16 +36,44 @@ public class EditorCamera extends OrthographicCamera implements InputProcessor{
 		m_directions = new ArrayList<Direction>();
 	}
 	
+	void setParralaxTarget(Map map)
+	{
+		m_parralaxTarget = map;
+	}
+	
+	public Vector2 getCurrentTranslation()
+	{
+		return m_currentTranslation;
+	}
+	
+	
+	@Override
+	public void translate(float x, float y)
+	{
+		m_currentTranslation = new Vector2(x * m_currentSpeed, y * m_currentSpeed);
+		super.translate(m_currentTranslation);
+		if(m_parralaxTarget != null)
+		{
+			m_parralaxTarget.updateParralax(this);
+		}
+	}
+	
+	@Override
+	public void translate(Vector2 vec)
+	{
+		this.translate(vec.x, vec.y);
+	}
+	
 	public void updateMovements()
 	{
 		if(m_directions.contains(Direction.LEFT))
-			this.translate(new Vector2(-5,0) );
+			this.translate(-5,0);
 		if(m_directions.contains(Direction.RIGHT))
-			this.translate(new Vector2(5,0) );
+			this.translate(5,0);
 		if(m_directions.contains(Direction.UP))
-			this.translate(new Vector2(0,5) );
+			this.translate(0,5);
 		if(m_directions.contains(Direction.DOWN))
-			this.translate(new Vector2(0,-5) );
+			this.translate(0,-5);
 		
 		this.update();
 	}

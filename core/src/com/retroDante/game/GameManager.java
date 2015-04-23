@@ -3,6 +3,7 @@ package com.retroDante.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.retroDante.game.Editor.EditorScreen;
 
 /**
  * 
@@ -120,7 +121,7 @@ public class GameManager implements DataSingleton<GameManager>{
 	 * @param name
 	 * @return
 	 */
-	boolean changeScreen(String name)
+	public boolean changeScreen(String name)
 	{
 		
 		if(m_game == null)

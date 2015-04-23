@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.Editor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +30,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.retroDante.game.Body;
+import com.retroDante.game.Factory;
+import com.retroDante.game.TileSetInfo;
+import com.retroDante.game.TileSetIterator;
+import com.retroDante.game.TileSetManager;
 import com.retroDante.game.character.EnemyFactory;
 import com.retroDante.game.map.MapFactory;
 import com.retroDante.game.trigger.TriggerFactory;
@@ -87,7 +92,7 @@ public class EditorPicker extends Table {
 		this.align(Align.center);
 
 		//autorise le débug : 
-		this.debug();
+		//this.debug();
 		m_typePanel.debug();
 		for(Entry<String,Table> t : m_elementsPanel.entrySet())
 		t.getValue().debug();
@@ -108,7 +113,7 @@ public class EditorPicker extends Table {
 	{
 		initTypeNames("enemy", "map", "trigger");
 		initTypeCount(8,7,5);
-		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "damageTrigger", "blocTrigger", "killTrigger", "bumpTrigger", "teleportTrigger"  );
+		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "damageTrigger", "blocTrigger", "killTrigger", "nextLevel", "teleportTrigger"  );
 		initFactories();
 		
 		setDefaultSkin();
@@ -351,6 +356,7 @@ public class EditorPicker extends Table {
 					{
 						String buttonName = typeName+Integer.toString(k);
 						final TextButton button = new TextButton(buttonName, m_skin, buttonName);
+						button.setText( m_elementNames.get(elementNumber) );
 						
 						tmpTable.add(button).space(5).maxSize(90, 70).minSize(80, 60);
 							tmpButtonGrp.add(button);
@@ -365,10 +371,15 @@ public class EditorPicker extends Table {
 								
 								if(m_factories.containsKey(finalTypeName))
 								{
+									Body newElement = m_factories.get(finalTypeName).create( finalElementName );
+									m_editorMouse.changePlaceable( newElement, finalTypeName, m_layoutIndex, newElement.getConstructorStep() );
+									
+									/*
 									if(finalTypeName == "trigger")
 										m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName, m_layoutIndex, 3 );
 									else
 										m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName, m_layoutIndex, 1 );
+									*/
 								}
 								else
 								{
@@ -435,7 +446,8 @@ public class EditorPicker extends Table {
 		m_skin.add("white", new Texture(pixmap));
 
 		// Store the default libgdx font under the name "default".
-		m_skin.add("default", new BitmapFont());
+		BitmapFont font = new BitmapFont();
+		m_skin.add("default", font);
 		
 		
 		//créé tous les styles des boutons :

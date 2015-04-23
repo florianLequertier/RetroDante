@@ -22,9 +22,10 @@ import com.retroDante.game.character.Character;
 public class Trigger extends Rigidbody implements Json.Serializable, Drawable, Cloneable {
 	
 	//pour un affichage de debug : 
-	private ShapeRenderer m_visual = new ShapeRenderer();
-	private Color m_color;
+	protected ShapeRenderer m_visual = new ShapeRenderer();
+	protected Color m_color;
 	private String m_type; //type de trigger.
+	private int m_constructorStep;
 	//private VisualEffect m_effect;
 	
 	public Trigger()
@@ -39,6 +40,13 @@ public class Trigger extends Rigidbody implements Json.Serializable, Drawable, C
 		m_color = color;
 	}
 	
+	public Trigger(Color color, int constructorStep)
+	{
+		this.makeStaticBody();
+		m_color = color;
+		m_constructorStep = constructorStep;
+	}
+	
 	public Object clone(){
 		Trigger tri = null;
 		try{
@@ -48,6 +56,17 @@ public class Trigger extends Rigidbody implements Json.Serializable, Drawable, C
 		}
 		
 		return tri;		
+	}
+	
+	@Override
+	public int getConstructorStep()
+	{
+		return m_constructorStep;
+	}
+	@Override
+	public void setConstructorStep(int constructorStep)
+	{
+		m_constructorStep = constructorStep;
 	}
 	
 	public String getType()

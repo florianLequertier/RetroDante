@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.retroDante.game.trigger.TeleportTrigger;
 import com.retroDante.game.trigger.Trigger;
 
 /**
@@ -59,7 +60,7 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	private int m_remainActions = 0;
 	private int m_maxActions = 0;
 	
-	Canvas(T element, String type)
+	public Canvas(T element, String type)
 	{
 //		m_button = new Button(m_skin);
 //		m_button.setSize(100, 100);
@@ -80,7 +81,7 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		m_maxActions = 0;
 	}
 	
-	Canvas(T element, String type, int layout, int remainActions)
+	public Canvas(T element, String type, int layout, int remainActions)
 	{
 //		m_button = new Button(m_skin);
 //		m_button.setSize(100, 100);
@@ -118,7 +119,7 @@ public class Canvas<T extends Body> implements CanvasInterface {
 			m_element.draw(batch);
 		
 		//m_button.draw(batch, 1);
-		m_collider.draw(batch);
+		//m_collider.draw(batch);
 	}
 	
 	@Override
@@ -231,14 +232,26 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		m_remainActions--;
 	}
 	@Override
-	public void additionnalAction(boolean decreaseAction)
+	public void additionnalAction(boolean decreaseAction, Vector2 worldPosition)
 	{
 		System.out.println("TODO : additionnalAction");
+		
+		if(m_element instanceof TeleportTrigger )
+		{
+			TeleportTrigger trigger = (TeleportTrigger)m_element;
+			trigger.setTeleportDestination(worldPosition);
+		}
+		
 		
 		if(decreaseAction)
 		m_remainActions--;
 	}
 	
+	@Override
+	public Body getElement()
+	{
+		return m_element;
+	}
 	
 	/**
 	 * return true si la strategie de drop a fini de dropper l'objet. On peut alors enlever l'objet à la souris
@@ -248,13 +261,13 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		
 		if(m_type.equals("trigger")) // si c'est un trigger, on poursuit les autres étapes
 		{
-			if(m_remainActions == 2) //resize
+			if(m_remainActions == this.m_maxActions - 1) //resize
 			{
 				this.resizeAction(worldPosition, true);
 			}
-			else if(m_remainActions == 1) 
+			else if(m_remainActions == this.m_maxActions - 2) 
 			{
-				this.additionnalAction(true);
+				this.additionnalAction(true, worldPosition);
 			}
 		}
 		
@@ -272,13 +285,13 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		if(m_type.equals("trigger")) // si c'est un trigger, on poursuit les autres étapes
 		{
-			if(m_remainActions == 2) //resize
+			if(m_remainActions == this.m_maxActions - 1) //resize
 			{
 				this.resizeAction(worldPosition, false);
 			}
-			else if(m_remainActions == 1) 
+			else if(m_remainActions == this.m_maxActions - 2) 
 			{
-				this.additionnalAction(false);
+				this.additionnalAction(false, worldPosition);
 			}
 		}
 	}
