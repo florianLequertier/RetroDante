@@ -246,7 +246,14 @@ public class EditorPicker extends Table {
 	
 	void changeLayout(int layoutIndex)
 	{
+
 		m_layoutIndex = layoutIndex;
+		
+		
+		if(m_editorMouse.hasCanvas())
+		{
+			m_editorMouse.setCanvasLayout(m_layoutIndex);
+		}
 	}
 
 
@@ -364,6 +371,7 @@ public class EditorPicker extends Table {
 							
 							final String finalTypeName = typeName ;
 							final String finalElementName = m_elementNames.get(elementNumber) ;
+							final int finalElementNumber = elementNumber;
 							button.addListener(new /*ChangeListener()*/ InputListener() {
 							@Override
 							//public void changed (ChangeEvent event, Actor actor) 
@@ -371,7 +379,12 @@ public class EditorPicker extends Table {
 								
 								if(m_factories.containsKey(finalTypeName))
 								{
-									Body newElement = m_factories.get(finalTypeName).create( finalElementName );
+									Body newElement = null;
+									if(finalTypeName.equals("trigger"))
+										newElement= m_factories.get(finalTypeName).create( finalElementName );
+									else
+										newElement= m_factories.get(finalTypeName).create( finalElementNumber );
+									
 									m_editorMouse.changePlaceable( newElement, finalTypeName, m_layoutIndex, newElement.getConstructorStep() );
 									
 									/*

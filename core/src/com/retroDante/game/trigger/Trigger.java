@@ -25,7 +25,7 @@ public class Trigger extends Rigidbody implements Json.Serializable, Drawable, C
 	protected ShapeRenderer m_visual = new ShapeRenderer();
 	protected Color m_color;
 	private String m_type; //type de trigger.
-	private int m_constructorStep;
+	private int m_constructorStep = 2;
 	//private VisualEffect m_effect;
 	
 	public Trigger()

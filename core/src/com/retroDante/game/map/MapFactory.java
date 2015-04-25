@@ -31,5 +31,19 @@ public class MapFactory implements Factory<MapElement>{
 
 	}
 	
+	@Override
+	public MapElement create(int index) {
+
+		if( index > 0 )
+		{
+			return new MapElement(index);
+		}
+		else
+		{
+			return new MapElement(0);
+		}
+
+	}
+	
 	
 }

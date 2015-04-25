@@ -65,7 +65,7 @@ public class MenuScreen implements Screen {
 		TextFieldStyle textFieldStyle = new TextFieldStyle();
 		textFieldStyle.font = m_skin.getFont("default");
 		textFieldStyle.focusedBackground = m_skin.newDrawable("white", Color.LIGHT_GRAY);
-		textFieldStyle.background = m_skin.newDrawable("white", Color.DARK_GRAY);
+		textFieldStyle.background = m_skin.newDrawable("white", Color.LIGHT_GRAY);
 		textFieldStyle.disabledBackground = m_skin.newDrawable("white", Color.DARK_GRAY);
 		textFieldStyle.fontColor = Color.WHITE;
 		textFieldStyle.selection = m_skin.newDrawable("white", Color.BLUE);
@@ -82,6 +82,8 @@ public class MenuScreen implements Screen {
 		
 		final TextField textField_load = new TextField("Save", m_skin);
 			textField_load.setText("nom de la map");
+		final TextField textField_loadEditor = new TextField("mapName", m_skin);
+			textField_loadEditor.setText("");
 		final TextButton button_test = new TextButton("Test", m_skin);
 			button_test.setText("map test");
 		final TextButton button_play = new TextButton("Play", m_skin);
@@ -91,9 +93,10 @@ public class MenuScreen implements Screen {
 		
 		table.add(button_test).space(20).width(100).row();
 		table.add(button_play).space(20).width(100).row();
-		table.add(textField_load).space(20).width(100).row();
-		table.add(button_load).space(20).width(100).row();
-		table.add(button_editor).space(20).width(100).row();
+		table.add(textField_load).space(20).spaceBottom(0).width(100).row();
+		table.add(button_load).space(20).spaceTop(0).width(100).row();
+		table.add(textField_loadEditor).space(20).spaceBottom(0).width(100).row();
+		table.add(button_editor).space(20).spaceTop(0).width(100).row();
 		table.add(button_quit).space(20).width(100).row();
 		
 		button_test.addListener(new ChangeListener() {
@@ -127,8 +130,10 @@ public class MenuScreen implements Screen {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				button_play.setChecked(false);
-				
-				GameManager.getInstance().changeScreen("editor");
+				if(textField_loadEditor.getText().equals(""))
+					GameManager.getInstance().changeScreen("editor");
+				else
+					GameManager.getInstance().changeScreen("editor", textField_loadEditor.getText() );
 			}
 
 		});

@@ -51,6 +51,8 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	protected Animator m_animator;
 	private float m_animationSpeed;
 	private int m_constructorStep = 1;
+	private int m_spriteIndex = 0;
+	private TileSetInfo m_tileSet = null; ///// ! \\\\\
 	
 	
 	//constructeurs et factories : 
@@ -71,6 +73,8 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 		m_texRegion = tileSet.get(spriteIndex);
 		m_animator = new Animator( new Animation(900, m_texRegion));
 		setDimension(new Vector2(m_texRegion.getRegionWidth(), m_texRegion.getRegionHeight()));
+		m_spriteIndex = spriteIndex;
+		m_tileSet = tileSet;
 	}
 
 	
@@ -300,12 +304,16 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 		super.write(json);
 		json.writeValue("m_type", m_type);
 		json.writeValue("m_animationSpeed", m_animationSpeed);
+		json.writeValue("m_spriteIndex", m_spriteIndex);
 	}
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		super.read(json, jsonData);
 		m_type = jsonData.getString("m_type");
 		setAnimationSpeed( jsonData.getFloat("m_animationSpeed") );
+		this.m_spriteIndex = jsonData.getInt("m_spriteIndex");
+		this.m_texRegion = m_tileSet.get(m_spriteIndex);
+		
 	}
 
 	

@@ -1,8 +1,10 @@
-package com.retroDante.game;
+package com.retroDante.game.Editor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.retroDante.game.Body;
+import com.retroDante.game.Manager;
 import com.retroDante.game.trigger.Trigger;
 
 
@@ -38,5 +40,6 @@ public interface CanvasInterface {
 	public Trigger getCollider();
 	public <T extends Body> void removeOn(Manager<T> manager);
 	public Body getElement();
+	public boolean checkIfDropIsFinished();
 
 }

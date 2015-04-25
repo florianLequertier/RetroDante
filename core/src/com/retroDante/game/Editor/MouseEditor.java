@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.retroDante.game.Body;
-import com.retroDante.game.Canvas;
-import com.retroDante.game.CanvasInterface;
 import com.retroDante.game.Manager;
 
 
@@ -54,6 +52,23 @@ public class MouseEditor {
 	public <T extends Body> void changePlaceable( T element, String type, int layout, int remainActions)
 	{
 		m_currentPlaceable = new Canvas<T>(element, type, layout, remainActions);
+	}
+	
+	public void setCanvasLayout(int layoutIndex)
+	{
+		if(m_currentPlaceable!=null)
+		{
+			m_currentPlaceable.setLayout(layoutIndex);
+		}
+	}
+	public int getCanvasLayout()
+	{
+		if(m_currentPlaceable!=null)
+		{
+			return m_currentPlaceable.getLayout();
+		}
+		else
+			return 0;
 	}
 	
 	/**
@@ -147,11 +162,11 @@ public class MouseEditor {
 	{
 		if(m_currentPlaceable == null)
 			return;
-		
-		if(m_currentPlaceable.applyDropStrategy(worldPosition))
-		{
-			m_currentPlaceable = null;
-		}
+		m_currentPlaceable.applyDropStrategy(worldPosition);
+//      if(m_currentPlaceable.applyDropStrategy(worldPosition))
+//		{
+//			m_currentPlaceable = null;
+//		}
 	}
 	
 	public void updateDropStrategy(Vector2 worldPosition)
@@ -161,6 +176,14 @@ public class MouseEditor {
 		
 		m_currentPlaceable.updateDropStrategy(worldPosition);
 
+	}
+	
+	public void checkIfDropIsFinished()
+	{
+		if(m_currentPlaceable.checkIfDropIsFinished())
+		{
+			m_currentPlaceable = null;
+		}
 	}
 	
 //	public void attachCanvasOn(Manager<? extends Body> manager, int index)

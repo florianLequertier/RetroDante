@@ -86,6 +86,21 @@ public class Enemy extends Character{
 		
 	}
 	
+	public Enemy(int index)
+	{
+		super( TileSetManager.getInstance().get("player"), index);
+		m_type = "enemy";
+		m_controller = new IAController();
+		
+		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
+		setAnimationSpeed(1.f);
+		m_animator.changeAnimation(0);
+		m_animator.play(true);
+		
+		m_weapon = new AttackEmitter();
+		
+	}
+	
 	//setters/ getters : 
 	
 	

@@ -32,6 +32,19 @@ public class EnemyFactory implements Factory<Enemy> {
 		{
 			return new Enemy();
 		}
+	}
+	
+	@Override
+	public Enemy create(int index) {
+
+		if( index > 0 )
+		{
+			return new Enemy(index);
+		}
+		else
+		{
+			return new Enemy(0);
+		}
 
 	}
 	

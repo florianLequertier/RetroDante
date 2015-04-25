@@ -21,7 +21,7 @@ public class EditorScreen implements Screen {
 	private EditorSceen m_sceen;
 	private HUDEditor m_hud;
 	private EditorCamera m_camera;
-    private String folderPath; //chemin vers le dossier source des ressources de cette map.
+    private String folderPath = ""; //chemin vers le dossier source des ressources de cette map.
 	
     
     public EditorScreen()
@@ -29,7 +29,7 @@ public class EditorScreen implements Screen {
     	
     }
     
-    EditorScreen(String loadPath)
+    public EditorScreen(String loadPath)
 	{
 		folderPath = loadPath;
 	}
@@ -48,10 +48,14 @@ public class EditorScreen implements Screen {
 			
 		m_mouse = new MouseEditor();
 		
-		m_sceen = new EditorSceen();
-			//m_stage.addActor(m_sceen);
-			m_sceen.setMouse(m_mouse);
-			//m_sceen.setCamera(m_camera);
+		if(folderPath != "")
+			m_sceen = new EditorSceen(folderPath);
+		else
+			m_sceen = new EditorSceen();
+		
+		//m_stage.addActor(m_sceen);
+		m_sceen.setMouse(m_mouse);
+		//m_sceen.setCamera(m_camera);
 			
 		m_camera = m_sceen.getCamera();//new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		

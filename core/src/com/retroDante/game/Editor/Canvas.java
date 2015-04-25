@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.Editor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.retroDante.game.Body;
+import com.retroDante.game.Manager;
 import com.retroDante.game.trigger.TeleportTrigger;
 import com.retroDante.game.trigger.Trigger;
 
@@ -220,6 +222,8 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	@Override
 	public void resizeAction(Vector2 position, boolean decreaseAction)
 	{
+		System.out.println("TODO : resize action");
+		
 		Vector2 A = m_element.getPosition();
 		Vector2 B = position;//new Vector2( Gdx.input.getX(), Gdx.input.getY() );
 		Vector2 dimension = B.mulAdd(A, -1);
@@ -294,6 +298,12 @@ public class Canvas<T extends Body> implements CanvasInterface {
 				this.additionnalAction(false, worldPosition);
 			}
 		}
+	}
+	
+	@Override
+	public boolean checkIfDropIsFinished()
+	{
+		return m_remainActions<=0;
 	}
 	
 	

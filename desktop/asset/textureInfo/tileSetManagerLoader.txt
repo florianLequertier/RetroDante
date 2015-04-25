@@ -4,8 +4,8 @@ texture/player.png
 textureInfo/player.txt
 
 platform
-texture/badlogic.jpg
-textureInfo/aaa.txt
+texture/map.png
+textureInfo/map.txt
 
 effect
 texture/effects.png

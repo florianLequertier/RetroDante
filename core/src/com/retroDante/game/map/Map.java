@@ -279,6 +279,36 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		}
 	}
 	
+	public Vector2 getParralaxDecalOfPlane(int index)
+	{
+		if(index < 0)
+		{
+			if( (-index - 1) >= 0 &&  (-index - 1) < m_backgrounds.size() )
+			{
+				return m_backgrounds.get(-index - 1).getParralaxDecal();
+			}
+			else
+			{
+				System.out.println("index out of bounds lors de la recherche du parralax");
+				return Vector2.Zero;
+			}
+		}
+		else if(index > 0)
+		{
+			if( (index - 1) >= 0 &&  (index - 1) < m_foregrounds.size() )
+			{
+				return m_foregrounds.get(index - 1).getParralaxDecal();
+			}
+			else
+			{
+				System.out.println("index out of bounds lors de la recherche du parralax");
+				return Vector2.Zero;
+			}
+		}
+		else
+			return Vector2.Zero;
+	}
+	
 	//serialisation : 
 	
 	public static Map load(String filePath)

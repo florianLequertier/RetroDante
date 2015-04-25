@@ -33,4 +33,13 @@ public class MapElement extends Element2D{
 		m_type = "platform";
 
 	}
+	
+	public MapElement(int index) 
+	{
+		super(TileSetManager.getInstance().get("platform"), index);
+		this.makeStaticBody();
+		
+		m_type = "platform";
+
+	}
 }

@@ -23,8 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.retroDante.game.Body;
-import com.retroDante.game.Canvas;
-import com.retroDante.game.CanvasInterface;
 import com.retroDante.game.Drawable;
 import com.retroDante.game.Manager;
 import com.retroDante.game.character.EnemyManager;
@@ -57,14 +55,14 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	EditorSceen(String FolderPath)
 	{
 		this();
-		loadRessources(FolderPath);
+		loadRessources("editorSave/"+FolderPath);
 	}
 
 	private void loadRessources(String folderPath)
 	{
-		m_player = Player.load(folderPath+"/player.txt");		
-		m_managers.put("enemy", EnemyManager.load(folderPath+"/enemy.txt"));
+		m_player = Player.load(folderPath+"/player.txt");	
 		m_managers.put("map", Map.load(folderPath+"/map.txt"));
+		m_managers.put("enemy", EnemyManager.load(folderPath+"/enemy.txt"));
 		m_managers.put("trigger", TriggerManager.load(folderPath+"/trigger.txt"));
 	}
 
@@ -74,8 +72,8 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	 */
 	void initManagers()
 	{
-		m_managers.put("enemy", new EnemyManager());
 		m_managers.put("map", new Map());
+		m_managers.put("enemy", new EnemyManager());
 		m_managers.put("trigger", new TriggerManager());
 	}
 	
@@ -145,17 +143,28 @@ public class EditorSceen extends InputAdapter implements Drawable{
 			{
 				if(	m_lastDroppedIndice==-1 || !m_mouseEditor.testCanvasEquality( m_canvasContainer.get(m_lastDroppedIndice)) )
 				{
-					m_mouseEditor.setCanvasPosition( positionDrop );
+					if(canvasType.equals("map") )
+					{
+						m_mouseEditor.setCanvasPosition( positionDrop.mulAdd( ((Map)m_managers.get(canvasType)).getParralaxDecalOfPlane(m_mouseEditor.getCanvasLayout() ), -1 ) );
+					}
+					else
+					{
+						m_mouseEditor.setCanvasPosition( positionDrop);
+					}
+					
 					m_mouseEditor.attachCanvasOn(m_managers.get(canvasType));
 					if(m_mouseEditor.dropCanvasOn(m_canvasContainer))
 					{
 						m_lastDroppedIndice = m_canvasContainer.size()-1;
 					}
-					m_mouseEditor.applyDropStrategy(positionDrop);
+					
+					m_mouseEditor.checkIfDropIsFinished();
+					//m_mouseEditor.applyDropStrategy(positionDrop);
 				}
 				else
 				{
 					m_mouseEditor.applyDropStrategy(positionDrop);
+					m_mouseEditor.checkIfDropIsFinished();
 				}
 
 			}
@@ -279,8 +288,6 @@ public class EditorSceen extends InputAdapter implements Drawable{
 		
 		batch.setProjectionMatrix(m_sceenCamera.combined);
 		
-			if(m_player != null)
-				m_player.draw(batch);
 			
 			for(Entry<String, Manager<? extends Body> > entity : m_managers.entrySet() )
 			{
@@ -293,6 +300,9 @@ public class EditorSceen extends InputAdapter implements Drawable{
 					entity.getValue().draw(batch);
 				}
 			}
+			
+			if(m_player != null)
+				m_player.draw(batch);
 			
 			for(CanvasInterface canvas : m_canvasContainer)
 			{

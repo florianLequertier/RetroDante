@@ -29,9 +29,24 @@ public class AttackFactory implements Factory<Attack> {
 			System.out.println("ERREUR : attackFactory : aucune attaque trouvée pour le nom donné ("+name+")");
 			return null;
 		}
+	}
+	
+	@Override
+	public Attack create(int index) {
+		
+		if(index == 0)
+		{
+			return new BurningHearthquake();
+		}
+		else
+		{
+			System.out.println("ERREUR : attackFactory : aucune attaque trouvée pour l'index donné ("+index+")");
+			return null;
+		}
 		
 
 	}
+
 
 	
 	

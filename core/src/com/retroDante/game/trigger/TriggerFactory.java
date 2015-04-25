@@ -41,4 +41,30 @@ public class TriggerFactory implements Factory<Trigger> {
 
 	}
 	
+	@Override
+	public Trigger create(int index) {
+
+		if( index == 0 )
+		{
+			return new DamageTrigger();
+		}
+		else if(index == 1)
+		{
+			return new KillTrigger();
+		}
+		else if(index == 2)
+		{
+			return new TeleportTrigger();
+		}
+		else if(index == 3)
+		{
+			return new NextLevel();
+		}
+		else
+		{
+			return new DamageTrigger();
+		}
+
+	}
+	
 }

@@ -31,5 +31,25 @@ public class VisualEffectFactory implements Factory<VisualEffect>{
 			return null;
 		}
 	}
+	@Override
+	public VisualEffect create(int index)
+	{
+		if(index == 0)
+		{
+			AnimatedEffect effect = new AnimatedEffect("effect", 0);
+			effect.setLifeTime(2);
+			effect.setPosition(new Vector2(0,0));
+			effect.setDimension(new Vector2(32,64));
+			effect.setAnimationSpeed(0.05f);
+			effect.setName("flameColumn");
+			
+			return effect;
+		}
+		else
+		{
+			System.out.println("ERREUR : VisualEffectFactory : l'index "+index+" ne correspond a aucun effet");
+			return null;
+		}
+	}
 	
 }
