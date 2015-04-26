@@ -9,11 +9,13 @@ import java.util.Map.Entry;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -22,15 +24,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Body;
 import com.retroDante.game.Drawable;
+import com.retroDante.game.Element2D;
 import com.retroDante.game.Manager;
 import com.retroDante.game.character.EnemyManager;
 import com.retroDante.game.character.Player;
 import com.retroDante.game.map.Map;
+import com.retroDante.game.map.MapElement;
 import com.retroDante.game.trigger.TriggerManager;
 
-public class EditorSceen extends InputAdapter implements Drawable{
+public class EditorSceen extends InputAdapter implements Drawable, Json.Serializable{
 
 	private MouseEditor m_mouseEditor; 
 	private List<CanvasInterface> m_canvasContainer;
@@ -55,16 +61,10 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	EditorSceen(String FolderPath)
 	{
 		this();
-		loadRessources("editorSave/"+FolderPath);
+		loadRessources(FolderPath);
 	}
 
-	private void loadRessources(String folderPath)
-	{
-		m_player = Player.load(folderPath+"/player.txt");	
-		m_managers.put("map", Map.load(folderPath+"/map.txt"));
-		m_managers.put("enemy", EnemyManager.load(folderPath+"/enemy.txt"));
-		m_managers.put("trigger", TriggerManager.load(folderPath+"/trigger.txt"));
-	}
+
 
 	
 	/**
@@ -143,7 +143,7 @@ public class EditorSceen extends InputAdapter implements Drawable{
 			{
 				if(	m_lastDroppedIndice==-1 || !m_mouseEditor.testCanvasEquality( m_canvasContainer.get(m_lastDroppedIndice)) )
 				{
-					if(canvasType.equals("map") )
+					if(canvasType.equals("map") ) // traitement de faveur pour la map à cause du parralax
 					{
 						m_mouseEditor.setCanvasPosition( positionDrop.mulAdd( ((Map)m_managers.get(canvasType)).getParralaxDecalOfPlane(m_mouseEditor.getCanvasLayout() ), -1 ) );
 					}
@@ -152,18 +152,18 @@ public class EditorSceen extends InputAdapter implements Drawable{
 						m_mouseEditor.setCanvasPosition( positionDrop);
 					}
 					
-					m_mouseEditor.attachCanvasOn(m_managers.get(canvasType));
-					if(m_mouseEditor.dropCanvasOn(m_canvasContainer))
+					m_mouseEditor.attachCanvasOn(m_managers.get(canvasType)); // Le canvas s'attache au manager
+					if(m_mouseEditor.dropCanvasOn(m_canvasContainer)) //On drop le canvas dans canvasContainer
 					{
 						m_lastDroppedIndice = m_canvasContainer.size()-1;
 					}
 					
-					m_mouseEditor.checkIfDropIsFinished();
+					m_mouseEditor.checkIfDropIsFinished(); // Regarde s'il faut maintenir le canvas actif ou si la souris peut briser le lien qu'elle a sur le canvas actif. 
 					//m_mouseEditor.applyDropStrategy(positionDrop);
 				}
 				else
 				{
-					m_mouseEditor.applyDropStrategy(positionDrop);
+					m_mouseEditor.applyDropStrategy(positionDrop); // Effectue des modifications (si besoin) sur le canvas actif (scale, ...)
 					m_mouseEditor.checkIfDropIsFinished();
 				}
 
@@ -174,6 +174,7 @@ public class EditorSceen extends InputAdapter implements Drawable{
 				m_mouseEditor.setCanvasPosition( positionDrop );
 				m_mouseEditor.dropCanvasOn(m_canvasContainer);
 				m_mouseEditor.applyDropStrategy(positionDrop);
+				m_mouseEditor.checkIfDropIsFinished();
 				m_lastDroppedIndice = -1;
 			}
 			else
@@ -259,7 +260,85 @@ public class EditorSceen extends InputAdapter implements Drawable{
 			String filePath = "editorSave/"+folderPath+"/"+entry.getKey()+".txt";
 			entry.getValue().save(filePath);
 		}
+		
+		
+		
+		String filePath = "editorSave/editableMap/"+folderPath+"/canvasContainer.txt";
+		Json json = new Json();
+		String text = json.toJson(this);
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);// internal(filePath);
+		file.writeString(text, false);
+
+
 	}
+	
+	private void loadRessources(String folderPath)
+	{
+		m_player = Player.load(folderPath+"/player.txt");	
+		m_managers.put("map", Map.load(folderPath+"/map.txt"));
+		m_managers.put("enemy", EnemyManager.load(folderPath+"/enemy.txt"));
+		m_managers.put("trigger", TriggerManager.load(folderPath+"/trigger.txt"));
+		/*
+		String filePath = "editorSave/editableMap/"+folderPath+"/canvasContainer.txt";
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
+		String fileString = file.readString();
+		
+		Json json = new Json();
+		JsonValue jsonData = new JsonValue(fileString);
+		json.fromJson(EditorSceen.class, fileString);
+		*/
+	}
+	
+	@Override
+	public void write(Json json) {
+		
+		//json.writeObjectStart("editorSceen");
+			//json.writeValue("canvasNumber", m_canvasContainer.size());
+			json.writeObjectStart("canvasContainer");
+				for(CanvasInterface canvas : m_canvasContainer)
+				{
+					canvas.write(json);
+				}
+			json.writeObjectEnd();
+		//json.writeObjectEnd();
+		
+	}
+	
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		
+		//JsonValue EditorSceenValue = jsonData.get("editorSceen");
+		//int canvasNumber = jsonData.getInt("canvasNumber");
+		JsonValue canvasValue;
+		JsonValue canvasContainer;
+		
+		canvasContainer = jsonData.get("canvasContainer");
+		System.out.println(canvasContainer.toString());
+		//System.out.println("canvasContainer");
+		
+		for(int i = 0; i<canvasContainer.size; i++)
+		{
+			canvasValue = canvasContainer.get(i);
+			@SuppressWarnings("unchecked")
+			Canvas<? extends Body> canvas = json.fromJson((Class<Canvas<?>>)(Class<?>)Canvas.class, canvasValue.toString());
+			if(m_managers.containsKey(canvas.getType()))
+			{
+				canvas.attachOn(m_managers.get(canvas.getType()));
+			}
+			else if(canvas.getType() == "player")
+			{
+				m_player = (Player)canvas.getElement();
+			}
+			else
+			{
+				System.out.println("ERROR : EditorSceen : read : le type de canvas est incorrect");
+			}
+			
+			canvas.read(json, canvasValue);
+		}
+				
+	}
+	
 	
 //	@Override
 //	public void draw(Batch batch, float alpha)
@@ -284,10 +363,16 @@ public class EditorSceen extends InputAdapter implements Drawable{
 	@Override
 	public void draw(Batch batch) {
 		
-		Matrix4 tempProj = batch.getProjectionMatrix();
+		//if(batch.isDrawing())
+		//batch.end();
+		
+		//Matrix4 tempProj = batch.getProjectionMatrix();
+		
 		
 		batch.setProjectionMatrix(m_sceenCamera.combined);
 		
+		if(!batch.isDrawing())
+		batch.begin();
 			
 			for(Entry<String, Manager<? extends Body> > entity : m_managers.entrySet() )
 			{
@@ -308,8 +393,10 @@ public class EditorSceen extends InputAdapter implements Drawable{
 			{
 				canvas.draw(batch, true);
 			}
-			
-		batch.setProjectionMatrix(tempProj);
+		
+		batch.end();
+		
+		//batch.setProjectionMatrix(tempProj);
 		
 	}
 	

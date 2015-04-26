@@ -1,6 +1,7 @@
 package com.retroDante.game.Editor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,8 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Body;
+import com.retroDante.game.Element2D;
 import com.retroDante.game.Manager;
+import com.retroDante.game.map.Map;
+import com.retroDante.game.map.MapLayout;
 import com.retroDante.game.trigger.TeleportTrigger;
 import com.retroDante.game.trigger.Trigger;
 
@@ -62,17 +68,20 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	private int m_remainActions = 0;
 	private int m_maxActions = 0;
 	
+	public Canvas()
+	{
+		
+		m_element = null;
+		m_collider = new Trigger(Color.GREEN);
+		m_collider.setDimension(m_element.getDimension());
+		m_type = "default";
+		m_layout = 0;
+		m_remainActions = 0;
+		m_maxActions = 0;
+	}
+	
 	public Canvas(T element, String type)
 	{
-//		m_button = new Button(m_skin);
-//		m_button.setSize(100, 100);
-//		m_button.addListener(new InputListener() {
-//			@Override
-//			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-//				System.out.println("appuie sur un button de la scene");
-//				return false;
-//			}
-//		});
 		
 		m_element = element;
 		m_collider = new Trigger(Color.GREEN);
@@ -85,15 +94,6 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	
 	public Canvas(T element, String type, int layout, int remainActions)
 	{
-//		m_button = new Button(m_skin);
-//		m_button.setSize(100, 100);
-//		m_button.addListener(new InputListener() {
-//			@Override
-//			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-//				System.out.println("appuie sur un button de la scene");
-//				return false;
-//			}
-//		});
 		
 		m_element = element;
 		m_collider = new Trigger(Color.GREEN);
@@ -108,7 +108,6 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	public void setPosition(Vector2 newPos) 
 	{
 
-		//m_button.setPosition(newPos.x, newPos.y);
 		m_collider.setPosition(newPos);
 		if(m_element != null)
 			m_element.setPosition(newPos);
@@ -119,9 +118,6 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		if(m_element != null && onlyButton == false)
 			m_element.draw(batch);
-		
-		//m_button.draw(batch, 1);
-		//m_collider.draw(batch);
 	}
 	
 	@Override
@@ -169,7 +165,22 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		return m_collider;
 	}
-	
+	@Override 
+	public void setCollider(Trigger collider)
+	{
+		m_collider = collider;
+	}
+	@SuppressWarnings("unchecked")
+	@Override 
+	public <L extends Body> void setElement(L element)
+	{
+		m_element = (T)element;
+	}
+	@Override
+	public T getElement()
+	{
+		return m_element;
+	}
 
 	@Override
 	public <T extends Body> void attachOn(Manager<T> manager)
@@ -251,12 +262,6 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		m_remainActions--;
 	}
 	
-	@Override
-	public Body getElement()
-	{
-		return m_element;
-	}
-	
 	/**
 	 * return true si la strategie de drop a fini de dropper l'objet. On peut alors enlever l'objet à la souris
 	 */
@@ -306,6 +311,55 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		return m_remainActions<=0;
 	}
 	
+	@Override
+	public void save(String filePath)
+	{
+		Json json = new Json();
+		String text = json.toJson(this);
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);// internal(filePath);
+		file.writeString(text, false);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public static <T extends Body>  Canvas<T> load(String filePath)
+	{
+		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);
+		String fileString = file.readString();
+		Json json = new Json();
+		Canvas<T> canvas = json.fromJson((Class<Canvas<T>>)(Class<?>)Canvas.class, fileString);
+		return canvas;
+	}
+	
+	
+	@Override
+	public void write(Json json) 
+	{
+	
+		json.writeObjectStart("canvas");
+			m_element.write(json);
+			json.writeValue("m_type", m_type);
+			json.writeValue("m_layout", m_layout);
+			json.writeValue("m_remainActions", m_remainActions);
+			json.writeValue("m_maxActions", m_maxActions);			
+		json.writeObjectEnd();
+				
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void read(Json json, JsonValue jsonData) 
+	{
+		
+		m_element = (T) json.fromJson(Body.class, jsonData.toString());
+		
+		m_type = jsonData.getString("m_type");
+		m_layout = jsonData.getInt("m_layout");
+		m_remainActions = jsonData.getInt("m_remainActions");
+		m_maxActions = jsonData.getInt("m_maxActions");
+	}
+	
+	
 	
 	@Override
 	public boolean equals(Object other)
@@ -319,13 +373,6 @@ public class Canvas<T extends Body> implements CanvasInterface {
 			if(this.m_element.equals(canvas.m_element))
 				return true;
 		}
-		/*else if(other instanceof CanvasInterface)
-		{
-			CanvasInterface canvasInter = (CanvasInterface)other;
-			if(this.m_element.equals(canvasInter.m_element))
-				return true;
-		}*/
-
 		
 		return false;
 	}

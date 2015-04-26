@@ -3,8 +3,10 @@ package com.retroDante.game.Editor;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.retroDante.game.Body;
 import com.retroDante.game.Manager;
@@ -21,11 +23,13 @@ public class MouseEditor {
 	
 	private CanvasInterface m_currentPlaceable;
 	private Vector2 m_position = new Vector2(); //position de la souris 
-	private boolean m_isVisible = true;;
+	private boolean m_isVisible = true;
+	private OrthographicCamera m_HUDCamera;
 	
 	
 	public MouseEditor()
 	{
+		m_HUDCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 	}
 	
@@ -37,6 +41,16 @@ public class MouseEditor {
 	public boolean getVisibility()
 	{
 		return m_isVisible;
+	}
+	
+	public void setCamera( OrthographicCamera camera)
+	{
+		m_HUDCamera = camera;
+	}
+	
+	public OrthographicCamera getCamera()
+	{
+		return m_HUDCamera;
 	}
 	
 	public <T extends Body> void changePlaceable(CanvasInterface canvas)
@@ -76,8 +90,10 @@ public class MouseEditor {
 	 */
 	public void update()
 	{
-		m_position.x = Gdx.input.getX();
-		m_position.y = -Gdx.input.getY() + Gdx.graphics.getHeight();
+		m_HUDCamera.update();
+		
+		m_position.x = Gdx.input.getX() - Gdx.graphics.getWidth()*0.5f;
+		m_position.y = -Gdx.input.getY() + Gdx.graphics.getHeight()*0.5f;
 		
 		if( (m_currentPlaceable != null) && (m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions()) ) 
 		{
@@ -90,10 +106,17 @@ public class MouseEditor {
 	 */
 	public void draw(Batch batch)
 	{
+		batch.setProjectionMatrix(m_HUDCamera.combined);
+		
+		if(!batch.isDrawing())
+			batch.begin();
+		
 		if(m_currentPlaceable != null && m_isVisible)
 		{
 			m_currentPlaceable.draw(batch, false);
 		}
+		
+		batch.end();
 	}
 	
 	/**

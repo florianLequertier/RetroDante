@@ -91,11 +91,10 @@ public class EditorScreen implements Screen {
 	{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		m_batch.begin();
-			m_mouse.draw(m_batch);
-			m_sceen.draw(m_batch);
-		m_batch.end();
+		m_sceen.draw(m_batch);
+		m_mouse.draw(m_batch);
 		
+
 		m_stage.act(Gdx.graphics.getDeltaTime());
 		m_stage.draw();
 		

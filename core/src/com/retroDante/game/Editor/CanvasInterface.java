@@ -3,6 +3,8 @@ package com.retroDante.game.Editor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Body;
 import com.retroDante.game.Manager;
 import com.retroDante.game.trigger.Trigger;
@@ -39,7 +41,12 @@ public interface CanvasInterface {
 	public void updateDropStrategy(Vector2 worldPosition);
 	public Trigger getCollider();
 	public <T extends Body> void removeOn(Manager<T> manager);
-	public Body getElement();
 	public boolean checkIfDropIsFinished();
+	public void save(String filePath);
+	public void setCollider(Trigger collider);
+	public <T extends Body> void setElement(T element);
+	public <T extends Body> T getElement();
+	public void write(Json json);
+	public void read(Json json, JsonValue jsonData);
 
 }
