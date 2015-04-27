@@ -25,6 +25,7 @@ public class MouseEditor {
 	private Vector2 m_position = new Vector2(); //position de la souris 
 	private boolean m_isVisible = true;
 	private OrthographicCamera m_HUDCamera;
+	private Vector2 m_dropPosition = Vector2.Zero;
 	
 	
 	public MouseEditor()
@@ -41,6 +42,16 @@ public class MouseEditor {
 	public boolean getVisibility()
 	{
 		return m_isVisible;
+	}
+	
+	public void setDropPosition(Vector2 dropPosition)
+	{
+		m_dropPosition = dropPosition;
+	}
+	
+	public Vector2 getDropPosition()
+	{
+		return m_dropPosition;
 	}
 	
 	public void setCamera( OrthographicCamera camera)
@@ -97,7 +108,8 @@ public class MouseEditor {
 		
 		if( (m_currentPlaceable != null) && (m_currentPlaceable.getRemainActions() == m_currentPlaceable.getMaxActions()) ) 
 		{
-			m_currentPlaceable.setPosition(m_position);
+			//m_currentPlaceable.setPosition(m_position);
+			m_currentPlaceable.setPosition(m_dropPosition);
 		}
 	}
 	
@@ -106,7 +118,7 @@ public class MouseEditor {
 	 */
 	public void draw(Batch batch)
 	{
-		batch.setProjectionMatrix(m_HUDCamera.combined);
+		//batch.setProjectionMatrix(m_HUDCamera.combined);
 		
 		if(!batch.isDrawing())
 			batch.begin();
@@ -149,6 +161,11 @@ public class MouseEditor {
 			return m_currentPlaceable.getElement();
 		else 
 			return null;
+	}
+	
+	public void deleteCanvas()
+	{
+		m_currentPlaceable = null;
 	}
 	
 	/**

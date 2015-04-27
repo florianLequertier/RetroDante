@@ -32,6 +32,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	protected boolean m_isGrounded;
 	protected boolean m_rightDirection;
 	protected StateMachine<Character> m_stateMachine;
+	protected LifeBar m_lifeBar = new LifeBar(10);
 	
 
 	
@@ -45,11 +46,13 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		this.makeSolidBody();
 		m_type = "character";
 		
-		m_life = 100.f;
+		m_life = 10.f;
 		m_speed = 60.f;
 		m_isDead = false;
 		m_rightDirection = true;
 		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
+		
+		m_animator.changeSpeed(0.02f);
 		
 	}
 	
@@ -59,11 +62,13 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		this.makeSolidBody();
 		m_type = "character";
 		
-		m_life = 100.f;
+		m_life = 10.f;
 		m_speed = 60.f;
 		m_isDead = false;
 		m_rightDirection = true;
 		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
+		
+		m_animator.changeSpeed(0.02f);
 		
 	}
 	
@@ -73,7 +78,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		this.makeSolidBody();
 		m_type = "character";
 		
-		m_life = 100.f;
+		m_life = 10.f;
 		m_speed = 60.f;
 		m_isDead = false;
 		m_rightDirection = true;
@@ -84,6 +89,8 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		m_animator.play(true);
 		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
 			
+		
+		m_animator.changeSpeed(0.02f);
 	}
 	
 	Character()
@@ -92,7 +99,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		this.makeSolidBody();
 		m_type = "character";
 		
-		m_life = 100.f;
+		m_life = 10.f;
 		m_speed = 60.f;
 		m_isDead = false;
 		m_rightDirection = true;
@@ -102,6 +109,8 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
 		m_stateMachine = new DefaultStateMachine<Character>(this, CharacterState.IDLE);
+		
+		m_animator.changeSpeed(0.02f);
 		
 	}
 	

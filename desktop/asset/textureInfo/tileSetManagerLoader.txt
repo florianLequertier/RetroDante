@@ -1,7 +1,11 @@
-5
+7
 player
 texture/player.png
 textureInfo/player.txt
+
+enemy
+texture/enemy.png
+textureInfo/enemy.txt
 
 platform
 texture/map.png
@@ -18,3 +22,7 @@ textureInfo/editor/editorButton.txt
 cutscene
 texture/cutscene.png
 textureInfo/cutscene.txt
+
+hud
+texture/hud.png
+textureInfo/hud.txt

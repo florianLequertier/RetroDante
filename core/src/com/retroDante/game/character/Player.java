@@ -69,6 +69,8 @@ public class Player extends Character {
 		m_animator.play(true);
 		
 		m_weapon = new AttackEmitter();
+		
+		m_animator.changeSpeed(0.02f);
 
 	}
 	
@@ -84,6 +86,8 @@ public class Player extends Character {
 		m_animator.play(true);
 		
 		m_weapon = new AttackEmitter();
+		
+		m_animator.changeSpeed(0.02f);
 		
 	}
 	

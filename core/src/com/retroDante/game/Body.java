@@ -23,7 +23,7 @@ public abstract class Body implements Json.Serializable, Editable {
 	private float m_rotation = 0;
 	private Affine2 m_transform = new Affine2();
 	
-	Body()
+	public Body()
 	{
 		m_dimension = new Vector2(1,1);
 		m_scaleFactor = new Vector2(1,1);

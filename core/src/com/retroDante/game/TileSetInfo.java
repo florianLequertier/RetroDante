@@ -75,7 +75,7 @@ public class TileSetInfo implements Iterable {
 		
 	}
 	
-	TextureRegion get(int index)
+	public TextureRegion get(int index)
 	{
 		if(index >= m_spriteNumber)
 		{
@@ -137,7 +137,7 @@ public class TileSetInfo implements Iterable {
 		return animList;
 	}
 	
-	Texture getTexture()
+	public Texture getTexture()
 	{
 		return m_texture;
 	}

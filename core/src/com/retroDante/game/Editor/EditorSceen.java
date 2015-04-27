@@ -44,6 +44,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	private HashMap<String, Manager<? extends Body> > m_managers;
 	private EditorCamera m_sceenCamera;
 	private int m_lastDroppedIndice;
+	private Vector2 m_positionDrop = Vector2.Zero;
 	
 	EditorSceen()
 	{
@@ -105,11 +106,29 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 		return true;
 	}
 	
+	@Override
+	public boolean keyDown(int keycode)
+	{
+		
+		if(keycode == Keys.DEL || keycode == Keys.BACKSPACE)
+		{
+			if(m_mouseEditor.hasCanvas())
+			{
+				m_mouseEditor.deleteCanvas();
+			}
+		}
+		
+		return true;
+	}
+	
 	public void update(float delta)
 	{
 		if(m_mouseEditor != null && m_mouseEditor.hasCanvas())
 		{
-			Vector2 positionDrop = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight());
+			
+			Vector2 positionDrop = new Vector2( (((int)(m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX()))/32)*32 - 48, (((int)(m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight()))/32)*32 - 32 );
+			m_mouseEditor.setDropPosition(positionDrop);
+			m_positionDrop = positionDrop;
 			if(	m_lastDroppedIndice!=-1 && m_mouseEditor.testCanvasEquality(  m_canvasContainer.get(m_lastDroppedIndice)) )
 			{
 				m_mouseEditor.updateDropStrategy(positionDrop);
@@ -125,7 +144,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	public void dropCanvasOnSceen()
 	{
 		
-		Vector2 positionDrop = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight());
+		Vector2 positionDrop = m_positionDrop;//new Vector2( (m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX())%32, (m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight())%32 );
 		Vector2 mousePosition = new Vector2(  Gdx.input.getX(), -Gdx.input.getY() + Gdx.graphics.getHeight());
 		
 		

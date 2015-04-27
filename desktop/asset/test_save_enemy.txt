@@ -1,1 +1,1 @@
-{enemyContainer:[{m_positionX:400,m_positionY:400,m_dimensionW:62,m_dimensionH:62,m_rotation:0,m_scaleFactorX:1,m_scaleFactorY:1,m_colliderPosX:400,m_colliderPosY:400,m_colliderWidth:62,m_colliderHeight:62,m_type:enemy,m_animationSpeed:1,m_life:100,m_speed:60}]}
+{enemyContainer:[{m_positionX:400,m_positionY:400,m_dimensionW:62,m_dimensionH:62,m_rotation:0,m_scaleFactorX:1,m_scaleFactorY:1,m_colliderPosX:400,m_colliderPosY:400,m_colliderWidth:62,m_colliderHeight:62,m_type:enemy,m_animationSpeed:1,m_spriteIndex:0,m_life:100,m_speed:60}]}

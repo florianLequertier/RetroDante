@@ -190,7 +190,7 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	
 	public void updateAnimation(float deltaTime)
 	{
-		m_texRegion = m_animator.getCurrentFrame();
+		m_texRegion = m_animator.getCurrentFrame(deltaTime);
 	}
 	
 //	public void updateMovement(float deltaTime)

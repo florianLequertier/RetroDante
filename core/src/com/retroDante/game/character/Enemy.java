@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -45,6 +46,8 @@ public class Enemy extends Character{
 		m_controller = new IAController();
 		m_weapon = new AttackEmitter();
 		
+		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
+		
 	}
 	
 	public Enemy(TileSetInfo tileSet, int spriteIndex) 
@@ -53,6 +56,8 @@ public class Enemy extends Character{
 		m_type = "enemy";
 		m_controller = new IAController();
 		m_weapon = new AttackEmitter();
+		
+		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
 		
 	}
 	
@@ -68,36 +73,48 @@ public class Enemy extends Character{
 		m_animator.play(true);
 		
 		m_weapon = new AttackEmitter();
+		
+		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
+		
+		m_animator.changeSpeed(0.02f);
 
 	}
 	
 	public Enemy()
 	{
-		super( TileSetManager.getInstance().get("player"), 0);
+		super( TileSetManager.getInstance().get("enemy"), 0);
 		m_type = "enemy";
 		m_controller = new IAController();
 		
-		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator = new Animator(TileSetManager.getInstance().get("enemy").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(1.f);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
 		
 		m_weapon = new AttackEmitter();
+		
+		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
+		
+		m_animator.changeSpeed(0.02f);
 		
 	}
 	
 	public Enemy(int index)
 	{
-		super( TileSetManager.getInstance().get("player"), index);
+		super( TileSetManager.getInstance().get("enemy"), index);
 		m_type = "enemy";
 		m_controller = new IAController();
 		
-		m_animator = new Animator(TileSetManager.getInstance().get("player").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
+		m_animator = new Animator(TileSetManager.getInstance().get("enemy").getForAnimation(0,1,2,3), "idle", "walk", "jump", "attack"); //créé une list avec les quatres premieres lignes du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(1.f);
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
 		
 		m_weapon = new AttackEmitter();
+		
+		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
+		
+		m_animator.changeSpeed(0.02f);
 		
 	}
 	
@@ -238,6 +255,17 @@ public class Enemy extends Character{
 		m_controller.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
+	}
+	
+	
+	@Override 
+	public void draw(Batch batch)
+	{
+		super.draw(batch);
+		
+		m_lifeBar.setPosition(this.getPosition().add(0, 64));
+		m_lifeBar.draw(batch);
+		
 	}
 	
 	
