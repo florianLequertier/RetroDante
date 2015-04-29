@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.retroDante.game.character.Character;
+import com.retroDante.game.character.Enemy;
 import com.retroDante.game.trigger.DamageTrigger;
 
 public class Attack implements Drawable, Cloneable {
@@ -21,11 +22,22 @@ public class Attack implements Drawable, Cloneable {
 	 */
 	Attack()
 	{
-		m_trigger = new DamageTrigger(10);
+		m_trigger = new DamageTrigger(1);
 		m_trigger.setDimension(new Vector2(32,32));
 		m_visual = null;
 		m_lifeTime = 5;
 		m_direction = Direction.Right;
+		m_fromEnemy = false;  
+	}
+	
+	Attack(float damage, boolean fromEnemy)
+	{
+		m_trigger = new DamageTrigger(damage);
+		m_trigger.setDimension(new Vector2(32,32));
+		m_visual = null;
+		m_lifeTime = 5;
+		m_direction = Direction.Right;
+		m_fromEnemy = fromEnemy;  
 	}
 	
 	Attack(Attack other)
@@ -34,7 +46,8 @@ public class Attack implements Drawable, Cloneable {
 		m_trigger.setDimension(other.getDimension());
 		m_visual = VisualEffectFactory.getInstance().create(other.getEffectName());
 		m_lifeTime = 5;
-		m_direction = Direction.Right;
+		m_direction = other.m_direction;
+		m_fromEnemy = other.m_fromEnemy;; 
 	}
 	
 	public Object clone(){
@@ -56,13 +69,24 @@ public class Attack implements Drawable, Cloneable {
 	 * Important : renvoie false si l'attack doit cesser.
 	 * 
 	 * @param deltaTime
-	 * @param characters
+	 * @param list
 	 */
-	public boolean update(float deltaTime, List<Character> characters)
+	public boolean update(float deltaTime, List<? extends Character> list)
 	{
 		updateTrigger(deltaTime);
 		updateVisual(deltaTime);
-		applyDamageOn(characters);
+		applyDamageOn(list);
+		m_lifeTime -= deltaTime;
+		if(m_lifeTime <= 0)
+			return false;
+		
+		return true;
+	}
+	public boolean update(float deltaTime, Character character)
+	{
+		updateTrigger(deltaTime);
+		updateVisual(deltaTime);
+		applyDamageOn(character);
 		m_lifeTime -= deltaTime;
 		if(m_lifeTime <= 0)
 			return false;
@@ -70,19 +94,36 @@ public class Attack implements Drawable, Cloneable {
 		return true;
 	}
 	
-	public void applyDamageOn(List<Character> characters)
+	public void applyDamageOn(List<? extends Character> list)
 	{
-		for(Character character : characters)
+		for(Character character : list)
+		{
+			if(!character.getIsInvulnerable() && character.getIsEnemy() != m_fromEnemy)
+			{
+				if(m_trigger.collideWith(character))
+				{
+					character.takeDamage(getDamage());
+					System.out.println("une attaque est rentré en collision avec un character");
+				}
+			}
+		}
+	}
+	public void applyDamageOn(Character character)
+	{
+		if(!character.getIsInvulnerable() && character.getIsEnemy() != m_fromEnemy)
 		{
 			if(m_trigger.collideWith(character))
-			applyDamageOn(character);
+			{
+				character.takeDamage(getDamage());
+				System.out.println("une attaque est rentré en collision avec un character");
+			}
 		}
 	}
 	
-	public void applyDamageOn(Character character)
-	{
-		character.takeDamage(getDamage());
-	}
+//	public void applyDamageOn(Character character)
+//	{
+//		character.takeDamage(getDamage());
+//	}
 	
 	public void updateTrigger(float deltaTime)
 	{

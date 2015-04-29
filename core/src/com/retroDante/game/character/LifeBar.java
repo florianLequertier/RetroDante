@@ -92,14 +92,17 @@ public class LifeBar extends Body{
 		if(!batch.isDrawing())
 			batch.begin();
 		
-		Affine2 transfo = this.getTransform();
-		int decal = (int) (this.getDimension().x * this.getScale().x*3); 
+		Vector2 savedPos = this.getPosition();
+		int decal = (int) (this.getDimension().x * (this.getScale().x+0.1f)); 
 		//transfo.translate(-this.m_life*0.5f*decal,0);
 		for(int i=0; i<this.m_life; i++)
 		{
-			transfo.translate(decal, 0);
-			batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, transfo );
+			//transfo.translate(decal, 0);
+			this.move(new Vector2(decal, 0));
+			batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform() );
 		}
+		
+		this.setPosition(savedPos);
 		
 	}
 	

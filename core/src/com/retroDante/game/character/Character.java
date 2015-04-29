@@ -3,6 +3,7 @@ package com.retroDante.game.character;
 import java.util.List;
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -33,6 +34,9 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	protected boolean m_rightDirection;
 	protected StateMachine<Character> m_stateMachine;
 	protected LifeBar m_lifeBar = new LifeBar(10);
+	protected boolean m_isInvulnerable = false;
+	protected float m_lastInvulnerabilityFrame = 0f;
+	protected boolean m_isEnemy = true;
 	
 
 	
@@ -115,6 +119,30 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	}
 	
 	//setters/ getters : 
+	public CharacterState getCurrentState()
+	{
+		return (CharacterState)m_stateMachine.getCurrentState();
+	}
+	
+	public boolean getIsEnemy()
+	{
+		return m_isEnemy;
+	}
+	
+	public void setIsEnemy(boolean state)
+	{
+		m_isEnemy = state;
+	}
+	
+	public boolean getIsInvulnerable()
+	{
+		return m_isInvulnerable;
+	}
+	
+	public void setIsInvulnerable(boolean state)
+	{
+		m_isInvulnerable = state;
+	}
 	
 	public boolean getIsDead()
 	{
@@ -154,7 +182,12 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	public void takeDamage(float damageAmount)
 	{
 		m_life -= damageAmount;
-		if(m_life<0)
+		
+		//invulnerability frames : 
+		m_isInvulnerable = true;
+		m_lastInvulnerabilityFrame = 0;
+		
+		if(m_life<=0.01f)
 		{
 			m_isDead = true;
 			m_life = 0;
@@ -211,6 +244,21 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		
 		super.drawWithParralax(batch, decalX, decalY);
 		
+	}
+	
+	@Override
+	public void update(float deltaTime, List<Element2D> others)
+	{
+		super.update(deltaTime, others);
+		if(m_isInvulnerable)
+		{
+			m_lastInvulnerabilityFrame += deltaTime;
+			if(m_lastInvulnerabilityFrame > 2f)
+			{
+				this.setIsInvulnerable(false);
+			}
+		}
+
 	}
 	
 	//ne percute pas les murs : 
@@ -275,12 +323,15 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	}
 	
 	//loader Json : 
-	
+
 	@Override
 	public void write(Json json) {
 			super.write(json);
 			json.writeValue("m_life", m_life);
 			json.writeValue("m_speed", m_speed);
+			json.writeValue("m_isInvulnerable", m_isInvulnerable);
+			json.writeValue("m_lastInvulnerabilityFrame", m_lastInvulnerabilityFrame);
+			json.writeValue("m_isEnemy", m_isEnemy);
 	}
 
 	@Override
@@ -288,6 +339,9 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 		super.read(json, jsonData);
 		m_speed = jsonData.getFloat("m_speed");
 		m_life = jsonData.getFloat("m_life");
+		m_isInvulnerable = jsonData.getBoolean("m_isInvulnerable");
+		m_lastInvulnerabilityFrame = jsonData.getFloat("m_lastInvulnerabilityFrame");
+		m_isEnemy = jsonData.getBoolean("m_isEnemy");
 	}
 	
 	//autres methodes : 

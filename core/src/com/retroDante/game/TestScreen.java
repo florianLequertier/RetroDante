@@ -162,7 +162,7 @@ public class TestScreen implements Screen, InputProcessor{
 			System.out.println("coucou");
 			attackManager.add(new BurningHearthquake(new Vector2(100,100)));
 		}
-		attackManager.update(delta, listCharacter);
+		//attackManager.updateOnEnemies(delta, listCharacter);
 		
 		
 	}

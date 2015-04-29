@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.retroDante.game.Animator;
 import com.retroDante.game.Attack;
@@ -45,6 +46,7 @@ public class Player extends Character {
 		m_type = "player";
 		m_controller = new PlayerController();
 		m_weapon = new AttackEmitter();
+		m_isEnemy = false;
 		
 	}
 	
@@ -54,6 +56,7 @@ public class Player extends Character {
 		m_type = "player";
 		m_controller = new PlayerController();
 		m_weapon = new AttackEmitter();
+		m_isEnemy = false;
 		
 	}
 	
@@ -71,6 +74,8 @@ public class Player extends Character {
 		m_weapon = new AttackEmitter();
 		
 		m_animator.changeSpeed(0.02f);
+		
+		m_isEnemy = false;
 
 	}
 	
@@ -88,6 +93,8 @@ public class Player extends Character {
 		m_weapon = new AttackEmitter();
 		
 		m_animator.changeSpeed(0.02f);
+		
+		m_isEnemy = false;
 		
 	}
 	
@@ -132,6 +139,7 @@ public class Player extends Character {
 	public void attack()
 	{
 		Attack attack = m_weapon.getAttackInstance();
+		attack.setFromEnemy(false);
 		if(m_rightDirection)
 		{
 			attack.setPosition(this.getPosition().add(70, 0));
@@ -270,6 +278,22 @@ public class Player extends Character {
 		
 		//réinitialisation : 
 		m_velocity = Vector2.Zero;
+	}
+	
+	/**
+	 * dessine uniquement le HUD du joueur (barre de vie,...)
+	 * 
+	 * @param batch
+	 */
+	public void drawHUD(Batch batch)
+	{
+		if(m_lifeBar != null)
+		{
+			m_lifeBar.setLife((int) this.m_life);
+			m_lifeBar.setPosition(new Vector2(-Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getHeight()*0.5f - 32));
+			//m_lifeBar.setScale(new Vector2(0.8f,0.8f));
+			m_lifeBar.draw(batch);
+		}
 	}
 	
 	//loader Json : 

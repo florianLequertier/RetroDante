@@ -173,7 +173,7 @@ public class PlayerController extends Controller implements InputProcessor {
 		
 		if(eventName != null)
 		{
-			mappedEvent.put(eventName, true);
+			mappedEvent.put(eventName, false);
 		}
 		
 		return false;

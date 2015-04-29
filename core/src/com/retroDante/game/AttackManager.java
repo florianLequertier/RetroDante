@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.retroDante.game.character.Character;
+import com.retroDante.game.character.Enemy;
 
 
 /**
@@ -49,16 +50,28 @@ public class AttackManager implements Drawable {
 	 * test la collision avec tous les characters passés en argument. Applique des dommages si collision.
 	 * 
 	 * @param deltaTime
-	 * @param characters
+	 * @param list
 	 */
-	public void update(float deltaTime, List<Character> characters)
+	public void updateOnEnemies(float deltaTime, List<Enemy> list)
 	{
 		Iterator<Attack> it = m_attackContainer.iterator();
 		while(it.hasNext())
 		{
 			Attack attack = it.next();
 			
-			if(!attack.update(deltaTime, characters)) //retourne false si l'attack est arrivé à son terme et doit cesser
+			if(!attack.update(deltaTime, list)) //retourne false si l'attack est arrivé à son terme et doit cesser
+				it.remove();
+		}
+	}
+	
+	public void updateOnPlayer(float deltaTime, Character character)
+	{
+		Iterator<Attack> it = m_attackContainer.iterator();
+		while(it.hasNext())
+		{
+			Attack attack = it.next();
+			
+			if(!attack.update(deltaTime, character)) //retourne false si l'attack est arrivé à son terme et doit cesser
 				it.remove();
 		}
 	}

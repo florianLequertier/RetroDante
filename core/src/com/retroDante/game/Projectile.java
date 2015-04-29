@@ -20,7 +20,7 @@ public class Projectile extends Attack {
 	}
 	
 	@Override
-	public boolean update(float deltaTime, List<Character> characters)
+	public boolean update(float deltaTime, List<? extends Character> characters)
 	{
 		updateTrigger(deltaTime);
 		updateVisual(deltaTime);
@@ -30,6 +30,26 @@ public class Projectile extends Attack {
 		m_visual.setPosition(newPosition);
 		
 		applyDamageOn(characters);
+		
+		
+		m_lifeTime -= deltaTime;
+		if(m_lifeTime <= 0)
+			return false;
+		
+		return true;
+	}
+	
+	@Override
+	public boolean update(float deltaTime, Character character)
+	{
+		updateTrigger(deltaTime);
+		updateVisual(deltaTime);
+		
+		//On bouge de trigger avant d'entamer les test de collision
+		Vector2 newPosition = m_trigger.getPosition();
+		m_visual.setPosition(newPosition);
+		
+		applyDamageOn(character);
 		
 		
 		m_lifeTime -= deltaTime;

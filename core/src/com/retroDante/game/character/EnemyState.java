@@ -5,7 +5,6 @@ import java.util.Random;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.math.Vector2;
-import com.retroDante.game.IAController;
 
 public enum EnemyState implements State<IAController>{
 
@@ -13,6 +12,7 @@ public enum EnemyState implements State<IAController>{
 	{
 		@Override
 		public void enter(IAController entity) {
+			entity.resetActions();
 			entity.putAction("idle", true); 
 		}
 		
@@ -37,12 +37,13 @@ public enum EnemyState implements State<IAController>{
 			
 			if(rand.nextFloat() > 0.5)
 			{
-				entity.putAction("walk_right", false); //on marche vers la gauche 
+				entity.resetActions();
+				//entity.putAction("walk_right", false); //on marche vers la gauche 
 				entity.putAction("walk_left", true); //on marche vers la gauche 
 			}
 			else
 			{
-				entity.putAction("walk_left", false);
+				//entity.putAction("walk_left", false);
 				entity.putAction("walk_right", true);
 			}
 			
@@ -63,12 +64,14 @@ public enum EnemyState implements State<IAController>{
 			{
 				if(character.checkAction("walk_right"))
 				{
-					character.putAction("walk_right", false); 
+					character.resetActions();
+					//character.putAction("walk_right", false); 
 					character.putAction("walk_left", true); //on marche vers la gauche 
 				}
 				else
 				{
-					character.putAction("walk_left", false);
+					character.resetActions();
+					//character.putAction("walk_left", false);
 					character.putAction("walk_right", true);
 				}
 			}
@@ -91,12 +94,14 @@ public enum EnemyState implements State<IAController>{
 			{
 				if(vectorToTarget.x < 0) // vers la gauche ? 
 				{
-					character.putAction("walk_right", false); 
+					character.resetActions();
+					//character.putAction("walk_right", false); 
 					character.putAction("walk_left", true); //on marche vers la gauche 
 				}
 				else
 				{
-					character.putAction("walk_left", false);
+					character.resetActions();
+					//character.putAction("walk_left", false);
 					character.putAction("walk_right", true);
 				}
 				
@@ -112,7 +117,10 @@ public enum EnemyState implements State<IAController>{
 	ATTACK(){
 		@Override
 		public void enter(IAController entity) {
-			entity.putAction("attack", false);
+			entity.resetActions();
+			entity.putAction("attack", true);
+			//entity.putAction("walk_left", false);
+			//entity.putAction("walk_right", false);
 		}
 		
 		@Override
@@ -127,7 +135,8 @@ public enum EnemyState implements State<IAController>{
 			}
 			else
 			{
-				character.putAction("attack", false);
+				character.resetActions();
+				//character.putAction("attack", false);
 			}
 			
 		}

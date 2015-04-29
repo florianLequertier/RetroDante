@@ -130,16 +130,17 @@ public class GameScreen  implements Screen, InputProcessor{
 		//enemy.update(delta, listCollider, player.getPosition()); //test
 		enemyManager.update(delta, listCollider, player.getPosition());
 		
-		List<Character> listCharacter = new ArrayList<Character>();
-			listCharacter.add(player);
-		triggerManager.update(delta, listCharacter);
+//		List<Character> listCharacter = new ArrayList<Character>();
+//			listCharacter.add(player);
+		triggerManager.update(delta, player );
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.E))
 		{
 			System.out.println("coucou");
 			attackManager.add(new BurningHearthquake(new Vector2(100,100)));
 		}
-		attackManager.update(delta, listCharacter);
+		attackManager.updateOnEnemies(delta, this.enemyManager.getContainer());
+		attackManager.updateOnPlayer(delta, player);
 		
 		
 	}
@@ -177,6 +178,8 @@ public class GameScreen  implements Screen, InputProcessor{
 		    	 font.setScale(2, 2);
 		    	 font.draw(batch, "PAUSE", -45, 100);
 		     }
+		     
+		     player.drawHUD(batch);
 		     
 		     batch.setProjectionMatrix(gameCamera.combined);
 			 triggerManager.draw(batch); //for debug ou creation de la map

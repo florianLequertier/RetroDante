@@ -43,28 +43,37 @@ public class EnemyManager extends Manager<Enemy> implements  Json.Serializable {
 	{
 		return m_container.remove(index);
 	}
+	
+	public List<Enemy> getContainer()
+	{
+		return m_container;
+	}
 
 	
 	//update 
 	public void update(float deltaTime, List<Element2D> others, Vector2 targetPosition)
 	{
-		List<Enemy> toDelete = new ArrayList<Enemy>();
+		List<Integer> toDelete = new ArrayList<Integer>();//new ArrayList<Enemy>();
 		
+		int index = 0;
 		for(Enemy e : m_container)
 		{
 			e.update(deltaTime, others, targetPosition);
 			if(e.getIsDead())
 			{
-				toDelete.add(e);
+				toDelete.add(index);
 			}
+			
+			index++;
 		}
 		
-		Iterator<Enemy> it = toDelete.iterator();
+		Iterator<Integer> it = toDelete.iterator();
 		while(it.hasNext())
 		{
-			it.next();
+			int indexToDelete = it.next();
 			
-			it.remove();
+			m_container.remove(indexToDelete);
+			//it.remove();
 		}
 		
 	}

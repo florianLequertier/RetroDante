@@ -17,7 +17,7 @@ public class BurningHearthquake extends Attack implements Cloneable{
 		
 		Vector2 position = new Vector2(0,0);
 		
-		m_trigger = new DamageTrigger(30);
+		m_trigger = new DamageTrigger(2);
 		
 		m_trigger.setDimension(new Vector2(32,64));
 		m_trigger.setPosition(position);
@@ -42,7 +42,7 @@ public class BurningHearthquake extends Attack implements Cloneable{
 	BurningHearthquake(Vector2 position)
 	{
 		super();
-		m_trigger = new DamageTrigger(30);
+		m_trigger = new DamageTrigger(2);
 		
 		m_trigger.setDimension(new Vector2(32,64));
 		m_trigger.setPosition(position);

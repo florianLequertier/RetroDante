@@ -17,7 +17,6 @@ import com.retroDante.game.BurningHearthquake;
 import com.retroDante.game.Direction;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.Force;
-import com.retroDante.game.IAController;
 import com.retroDante.game.TileSetInfo;
 import com.retroDante.game.TileSetManager;
 import com.retroDante.game.Controllable.KeyStatus;
@@ -149,6 +148,7 @@ public class Enemy extends Character{
 	public void attack()
 	{
 		Attack attack = m_weapon.getAttackInstance();
+		attack.setFromEnemy(true);
 		if(m_rightDirection)
 		{
 			attack.setPosition(this.getPosition().add(70, 0));
@@ -211,10 +211,10 @@ public class Enemy extends Character{
 		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
 		m_controller.setTargetPosition(targetPosition);
 
-		m_controller.setAttackRange(100);
+		m_controller.setAttackRange(1000);
 		m_controller.setOwnLife(m_life);
 		m_controller.setOwnPosition(getPosition());
-		m_controller.setVisibility(10000000);
+		m_controller.setVisibility(100000);
 		m_controller.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
@@ -222,10 +222,10 @@ public class Enemy extends Character{
 	public void update(float deltaTime, Vector2 targetPosition)
 	{
 		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
-		m_controller.setAttackRange(100);
+		m_controller.setAttackRange(1000);
 		m_controller.setOwnLife(m_life);
 		m_controller.setOwnPosition(getPosition());
-		m_controller.setVisibility(10000000);
+		m_controller.setVisibility(100000);
 		m_controller.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
@@ -236,10 +236,10 @@ public class Enemy extends Character{
 	public void update(float deltaTime, List<Element2D> others)
 	{
 		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
-		m_controller.setAttackRange(100);
+		m_controller.setAttackRange(1000);
 		m_controller.setOwnLife(m_life);
 		m_controller.setOwnPosition(getPosition());
-		m_controller.setVisibility(10000000);
+		m_controller.setVisibility(100000);
 		m_controller.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
@@ -248,10 +248,10 @@ public class Enemy extends Character{
 	public void update(float deltaTime)
 	{
 		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
-		m_controller.setAttackRange(100);
+		m_controller.setAttackRange(1000);
 		m_controller.setOwnLife(m_life);
 		m_controller.setOwnPosition(getPosition());
-		m_controller.setVisibility(10000000);
+		m_controller.setVisibility(100000);
 		m_controller.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
@@ -263,6 +263,7 @@ public class Enemy extends Character{
 	{
 		super.draw(batch);
 		
+		m_lifeBar.setLife((int) this.m_life);
 		m_lifeBar.setPosition(this.getPosition().add(0, 64));
 		m_lifeBar.draw(batch);
 		

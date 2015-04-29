@@ -48,6 +48,16 @@ public class TriggerManager extends Manager<Trigger> implements Json.Serializabl
 			}
 		}
 	}
+	public void update(float deltaTime, Character currentCharacter)
+	{
+		for(Trigger currentTrigger : m_triggerContainer)
+		{
+			if(currentCharacter.containedIn(currentTrigger)) //rencontre du trigger et du character
+			{
+				currentTrigger.triggerEventOn(currentCharacter);
+			}
+		}
+	}
 
 	//à utiliser pour le debugging, ou lors de la création de map. 
 	@Override

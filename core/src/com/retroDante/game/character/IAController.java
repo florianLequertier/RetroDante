@@ -1,11 +1,13 @@
-package com.retroDante.game;
+package com.retroDante.game.character;
+
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.math.Vector2;
-import com.retroDante.game.character.EnemyState;
+import com.retroDante.game.Controller;
 
 /**
  * 
@@ -23,7 +25,7 @@ public class IAController extends Controller {
 	Vector2 m_ownPosition = new Vector2(0,0); // position le L'ia
 	float m_ownLife = 100; // vie de l'ia
 	float m_visibility = 100; //vision de l'IA
-	float m_attackRange = 10; //distance de l'attaque de l'ia
+	float m_attackRange = 100; //distance de l'attaque de l'ia
 	float m_lastTime = 0; //temps correspondant à la derniere action effectuée
 	float m_currentTime = 0; 
 	
@@ -76,6 +78,14 @@ public class IAController extends Controller {
 	public void putAction(String actionName, boolean actionState)
 	{
 		mappedEvent.put(actionName, actionState);
+	}
+	
+	public void resetActions()
+	{
+		for(Entry<String, Boolean> event : mappedEvent.entrySet())
+		{
+			event.setValue(false);
+		}
 	}
 	
 	// getters / setters : 

@@ -18,6 +18,7 @@ public class Animator{
 	private float m_currentFrame;
 	private boolean m_isPlaying;
 	private boolean m_isLooping;
+	private boolean m_finished = false;
 	
 	public Animator(Animation animation)
 	{
@@ -101,6 +102,12 @@ public class Animator{
 	{
 		if(m_isPlaying)
 			m_currentFrame = (float) m_timer.getElapsedTime();
+//		if(m_currentFrame % m_animationContainer.get(m_currentAnimation).getAnimationDuration() == 0)
+//		{
+//			m_finished = true;
+//			m_currentFrame = 0;
+//		}
+		//m_currentFrame %= m_animationContainer.get(m_currentAnimation).getAnimationDuration();
 		
 		return m_animationContainer.get(m_currentAnimation).getKeyFrame(m_currentFrame, m_isLooping);
 	}
@@ -115,6 +122,12 @@ public class Animator{
 	public TextureRegion getCurrentFrame(float delta)
 	{
 		m_elapsedTime += delta;
+//		if(m_elapsedTime > m_animationContainer.get(m_currentAnimation).getAnimationDuration())
+//		{
+//			m_finished = true;
+//			m_elapsedTime -= m_animationContainer.get(m_currentAnimation).getAnimationDuration();
+//		}
+		//m_elapsedTime %= m_animationContainer.get(m_currentAnimation).getAnimationDuration();
 		
 		if(m_isPlaying)
 			m_currentFrame = m_elapsedTime;
@@ -174,6 +187,7 @@ public class Animator{
 		m_isPlaying = true;
 		m_timer.restart();
 		m_currentFrame = 0;
+		m_finished = false;
 	}
 	public void play(boolean isLooping)
 	{
@@ -181,6 +195,7 @@ public class Animator{
 		m_isPlaying = true;
 		m_timer.restart();
 		m_currentFrame = 0;
+		m_finished = false;
 	}
 	public void playAt(float animationSpeed)
 	{
@@ -191,6 +206,7 @@ public class Animator{
 		{
 			a.setFrameDuration(animationSpeed);
 		}
+		m_finished = false;
 	}
 	public void playAt(boolean isLooping, float animationSpeed)
 	{
@@ -202,11 +218,13 @@ public class Animator{
 		{
 			a.setFrameDuration(animationSpeed);
 		}
+		m_finished = false;
 	}
 	
 	public void stop()
 	{
 		m_isPlaying = false;
+		m_finished = true;
 		m_timer.restart();
 	}
 	public void changeMode(Animation.PlayMode playMode)

@@ -25,7 +25,7 @@ public class AttackEmitter {
 	
 	public void changeAttack(String name)
 	{
-		m_attackModel = AttackFactory.getInstance().create("burningHearthquake");
+		m_attackModel = AttackFactory.getInstance().create(name);
 	}
 	
 	public Attack getAttackInstance()
