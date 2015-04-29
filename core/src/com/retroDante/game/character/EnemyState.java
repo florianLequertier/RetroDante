@@ -136,7 +136,7 @@ public enum EnemyState implements State<IAController>{
 			else
 			{
 				character.resetActions();
-				//character.putAction("attack", false);
+				character.putAction("attack", true);
 			}
 			
 		}

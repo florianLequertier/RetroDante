@@ -157,13 +157,31 @@ public enum CharacterState implements State<Character> {
 	{
 		@Override
 		public void enter(Character entity) {
-			entity.attack();
-			entity.getAnimator().changeAnimation("attack");
-			entity.getAnimator().playAt(0.5f);
+			
+			if(entity.canAttack())
+			{
+				entity.attack();
+				
+				entity.getAnimator().changeAnimation("attack");
+				entity.getAnimator().playAt(0.5f);
+			}
+
 		}
 		
 		@Override
 		public void update(Character character){
+			
+			if(character.checkAction("attack"))
+			{
+				if(character.canAttack())
+				{
+					character.attack();
+					
+					character.getAnimator().changeAnimation("attack");
+					character.getAnimator().playAt(0.5f);
+				}
+
+			}
 			
 			if(character.checkAction("walk_left"))
 			{

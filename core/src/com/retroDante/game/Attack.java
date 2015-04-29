@@ -11,45 +11,58 @@ import com.retroDante.game.trigger.DamageTrigger;
 
 public class Attack implements Drawable, Cloneable {
 	
-	VisualEffect m_visual;
-	DamageTrigger m_trigger;
-	float m_lifeTime;
-	boolean m_fromEnemy;
-	Direction m_direction;
+	VisualEffect m_visual; // visuel de l'attaque
+	DamageTrigger m_trigger; // zone de damage de l'attaque
+	final float m_maxLifeTime; // delai au bout duquel l'attaque disparait (en secondes), reste fixe.
+	float m_lifeTime; // delai au bout duquel l'attaque disparait (en secondes)
+	boolean m_fromEnemy; // l'attaque provient elle d'un ennemi
+	Direction m_direction; // la direction de l'attaque (Une enumeration de type Direction)
+	float m_delay; //le delay entre deux attaques de ce type (en secondes)
 	
 	/**
 	 * Attack par defaut de 10, sans visuel, 5 seconde de lifeTime, dimensions : 32*32
 	 */
-	Attack()
-	{
-		m_trigger = new DamageTrigger(1);
-		m_trigger.setDimension(new Vector2(32,32));
-		m_visual = null;
-		m_lifeTime = 5;
-		m_direction = Direction.Right;
-		m_fromEnemy = false;  
-	}
-	
-	Attack(float damage, boolean fromEnemy)
+
+	Attack(float damage, float delay, float lifeTime, boolean fromEnemy)
 	{
 		m_trigger = new DamageTrigger(damage);
 		m_trigger.setDimension(new Vector2(32,32));
 		m_visual = null;
+		m_maxLifeTime = 5;
 		m_lifeTime = 5;
 		m_direction = Direction.Right;
 		m_fromEnemy = fromEnemy;  
+		m_delay = delay;
 	}
 	
+	Attack(float damage, float delay, boolean fromEnemy)
+	{
+		this( damage , delay , 5 , fromEnemy ); 
+	}
+	
+	Attack(float damage, boolean fromEnemy)
+	{
+		this( damage , 1 , 5 , fromEnemy ); 
+	}
+	
+	Attack()
+	{
+		this( 1 , true );
+	}
+	
+	//constructeur de copie
 	Attack(Attack other)
 	{
 		m_trigger = new DamageTrigger(other.m_trigger.getDamageAmount());
 		m_trigger.setDimension(other.getDimension());
 		m_visual = VisualEffectFactory.getInstance().create(other.getEffectName());
-		m_lifeTime = 5;
+		m_lifeTime = other.m_lifeTime;
+		m_maxLifeTime = other.m_maxLifeTime;
 		m_direction = other.m_direction;
 		m_fromEnemy = other.m_fromEnemy;; 
 	}
 	
+	//fonction de clonage de l'objet
 	public Object clone(){
 		Attack att = null;
 		try{
@@ -94,6 +107,11 @@ public class Attack implements Drawable, Cloneable {
 		return true;
 	}
 	
+	/**
+	 * Applique le damage de l'arme au(x) character(s) passés en paramétre
+	 * 
+	 * @param list
+	 */
 	public void applyDamageOn(List<? extends Character> list)
 	{
 		for(Character character : list)
@@ -120,10 +138,6 @@ public class Attack implements Drawable, Cloneable {
 		}
 	}
 	
-//	public void applyDamageOn(Character character)
-//	{
-//		character.takeDamage(getDamage());
-//	}
 	
 	public void updateTrigger(float deltaTime)
 	{
@@ -136,7 +150,18 @@ public class Attack implements Drawable, Cloneable {
 		m_visual.update(deltaTime);
 	}
 	
+	
 	//getters / setters 
+	
+	public void setDelay(float delay)
+	{
+		m_delay = delay;
+	}
+	
+	public float getDelay()
+	{
+		return m_delay;
+	}
 	
 	public void setDirection(Direction direction)
 	{

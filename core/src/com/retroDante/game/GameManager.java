@@ -22,7 +22,9 @@ public class GameManager implements DataSingleton<GameManager>{
 	float m_savedTime = 0;
 	float m_elapsedTime = 0;
 	InputMultiplexer m_inputHandler; 
+	private boolean m_followingStroy; // le jeu suit l'histoire ? Ou la partie est une partie customisée ? 
 	private StoryChapter m_currentChapter; // chapitre actuel de l'histoire (ne sert que lors du mode histoire)
+	private String m_currentFolderName; // le dossier contenant les ressources pour charger la map 
 	//StateMachine m_gameState = new ReverseStateMachine();
 	
 	
@@ -130,16 +132,25 @@ public class GameManager implements DataSingleton<GameManager>{
 		
 		if(name == "test")
 		{
+			this.m_followingStroy = false;
+			this.m_currentFolderName = "";
+			
 			m_game.getScreen().dispose();
 			m_game.setScreen(new TestScreen());
 		}
 		else if(name == "game")
 		{
+			this.m_followingStroy = true;
+			this.m_currentChapter = StoryChapter.Tutorial;
+			
 			m_game.getScreen().dispose();
 			m_game.setScreen(new GameScreen(StoryChapter.Tutorial));
 		}
 		else if(name == "editor")
 		{
+			this.m_followingStroy = false;
+			this.m_currentFolderName = "";
+			
 			m_game.getScreen().dispose();
 			m_game.setScreen(new EditorScreen());
 		}
@@ -164,6 +175,9 @@ public class GameManager implements DataSingleton<GameManager>{
 		
 		if(m_game == null || loadFolder == "")
 			return false;
+		
+		this.m_followingStroy = false;
+		this.m_currentFolderName = loadFolder;
 		
 		if(name == "editor")
 		{
@@ -194,6 +208,8 @@ public class GameManager implements DataSingleton<GameManager>{
 	 */
 	public boolean changeScreen(StoryChapter chapter)
 	{
+		
+		this.m_followingStroy = true;
 		
 		if(m_game == null)
 			return false;
@@ -232,6 +248,22 @@ public class GameManager implements DataSingleton<GameManager>{
 			m_game.getScreen().dispose();
 			m_game.setScreen(new MenuScreen());
 		}
+	}
+	
+	public void reloadChapter()
+	{
+		m_game.getScreen().dispose();
+		m_game.setScreen(new GameScreen(this.m_currentChapter));
+	}
+	
+	public void reloadLevel()
+	{
+		m_game.getScreen().dispose();
+		
+		if(this.m_followingStroy)
+			m_game.setScreen(new GameScreen(this.m_currentChapter));
+		else
+			m_game.setScreen(new GameScreen(this.m_currentFolderName));
 	}
 	
 	@Override

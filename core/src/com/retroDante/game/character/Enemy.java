@@ -173,6 +173,15 @@ public class Enemy extends Character{
 		System.out.println("ATTACK !!!!!");
 	}
 	
+	@Override
+	public boolean canAttack()
+	{
+		if(m_weapon == null)
+			return false;
+		else
+			return m_weapon.canAttack();
+	}
+	
 	//overrides Controllers : 
 	
 	@Override
@@ -206,53 +215,61 @@ public class Enemy extends Character{
 	}
 	
 	//update 
-	public void update(float deltaTime, List<Element2D> others, Vector2 targetPosition)
+	/**
+	 * check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+	 * 
+	 * @param deltaTime
+	 * @param targetPosition
+	 */
+	public void updateIAController(float deltaTime, Vector2 targetPosition)
 	{
-		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
 		m_controller.setTargetPosition(targetPosition);
-
 		m_controller.setAttackRange(1000);
 		m_controller.setOwnLife(m_life);
 		m_controller.setOwnPosition(getPosition());
 		m_controller.setVisibility(100000);
 		m_controller.update(deltaTime);
+	}
+	public void updateIAController(float deltaTime)
+	{
+		this.updateIAController(deltaTime, new Vector2(0,0));
+	}
+	
+	public void update(float deltaTime, List<Element2D> others, Vector2 targetPosition)
+	{
+ 
+		m_weapon.update(deltaTime);
+		updateIAController(deltaTime, targetPosition);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
+		
+		
 	}
 	public void update(float deltaTime, Vector2 targetPosition)
 	{
-		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
-		m_controller.setAttackRange(1000);
-		m_controller.setOwnLife(m_life);
-		m_controller.setOwnPosition(getPosition());
-		m_controller.setVisibility(100000);
-		m_controller.update(deltaTime);
+
+		m_weapon.update(deltaTime);
+		updateIAController(deltaTime, targetPosition);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
+
 	}
 	
 	//Override element2D :
 	@Override
 	public void update(float deltaTime, List<Element2D> others)
 	{
-		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
-		m_controller.setAttackRange(1000);
-		m_controller.setOwnLife(m_life);
-		m_controller.setOwnPosition(getPosition());
-		m_controller.setVisibility(100000);
-		m_controller.update(deltaTime);
+
+		m_weapon.update(deltaTime);
+		updateIAController(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
 	}
 	@Override
 	public void update(float deltaTime)
 	{
-		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
-		m_controller.setAttackRange(1000);
-		m_controller.setOwnLife(m_life);
-		m_controller.setOwnPosition(getPosition());
-		m_controller.setVisibility(100000);
-		m_controller.update(deltaTime);
+		m_weapon.update(deltaTime);
+		updateIAController(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
 	}

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ import com.retroDante.game.Direction;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.Force;
 import com.retroDante.game.GameCamera;
+import com.retroDante.game.GameManager;
 import com.retroDante.game.TileSetInfo;
 import com.retroDante.game.TileSetManager;
 
@@ -35,6 +37,8 @@ public class Player extends Character {
 	private GameCamera m_camera;
 	private AttackEmitter m_weapon;
 	private PlayerController m_controller;
+	private boolean m_wounded = false;
+	private float m_woundedTimer = 0;
 	
 	/**
 	 * Le player est un solidBody 
@@ -133,6 +137,15 @@ public class Player extends Character {
 		m_weapon.changeAttack(newAttack);
 	}
 	
+	
+	//gestion de la mort du joueur : 
+	@Override
+	public void kill()
+	{
+		m_isDead = true;
+		GameManager.getInstance().reloadLevel();
+	}
+	
 	/**
 	 * Création positionnement, puis ajout au manager, de l'attaque produite par l'attackEmitter du joueur.
 	 */
@@ -164,16 +177,29 @@ public class Player extends Character {
 		System.out.println("ATTACK !!!!!");
 	}
 	
-	//overrides Controllers : 
+	@Override
+	public boolean canAttack()
+	{
+		if(m_weapon == null)
+			return false;
+		else
+			return m_weapon.canAttack();
+	}
 	
-//	@Override
-//	public void listenKey(KeyStatus status, int keycode) {
-//		
-//		if(status == KeyStatus.DOWN)
-//			m_controller.listenKeyDown(keycode);
-//		else if(status == KeyStatus.UP)
-//			m_controller.listenKeyUp(keycode);
-//	}
+	@Override
+	public void takeDamage(float damageAmount)
+	{
+		super.takeDamage(damageAmount);
+		if(damageAmount > 0)
+		{
+			m_wounded = true;
+			m_woundedTimer = 0;
+		}
+		if(this.m_isDead)
+		{
+			this.kill();
+		}
+	}
 	
 	@Override
 	public void checkController()
@@ -205,18 +231,30 @@ public class Player extends Character {
 		return m_controller.checkActionOnce(stateName);
 	}
 	
+	private void updateWoundedEffect(float deltaTime)
+	{
+		m_woundedTimer += deltaTime;
+		if(m_woundedTimer > 1)
+		{
+			m_woundedTimer = 0;
+			m_wounded = false;
+		}
+	}
+	
 	//Override element2D :
 	@Override
 	public void update(float deltaTime, List<Element2D> others)
 	{
-		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		updateWoundedEffect(deltaTime);
+		m_weapon.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
 	}
 	@Override
 	public void update(float deltaTime)
 	{
-		//checkController(); //check le controller avant l'update des forces. Permet de rajouter les forces pour le saut, ou de modifier la vitesse
+		updateWoundedEffect(deltaTime);
+		m_weapon.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
 	}
@@ -272,7 +310,7 @@ public class Player extends Character {
 		//on bouge la camera si elle est présente : 
 		if(m_camera != null)
 		{
-			m_camera.follow( m_collider.getCenter(new Vector2(0,0)) );// getPosition().add( new Vector2(m_collider.getWidth()*0.5f, m_collider.getHeight()*0.5f) ) );
+			m_camera.follow( m_collider.getCenter(new Vector2(0,0)) );
 		}
 			
 		
@@ -291,9 +329,43 @@ public class Player extends Character {
 		{
 			m_lifeBar.setLife((int) this.m_life);
 			m_lifeBar.setPosition(new Vector2(-Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getHeight()*0.5f - 32));
-			//m_lifeBar.setScale(new Vector2(0.8f,0.8f));
 			m_lifeBar.draw(batch);
 		}
+	}
+	
+	// Ajoute un effet quand le joueur est touché : quand le joueur est invulnérable, sa sprite devient transparente, quand il est touché, l'écran devient rouge
+	@Override
+	public void draw(Batch batch) {
+		
+		if(this.m_isInvulnerable)
+			batch.setColor(1,1,1,0.5f);
+		else
+			batch.setColor(1,1,1,1);
+		
+		this.updateTransform();
+		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform());
+		
+		
+		if(this.m_wounded)
+		{
+			
+			Color sreenColor = Color.WHITE;
+			
+			if(this.m_woundedTimer > 0.5f)
+			{
+				sreenColor = Color.WHITE;
+				sreenColor.mul(1.f, this.m_woundedTimer*2.f - 1.f, this.m_woundedTimer*2.f - 1.f, 1.f);
+			}
+			else
+			{
+				sreenColor = Color.WHITE;
+				sreenColor.mul(1.f, 1.f - this.m_woundedTimer*2.f, 1.f - this.m_woundedTimer*2.f, 1.f);
+			}
+			
+			batch.setColor(sreenColor);
+		}
+		else
+			batch.setColor(1,1,1,1);
 	}
 	
 	//loader Json : 
