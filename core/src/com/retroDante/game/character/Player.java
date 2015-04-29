@@ -155,12 +155,12 @@ public class Player extends Character {
 		attack.setFromEnemy(false);
 		if(m_rightDirection)
 		{
-			attack.setPosition(this.getPosition().add(70, 0));
+			attack.setPosition(this.getPosition().add(32, 0));
 			attack.setDirection(Direction.Right);
 		}
 		else
 		{
-			attack.setPosition(this.getPosition().add(-6, 0));
+			attack.setPosition(this.getPosition().add(32, 0));
 			attack.setDirection(Direction.Left);
 		}
 			
@@ -194,10 +194,6 @@ public class Player extends Character {
 		{
 			m_wounded = true;
 			m_woundedTimer = 0;
-		}
-		if(this.m_isDead)
-		{
-			this.kill();
 		}
 	}
 	
@@ -249,6 +245,11 @@ public class Player extends Character {
 		m_weapon.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime, others);
+		
+		if(this.m_isDead)
+		{
+			this.kill();
+		}
 	}
 	@Override
 	public void update(float deltaTime)
@@ -257,6 +258,11 @@ public class Player extends Character {
 		m_weapon.update(deltaTime);
 		updateStateMachine(); //remplace le checkController, gere les etats de l'entité, change l'action a effectuer et l'animation à jouer
 		super.update(deltaTime);
+		
+		if(this.m_isDead)
+		{
+			this.kill();
+		}
 	}
 	@Override
 	public void updateMovement(float deltaTime, List<Element2D> others)
@@ -336,6 +342,12 @@ public class Player extends Character {
 	// Ajoute un effet quand le joueur est touché : quand le joueur est invulnérable, sa sprite devient transparente, quand il est touché, l'écran devient rouge
 	@Override
 	public void draw(Batch batch) {
+
+		
+		if(m_texRegion.isFlipX() &&  m_rightDirection)
+		m_texRegion.flip(true, false);
+		else if(!m_texRegion.isFlipX() &&  !m_rightDirection)
+		m_texRegion.flip(true, false);
 		
 		if(this.m_isInvulnerable)
 			batch.setColor(1,1,1,0.5f);
@@ -366,6 +378,8 @@ public class Player extends Character {
 		}
 		else
 			batch.setColor(1,1,1,1);
+
+		
 	}
 	
 	//loader Json : 

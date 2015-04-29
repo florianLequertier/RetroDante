@@ -180,6 +180,7 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 	//Override drawable : 
 	@Override
 	public void draw(Batch batch) {
+
 		
 		for(MapLayout layout : m_backgrounds)
 		{
@@ -190,10 +191,12 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		{
 			layout.draw(batch);
 		}
+
 	}
 	
 	//parrallax : 
 	public void drawWithParralax(Batch batch) {
+
 		
 		for(MapLayout layout : m_backgrounds)
 		{
@@ -204,9 +207,11 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		{
 			layout.drawWithParralax(batch);
 		}
+
 	} 
 	public void drawBackgroungWithParralax(Batch batch) {
 		
+	
 		for(MapLayout layout : m_backgrounds)
 		{
 			layout.drawWithParralax(batch);
@@ -214,16 +219,19 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		
 	}
 	public void drawMaingroundWithParralax(Batch batch) {
+
 		
 		m_mainground.draw(batch);
 		
 	}
 	public void drawForegroundWithParralax(Batch batch) {
 
+		
 		for(MapLayout layout : m_foregrounds)
 		{
 			layout.drawWithParralax(batch);
 		}
+
 		
 	}
 	
@@ -258,25 +266,57 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 	{
 		int maxIndex = MapLayout.getMaxIndex();
 		
+		//Ancien algo de parrallax, visuellement plus beau, mais difficillement gérable dans l'éditeur 
+		/*
 		for(MapLayout layout : m_backgrounds)
 		{
-			
-			float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
-			float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
-			
-			layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
-
+			if(layout.getIndex() == -1)
+			{
+				layout.setParralaxDecal( Vector2.Zero );
+			}
+			else
+			{
+				float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+				float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+				
+				layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
+			}
 		}
 		
 		
 		for(MapLayout layout : m_foregrounds)
 		{
-			float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
-			float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
-			
-			layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
-
+			if(layout.getIndex() == -1)
+			{
+				layout.setParralaxDecal( Vector2.Zero );
+			}
+			else
+			{
+				float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+				float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+				
+				layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
+			}
+		}*/
+		
+		for(MapLayout layout : m_backgrounds)
+		{
+			if(layout.getIndex() == -maxIndex)
+			{
+				layout.setParralaxDecal( layout.getParralaxDecal().add(camera.getCurrentTranslation()) );
+			}
+			else
+			{
+				layout.setParralaxDecal( Vector2.Zero );
+			}
 		}
+		
+		
+		for(MapLayout layout : m_foregrounds)
+		{
+			layout.setParralaxDecal( Vector2.Zero );
+		}
+		
 	}
 	
 	public Vector2 getParralaxDecalOfPlane(int index)

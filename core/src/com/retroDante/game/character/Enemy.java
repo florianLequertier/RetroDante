@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -47,6 +48,9 @@ public class Enemy extends Character{
 		
 		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
 		
+		m_speed = 50;
+		m_life = 4;
+		
 	}
 	
 	public Enemy(TileSetInfo tileSet, int spriteIndex) 
@@ -57,6 +61,9 @@ public class Enemy extends Character{
 		m_weapon = new AttackEmitter();
 		
 		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
+		
+		m_speed = 50;
+		m_life = 4;
 		
 	}
 	
@@ -76,6 +83,9 @@ public class Enemy extends Character{
 		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
 		
 		m_animator.changeSpeed(0.02f);
+		
+		m_speed = 50;
+		m_life = 4;
 
 	}
 	
@@ -96,6 +106,9 @@ public class Enemy extends Character{
 		
 		m_animator.changeSpeed(0.02f);
 		
+		m_speed = 50;
+		m_life = 4;
+		
 	}
 	
 	public Enemy(int index)
@@ -114,6 +127,9 @@ public class Enemy extends Character{
 		m_lifeBar.setScale(new Vector2(0.3f,0.3f));
 		
 		m_animator.changeSpeed(0.02f);
+		
+		m_speed = 50;
+		m_life = 4;
 		
 	}
 	
@@ -151,12 +167,12 @@ public class Enemy extends Character{
 		attack.setFromEnemy(true);
 		if(m_rightDirection)
 		{
-			attack.setPosition(this.getPosition().add(70, 0));
+			attack.setPosition(this.getPosition().add(32, 0));
 			attack.setDirection(Direction.Right);
 		}
 		else
 		{
-			attack.setPosition(this.getPosition().add(-6, 0));
+			attack.setPosition(this.getPosition().add(32, 0));
 			attack.setDirection(Direction.Left);
 		}
 			
@@ -274,12 +290,29 @@ public class Enemy extends Character{
 		super.update(deltaTime);
 	}
 	
-	
-	@Override 
+
+	@Override
 	public void draw(Batch batch)
 	{
-		super.draw(batch);
+			
+		Color screenColor = batch.getColor();
 		
+		if(m_texRegion.isFlipX() &&  m_rightDirection)
+			m_texRegion.flip(true, false);
+		else if(!m_texRegion.isFlipX() &&  !m_rightDirection)
+			m_texRegion.flip(true, false);
+
+		if(this.m_isInvulnerable)
+			batch.setColor(1,1,1,0.5f);
+		else
+			batch.setColor(1,1,1,1);
+
+		this.updateTransform();
+		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform());
+
+		batch.setColor(screenColor);
+
+
 		m_lifeBar.setLife((int) this.m_life);
 		m_lifeBar.setPosition(this.getPosition().add(0, 64));
 		m_lifeBar.draw(batch);

@@ -9,6 +9,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -161,8 +162,8 @@ public class GameScreen  implements Screen, InputProcessor{
 		     
 		     //plan du milieu : 
 		     map.drawMaingroundWithParralax(batch);
-		     player.draw(batch);
 		     enemyManager.draw(batch);
+		     player.draw(batch);
 		     attackManager.draw(batch);
 		     
 	
@@ -183,6 +184,7 @@ public class GameScreen  implements Screen, InputProcessor{
 		     
 		     batch.setProjectionMatrix(gameCamera.combined);
 			 triggerManager.draw(batch); //for debug ou creation de la map
+			 this.attackManager.drawDebug(batch);
 		     
 		 batch.end();
 		 
@@ -191,7 +193,6 @@ public class GameScreen  implements Screen, InputProcessor{
 		 
 		//////////////////////////////////////////////////
 		//////////////// dessin du HUD ///////////////////
-
 		m_stage.act(Gdx.graphics.getDeltaTime());
 		m_stage.draw();
 		
@@ -270,6 +271,10 @@ public class GameScreen  implements Screen, InputProcessor{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		
+		batch.setColor(Color.WHITE);
+		if(batch.isDrawing())
+		batch.end();
 		
 		attackManager.clear(); // AttackManager étant dans le stack, il ne faut pas oublier d'enlever les elements qu'elle contient lorsque l'on quitte le niveau.
 		tileSetManager.clear(); // idem

@@ -88,12 +88,13 @@ public class AttackManager implements Drawable {
 	}
 	
 	//pour le debug : 
-	public void drawDebug(SpriteBatch batch) {
-		
+	public void drawDebug(Batch batch) {
+
 		for(Attack attack : m_attackContainer)
 		{
 			attack.drawDebug(batch); //draw aussi les triggers
 		}
+
 	}
 	
 }

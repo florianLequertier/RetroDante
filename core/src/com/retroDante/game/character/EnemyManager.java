@@ -52,50 +52,34 @@ public class EnemyManager extends Manager<Enemy> implements  Json.Serializable {
 	
 	//update 
 	public void update(float deltaTime, List<Element2D> others, Vector2 targetPosition)
-	{
-		List<Integer> toDelete = new ArrayList<Integer>();//new ArrayList<Enemy>();
-		
+	{		
 		int index = 0;
-		for(Enemy e : m_container)
+		Iterator<Enemy> itEnemy = m_container.iterator();
+		while(itEnemy.hasNext())
 		{
+			Enemy e = itEnemy.next();
+			
 			e.update(deltaTime, others, targetPosition);
 			if(e.getIsDead())
 			{
-				toDelete.add(index);
+				itEnemy.remove();
 			}
-			
-			index++;
-		}
-		
-		Iterator<Integer> it = toDelete.iterator();
-		while(it.hasNext())
-		{
-			int indexToDelete = it.next();
-			
-			m_container.remove(indexToDelete);
-			//it.remove();
 		}
 		
 	}
 	public void update(float deltaTime, Vector2 targetPosition)
 	{
-		List<Enemy> toDelete = new ArrayList<Enemy>();
-		
-		for(Enemy e : m_container)
+		int index = 0;
+		Iterator<Enemy> itEnemy = m_container.iterator();
+		while(itEnemy.hasNext())
 		{
+			Enemy e = itEnemy.next();
+			
 			e.update(deltaTime, targetPosition);
 			if(e.getIsDead())
 			{
-				toDelete.add(e);
+				itEnemy.remove();
 			}
-		}
-
-		Iterator<Enemy> it = toDelete.iterator();
-		while(it.hasNext())
-		{
-			it.next();
-			
-			it.remove();
 		}
 		
 	}
@@ -103,45 +87,35 @@ public class EnemyManager extends Manager<Enemy> implements  Json.Serializable {
 	//Override element2D :
 	public void update(float deltaTime, List<Element2D> others)
 	{
-		List<Enemy> toDelete = new ArrayList<Enemy>();
 		
-		for(Enemy e : m_container)
+		int index = 0;
+		Iterator<Enemy> itEnemy = m_container.iterator();
+		while(itEnemy.hasNext())
 		{
+			Enemy e = itEnemy.next();
+			
 			e.update(deltaTime, others);
 			if(e.getIsDead())
 			{
-				toDelete.add(e);
+				itEnemy.remove();
 			}
-		}
-
-		Iterator<Enemy> it = toDelete.iterator();
-		while(it.hasNext())
-		{
-			it.next();
-			
-			it.remove();
 		}
 		
 	}
 	public void update(float deltaTime)
 	{
-		List<Enemy> toDelete = new ArrayList<Enemy>();
 		
-		for(Enemy e : m_container)
+		int index = 0;
+		Iterator<Enemy> itEnemy = m_container.iterator();
+		while(itEnemy.hasNext())
 		{
+			Enemy e = itEnemy.next();
+			
 			e.update(deltaTime);
 			if(e.getIsDead())
 			{
-				toDelete.add(e);
+				itEnemy.remove();
 			}
-		}
-
-		Iterator<Enemy> it = toDelete.iterator();
-		while(it.hasNext())
-		{
-			it.next();
-			
-			it.remove();
 		}
 		
 	}

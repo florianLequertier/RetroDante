@@ -98,7 +98,13 @@ public class Trigger extends Rigidbody implements Json.Serializable, Drawable, C
 	@Override 
 	public void draw(Batch batch)
 	{
-		batch.end();
+		boolean isDrawing = false;
+		if(batch.isDrawing())
+		{
+			batch.end();
+			isDrawing = true;
+		}
+
 		
 		m_visual.setProjectionMatrix( batch.getProjectionMatrix() );
 		 m_visual.begin(ShapeType.Line);
@@ -106,6 +112,7 @@ public class Trigger extends Rigidbody implements Json.Serializable, Drawable, C
 			 m_visual.rect(m_collider.x, m_collider.y, m_collider.width, m_collider.height);
 		 m_visual.end();
 		 
+		 if(isDrawing)
 		 batch.begin();
 	}
 	

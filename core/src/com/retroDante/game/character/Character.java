@@ -31,6 +31,7 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	protected boolean m_isDead;
 	protected float m_speed;
 	protected boolean m_isGrounded;
+	protected float m_jumpDelay; // petit delay lorsque le personnage saute, pour eviter de calculer m_isGrounded seulement une frame apres le saut
 	protected boolean m_rightDirection;
 	protected StateMachine<Character> m_stateMachine;
 	protected LifeBar m_lifeBar = new LifeBar(10);
@@ -119,6 +120,16 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 	}
 	
 	//setters/ getters : 
+	public void setJumpDelay(float delay)
+	{
+		m_jumpDelay = delay;
+	}
+	
+	public float getJumpDelay()
+	{
+		return m_jumpDelay;
+	}
+	
 	public CharacterState getCurrentState()
 	{
 		return (CharacterState)m_stateMachine.getCurrentState();
@@ -258,6 +269,12 @@ public abstract class Character extends Element2D implements Json.Serializable, 
 				this.setIsInvulnerable(false);
 			}
 		}
+		
+		if(m_jumpDelay<0.5f) //debug pour le timing du saut
+		{
+			m_isGrounded = false;
+		}
+		this.m_jumpDelay++;
 
 	}
 	

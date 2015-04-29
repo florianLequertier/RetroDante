@@ -19,7 +19,7 @@ public class MapLayout implements Drawable, Json.Serializable {
 	Vector2 m_parralaxDecal = new Vector2(0,0);
 	float m_parralaxFactor = 1;
 	int m_index = 0;
-	static int s_maxIndex = 0;
+	static int s_maxIndex = 3;
 	static int getMaxIndex() { return s_maxIndex;}
 	
 	

@@ -1,6 +1,7 @@
 package com.retroDante.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.retroDante.game.Editor.EditorScreen;
@@ -61,6 +62,11 @@ public class GameManager implements DataSingleton<GameManager>{
 	public void togglePause()
 	{
 		m_gamePaused = (m_gamePaused)?false:true ;
+	}
+	
+	public void setPause(boolean state)
+	{
+		m_gamePaused = state;
 	}
 	
 	public void update(float deltaTime)
@@ -224,6 +230,7 @@ public class GameManager implements DataSingleton<GameManager>{
 	public void quitGame()
 	{
 		m_game.dispose();
+		Gdx.app.exit();
 	}
 	
 	public void setCurrentChapter(StoryChapter chapter)

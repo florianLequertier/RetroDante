@@ -164,6 +164,7 @@ public class MenuScreen implements Screen {
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	         
 	     m_batch.begin();
+	     	m_batch.setColor(Color.WHITE);
 	        m_batch.draw(m_background, 0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	     m_batch.end();
 	         

@@ -240,8 +240,8 @@ public class Attack implements Drawable, Cloneable {
 		m_visual.draw(batch);
 	}
 	//pour le debug : 
-	public void drawDebug(SpriteBatch batch) {
-		m_visual.draw(batch);
+	public void drawDebug(Batch batch) {
+		//m_visual.draw(batch);
 		m_trigger.draw(batch); //draw du trigger en plus
 	}
 	

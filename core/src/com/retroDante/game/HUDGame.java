@@ -90,14 +90,16 @@ public class HUDGame extends Table{
 	
 	public void closePauseMenu()
 	{
-		GameManager.getInstance().togglePause(); //unpause
+		//GameManager.getInstance().togglePause(); //unpause
+		GameManager.getInstance().setPause(false);
 		m_centerCell.clearActor();
 		//this.removeActor(m_pauseMenu);
 	}
 	
 	public void openPauseMenu()
 	{
-		GameManager.getInstance().togglePause(); //pause
+		//GameManager.getInstance().togglePause(); //pause
+		GameManager.getInstance().setPause(true);
 		m_centerCell.setActor(m_pauseMenu);
 		
 		//this.addActor(m_pauseMenu);

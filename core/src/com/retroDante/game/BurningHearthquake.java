@@ -93,12 +93,21 @@ public class BurningHearthquake extends Attack implements Cloneable{
 
 		if( (m_lifeTime/m_intitialAmountOfTime) < 1- m_step/( (float)m_totalStep * 2)  && (m_lifeTime/m_intitialAmountOfTime) >= m_step/( (float)m_totalStep ))
 		{
-			float decal = 30;
+			float leftSign = 1;
+			float decal01 = 30; // decal constant de 30
+			float decal02 = 0; // 0 si right -decal01 si left
 			if(m_direction == Direction.Left)
-				decal *= -1;
+			{
+				leftSign = -1;
+				decal01 = 30;
+				decal02 = -decal01;
+			}
+
 			
-			Vector2 currentDimension = m_trigger.getDimension();
-				m_trigger.setDimension( currentDimension.add(decal, 0) );
+			Vector2 currentTriggerDimension = m_trigger.getDimension();
+			Vector2 currentTriggerPosition = m_trigger.getPosition();
+				m_trigger.setDimension( currentTriggerDimension.add(decal01, 0) );
+				m_trigger.setPosition(currentTriggerPosition.add(-decal02 * leftSign, 0));
 			
 			Vector2 currentPosition = m_visual.getPosition();
 			AnimatedEffect effect = (AnimatedEffect) VisualEffectFactory.getInstance().create("flameColumn");
@@ -109,7 +118,7 @@ public class BurningHearthquake extends Attack implements Cloneable{
 //			effect.setAnimationSpeed(0.05f);
 			
 			effect.setLifeTime(m_lifeTime);
-			effect.setPosition(currentPosition.add(decal * m_step, 0));
+			effect.setPosition(currentPosition.add(decal01 * leftSign * m_step + decal02, 0));
 			m_visual.append(effect);
 			
 			m_step++;

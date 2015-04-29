@@ -146,10 +146,10 @@ public enum CharacterState implements State<Character> {
 				character.flipRight();
 				character.setVelocity( character.getVelocity().add(character.getSpeed(), 0));
 			}
-			else if(character.getIsGrounded())
+			if(character.getIsGrounded())
 			{
 				character.getStateMachine().changeState(IDLE);
-			}	
+			}
 			
 		}
 	},
