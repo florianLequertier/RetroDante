@@ -1,1 +1,1 @@
-{enemyContainer:[]}
+{enemyContainer:[{m_positionX:144,m_positionY:0,m_dimensionW:64,m_dimensionH:64,m_rotation:0,m_scaleFactorX:1,m_scaleFactorY:1,m_colliderPosX:144,m_colliderPosY:0,m_colliderWidth:64,m_colliderHeight:64,m_type:enemy,m_animationSpeed:1,m_spriteIndex:0,m_life:4,m_speed:50,m_isInvulnerable:false,m_lastInvulnerabilityFrame:0,m_isEnemy:true}]}

@@ -1,9 +1,12 @@
-package com.retroDante.game;
+package com.retroDante.game.attack;
 
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.Direction;
 import com.retroDante.game.trigger.DamageTrigger;
+import com.retroDante.game.visualEffect.AnimatedEffect;
+import com.retroDante.game.visualEffect.VisualEffectFactory;
 
 public class BurningHearthquake extends Attack implements Cloneable{
 	
@@ -11,7 +14,7 @@ public class BurningHearthquake extends Attack implements Cloneable{
 	int m_totalStep = 7;
 	float m_intitialAmountOfTime;
 	
-	BurningHearthquake()
+	public BurningHearthquake()
 	{
 		super();
 		
@@ -39,7 +42,7 @@ public class BurningHearthquake extends Attack implements Cloneable{
 		m_intitialAmountOfTime = m_lifeTime;
 	}
 	
-	BurningHearthquake(Vector2 position)
+	public BurningHearthquake(Vector2 position)
 	{
 		super();
 		m_trigger = new DamageTrigger(2);

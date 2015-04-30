@@ -22,6 +22,7 @@ public abstract class Body implements Json.Serializable, Editable {
 	private Vector2 m_position = new Vector2(0,0);
 	private float m_rotation = 0;
 	private Affine2 m_transform = new Affine2();
+	protected boolean m_flipRight = true;
 	
 	public Body()
 	{
@@ -96,6 +97,16 @@ public abstract class Body implements Json.Serializable, Editable {
 	public Vector2 getDimension()
 	{
 		return m_dimension;
+	}
+	
+	public boolean getFlipRight()
+	{
+		return m_flipRight;
+	}
+	
+	public void setFlipRight(boolean state)
+	{
+		m_flipRight = state;
 	}
 	
 	public abstract void draw(Batch batch);

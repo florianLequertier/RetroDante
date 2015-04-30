@@ -1,13 +1,18 @@
-package com.retroDante.game;
+package com.retroDante.game.attack;
 
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.Direction;
+import com.retroDante.game.Drawable;
 import com.retroDante.game.character.Character;
 import com.retroDante.game.character.Enemy;
 import com.retroDante.game.trigger.DamageTrigger;
+import com.retroDante.game.visualEffect.AnimatedEffect;
+import com.retroDante.game.visualEffect.VisualEffect;
+import com.retroDante.game.visualEffect.VisualEffectFactory;
 
 public class Attack implements Drawable, Cloneable {
 	
@@ -27,12 +32,16 @@ public class Attack implements Drawable, Cloneable {
 	{
 		m_trigger = new DamageTrigger(damage);
 		m_trigger.setDimension(new Vector2(32,32));
-		m_visual = null;
 		m_maxLifeTime = 5;
 		m_lifeTime = 5;
 		m_direction = Direction.Right;
 		m_fromEnemy = fromEnemy;  
 		m_delay = delay;
+		
+		AnimatedEffect effect = (AnimatedEffect) VisualEffectFactory.getInstance().create("slice");
+		effect.setLifeTime(m_lifeTime);
+		m_visual = effect; //VisualEffectFactory.getInstance().create("slice");
+		m_visual.setFlipRight(true);
 	}
 	
 	Attack(float damage, float delay, boolean fromEnemy)
@@ -150,6 +159,14 @@ public class Attack implements Drawable, Cloneable {
 		m_visual.update(deltaTime);
 	}
 	
+	public void play()
+	{
+		if(m_visual != null)
+		{
+			m_visual.play();
+		}
+	}
+	
 	
 	//getters / setters 
 	
@@ -165,12 +182,34 @@ public class Attack implements Drawable, Cloneable {
 	
 	public void setDirection(Direction direction)
 	{
+		Direction previousDir = m_direction;
+		
 		m_direction = direction;
 		if(direction == Direction.Left)
 		{
-			float width = m_trigger.getDimension().x;
-			float height = m_trigger.getDimension().y;
-			m_trigger.setDimension(new Vector2(-width, height));
+			m_visual.setFlipRight(false);
+			
+			if(previousDir != m_direction)
+			{
+				float width = m_trigger.getDimension().x;
+				m_trigger.move(new Vector2(-width, 0));
+				if(m_visual != null)
+					m_visual.move(new Vector2(-width, 0));
+			}
+
+		}
+		else
+		{
+			m_visual.setFlipRight(true);
+			
+			if(previousDir != m_direction)
+			{
+				float width = m_trigger.getDimension().x;
+				m_trigger.move(new Vector2(width, 0));
+				if(m_visual != null)
+					m_visual.move(new Vector2(width, 0));
+			}
+			
 		}
 			
 	}
@@ -237,12 +276,13 @@ public class Attack implements Drawable, Cloneable {
 	//drawable : 
 	@Override
 	public void draw(Batch batch) {
-		m_visual.draw(batch);
+		m_visual.draw(batch );
 	}
+	
 	//pour le debug : 
 	public void drawDebug(Batch batch) {
 		//m_visual.draw(batch);
-		m_trigger.draw(batch); //draw du trigger en plus
+		m_trigger.draw(batch); //draw du trigger
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.attack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.retroDante.game.Drawable;
 import com.retroDante.game.character.Character;
 import com.retroDante.game.character.Enemy;
 

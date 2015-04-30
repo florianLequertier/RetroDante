@@ -1,4 +1,5 @@
-package com.retroDante.game;
+package com.retroDante.game.attack;
+
 
 
 /**
@@ -17,7 +18,21 @@ public class AttackEmitter {
 	
 	public AttackEmitter()
 	{
-		m_attackModel = new BurningHearthquake();
+		m_attackModel = new Attack();
+		m_attackDelay = m_attackModel.getDelay();
+		m_elapsedTime = 0;
+	}
+	
+	public AttackEmitter(Attack newAttack)
+	{
+		m_attackModel = newAttack;
+		m_attackDelay = m_attackModel.getDelay();
+		m_elapsedTime = 0;
+	}
+	
+	public AttackEmitter(String name)
+	{
+		m_attackModel = AttackFactory.getInstance().create(name);;
 		m_attackDelay = m_attackModel.getDelay();
 		m_elapsedTime = 0;
 	}
@@ -44,7 +59,10 @@ public class AttackEmitter {
 		{
 			m_elapsedTime = 0;
 		}
-		return (Attack) m_attackModel.clone(); 
+		
+		Attack instancedAttack = (Attack) m_attackModel.clone(); 
+		instancedAttack.play();
+		return instancedAttack;
 	}
 	
 	public boolean canAttack()

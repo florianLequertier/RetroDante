@@ -27,7 +27,7 @@ public class Force {
 		return f;
 	}
 	
-	Force(Vector2 forceVector)
+	public Force(Vector2 forceVector)
 	{
 		setIntensity(forceVector.len());
 		setInitialIntensity(forceVector.len());
@@ -35,7 +35,7 @@ public class Force {
 		m_type = TypeOfForce.CONSTANT;
 	}
 	
-	Force(Vector2 forceVector, TypeOfForce type)
+	public Force(Vector2 forceVector, TypeOfForce type)
 	{
 		setIntensity(forceVector.len());
 		setInitialIntensity(forceVector.len());

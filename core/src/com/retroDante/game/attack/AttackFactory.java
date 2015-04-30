@@ -1,4 +1,6 @@
-package com.retroDante.game;
+package com.retroDante.game.attack;
+
+import com.retroDante.game.Factory;
 
 
 /**
@@ -20,7 +22,11 @@ public class AttackFactory implements Factory<Attack> {
 	@Override
 	public Attack create(String name) {
 		
-		if(name == "burningHearthquake")
+		if(name == "slice")
+		{
+			return new Attack();
+		}
+		else if(name == "burningHearthquake")
 		{
 			return new BurningHearthquake();
 		}
@@ -35,6 +41,10 @@ public class AttackFactory implements Factory<Attack> {
 	public Attack create(int index) {
 		
 		if(index == 0)
+		{
+			return new Attack();
+		}
+		else if(index == 1)
 		{
 			return new BurningHearthquake();
 		}

@@ -11,16 +11,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Animator;
-import com.retroDante.game.Attack;
-import com.retroDante.game.AttackEmitter;
-import com.retroDante.game.AttackManager;
-import com.retroDante.game.BurningHearthquake;
 import com.retroDante.game.Direction;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.Force;
 import com.retroDante.game.TileSetInfo;
 import com.retroDante.game.TileSetManager;
 import com.retroDante.game.Controllable.KeyStatus;
+import com.retroDante.game.attack.Attack;
+import com.retroDante.game.attack.AttackEmitter;
+import com.retroDante.game.attack.AttackManager;
+import com.retroDante.game.attack.BurningHearthquake;
 
 
 /**
@@ -167,25 +167,18 @@ public class Enemy extends Character{
 		attack.setFromEnemy(true);
 		if(m_rightDirection)
 		{
-			attack.setPosition(this.getPosition().add(32, 0));
+			attack.setPosition(this.getPosition().add(0, 0));
 			attack.setDirection(Direction.Right);
 		}
 		else
 		{
-			attack.setPosition(this.getPosition().add(32, 0));
+			attack.setPosition(this.getPosition().add(0, 0));
 			attack.setDirection(Direction.Left);
 		}
 			
 		
 		AttackManager.getInstance().add(attack); // ajout à l'attackManager.
-		if(attack instanceof BurningHearthquake)
-		{
-			System.out.println("ATTACK REUSSIE");
-		}
-		else
-		{
-			System.out.println("ATTACK NON REUSSIE");
-		}
+		
 		System.out.println("ATTACK !!!!!");
 	}
 	

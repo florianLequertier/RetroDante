@@ -1,8 +1,9 @@
-package com.retroDante.game;
+package com.retroDante.game.attack;
 
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.Force;
 import com.retroDante.game.character.Character;
 
 public class Projectile extends Attack {

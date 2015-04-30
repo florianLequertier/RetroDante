@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.visualEffect;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

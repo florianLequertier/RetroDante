@@ -1,4 +1,4 @@
-package com.retroDante.game;
+package com.retroDante.game.visualEffect;
 
 import java.util.Iterator;
 
@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.Animator;
+import com.retroDante.game.TileSetManager;
 
 public class AnimatedEffect extends VisualEffect{
 	
@@ -104,9 +106,8 @@ public class AnimatedEffect extends VisualEffect{
 	}
 
 	@Override
-	public void getDimension() {
-		m_bound.getSize(new Vector2(0,0));
-		
+	public Vector2 getDimension() {
+		return m_bound.getSize(new Vector2(0,0));
 	}
 	
 	public void updateAnimation(float deltaTime)
@@ -142,9 +143,30 @@ public class AnimatedEffect extends VisualEffect{
 			m_child.draw(batch);
 		
 		if(m_isActive)
-		batch.draw( m_texRegion, m_bound.x, m_bound.y, m_bound.width, m_bound.height);
+		{
+			if(m_texRegion.isFlipX() &&  m_flipRight)
+				m_texRegion.flip(true, false);
+			else if(!m_texRegion.isFlipX() &&  !m_flipRight)
+				m_texRegion.flip(true, false);
+			
+			batch.draw( m_texRegion, m_bound.x, m_bound.y, m_bound.width, m_bound.height);
+			
+		}
+		
 	}
 	
 	
 	
-}
+
+
+	@Override
+	public int getConstructorStep() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setConstructorStep(int constructorStep) {
+		// TODO Auto-generated method stub
+		
+	}}

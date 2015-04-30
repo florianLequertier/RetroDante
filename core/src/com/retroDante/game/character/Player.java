@@ -11,10 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.retroDante.game.Animator;
-import com.retroDante.game.Attack;
-import com.retroDante.game.AttackEmitter;
-import com.retroDante.game.AttackManager;
-import com.retroDante.game.BurningHearthquake;
 import com.retroDante.game.Direction;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.Force;
@@ -22,6 +18,10 @@ import com.retroDante.game.GameCamera;
 import com.retroDante.game.GameManager;
 import com.retroDante.game.TileSetInfo;
 import com.retroDante.game.TileSetManager;
+import com.retroDante.game.attack.Attack;
+import com.retroDante.game.attack.AttackEmitter;
+import com.retroDante.game.attack.AttackManager;
+import com.retroDante.game.attack.BurningHearthquake;
 
 /**
  * 
@@ -49,7 +49,7 @@ public class Player extends Character {
 		super(tex);
 		m_type = "player";
 		m_controller = new PlayerController();
-		m_weapon = new AttackEmitter();
+		m_weapon = new AttackEmitter("burningHearthquake");
 		m_isEnemy = false;
 		
 	}
@@ -59,7 +59,7 @@ public class Player extends Character {
 		super(tileSet, spriteIndex);
 		m_type = "player";
 		m_controller = new PlayerController();
-		m_weapon = new AttackEmitter();
+		m_weapon = new AttackEmitter("burningHearthquake");
 		m_isEnemy = false;
 		
 	}
@@ -75,7 +75,7 @@ public class Player extends Character {
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
 		
-		m_weapon = new AttackEmitter();
+		m_weapon = new AttackEmitter("burningHearthquake");
 		
 		m_animator.changeSpeed(0.02f);
 		
@@ -94,7 +94,7 @@ public class Player extends Character {
 		m_animator.changeAnimation(0);
 		m_animator.play(true);
 		
-		m_weapon = new AttackEmitter();
+		m_weapon = new AttackEmitter("burningHearthquake");
 		
 		m_animator.changeSpeed(0.02f);
 		
@@ -166,14 +166,7 @@ public class Player extends Character {
 			
 		
 		AttackManager.getInstance().add(attack); // ajout à l'attackManager.
-		if(attack instanceof BurningHearthquake)
-		{
-			System.out.println("ATTACK REUSSIE");
-		}
-		else
-		{
-			System.out.println("ATTACK NON REUSSIE");
-		}
+
 		System.out.println("ATTACK !!!!!");
 	}
 	
@@ -357,7 +350,7 @@ public class Player extends Character {
 		this.updateTransform();
 		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform());
 		
-		
+		/*
 		if(this.m_wounded)
 		{
 			
@@ -376,7 +369,7 @@ public class Player extends Character {
 			
 			batch.setColor(sreenColor);
 		}
-		else
+		else*/
 			batch.setColor(1,1,1,1);
 
 		

@@ -1,10 +1,12 @@
-package com.retroDante.game;
+package com.retroDante.game.visualEffect;
 
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.Body;
+import com.retroDante.game.Drawable;
 
 import java.util.Iterator;
 
-public abstract class VisualEffect implements Drawable, Iterable<VisualEffect>, Cloneable {
+public abstract class VisualEffect extends Body implements Iterable<VisualEffect>, Cloneable {
 	
 	protected String m_name;
 	protected VisualEffect m_child;
@@ -39,10 +41,10 @@ public abstract class VisualEffect implements Drawable, Iterable<VisualEffect>, 
 	}
 	
 	
-	abstract public void setPosition(Vector2 position);
-	abstract public Vector2 getPosition();
-	abstract public void setDimension(Vector2 dimension);
-	abstract public void getDimension();
+//	abstract public void setPosition(Vector2 position);
+//	abstract public Vector2 getPosition();
+//	abstract public void setDimension(Vector2 dimension);
+//	abstract public void getDimension();
 	
 	abstract public void play();
 	public void update(float deltaTime)

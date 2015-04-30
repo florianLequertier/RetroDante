@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.retroDante.game.attack.AttackManager;
+import com.retroDante.game.attack.BurningHearthquake;
 import com.retroDante.game.character.Character;
 import com.retroDante.game.character.Enemy;
 import com.retroDante.game.character.EnemyManager;
