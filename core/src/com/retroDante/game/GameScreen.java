@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.retroDante.game.attack.AttackManager;
@@ -30,7 +31,7 @@ import com.retroDante.game.trigger.TriggerManager;
 public class GameScreen  implements Screen, InputProcessor{
 
 	private Stage m_stage;
-	private Batch batch;
+	//private Batch batch;
     private BitmapFont font;
     GameCamera gameCamera;
     HUDCamera hudCamera;
@@ -46,6 +47,7 @@ public class GameScreen  implements Screen, InputProcessor{
 	GameManager gameManager = GameManager.getInstance(); //Singleton
 	EffectCamera effectCamera = null;
     private String folderPath; //chemin vers le dossier source des ressources de cette map.
+    private SpriteBatch batch = new SpriteBatch();
     
 	
     
@@ -96,7 +98,7 @@ public class GameScreen  implements Screen, InputProcessor{
 		m_stage = new Stage();
 		
 		//Initialisation batch : 
-		batch = m_stage.getBatch();
+		//batch = m_stage.getBatch();
 		
 		//Initialisation font : 
 		font = new BitmapFont();
@@ -163,7 +165,6 @@ public class GameScreen  implements Screen, InputProcessor{
 		batch.setProjectionMatrix(gameCamera.combined);
 		
 		batch.begin();
-			
 			 //arriere plan : 
 		     map.drawBackgroungWithParralax(batch);
 		     
@@ -194,17 +195,19 @@ public class GameScreen  implements Screen, InputProcessor{
 			 triggerManager.draw(batch); //for debug ou creation de la map
 			 this.attackManager.drawDebug(batch);
 		     
+
+			 batch.setProjectionMatrix(effectCamera.combined);
 			 effectCamera.draw(batch);
 			 
 		 batch.end();
-		 
-		 
-		 
+
 		 
 		//////////////////////////////////////////////////
 		//////////////// dessin du HUD ///////////////////
 		m_stage.act(Gdx.graphics.getDeltaTime());
 		m_stage.draw();
+		
+	
 		
 	}
 	

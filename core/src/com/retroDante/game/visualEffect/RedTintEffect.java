@@ -47,27 +47,25 @@ public class RedTintEffect extends VisualEffect {
 		if(this.m_isActive && m_visual != null)
 		{
 			float timer = m_lifeTime - m_remainingTime;
-			
-			Color sreenColor = Color.WHITE;
+			System.out.println("timer = "+timer);
+			Color sreenColor = new Color(Color.WHITE);
 			
 			if(timer > 0.5f)
 			{
-				sreenColor = Color.WHITE;
-				sreenColor.mul(1.f, 1.f, 1.f, timer*2.f - 1.f);
+				sreenColor = new Color(Color.WHITE);
+				sreenColor.mul(1.f, 1.f, 1.f, 1.f - (timer-0.5f)*2.f);
 			}
 			else
 			{
-				sreenColor = Color.WHITE;
-				sreenColor.mul(1.f, 1.f, 1.f, 1.f - timer*2.f);
+				sreenColor = new Color(Color.WHITE);
+				sreenColor.mul(1.f, 1.f, 1.f, timer*2.f);
 			}
 			
 			batch.setColor(sreenColor);
-			
 				batch.draw(m_visual, -Gdx.graphics.getWidth()*0.5f, -Gdx.graphics.getHeight()*0.5f, Gdx.graphics.getWidth() + 20, Gdx.graphics.getHeight() + 20 );
-			
-			batch.setColor(1,1,1,1);
+			batch.setColor(new Color(Color.WHITE));
 		}
-			
+		batch.setColor(new Color(Color.WHITE));
 	}
 	
 	

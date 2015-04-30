@@ -31,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.retroDante.game.Body;
+import com.retroDante.game.Element2D;
 import com.retroDante.game.Factory;
 import com.retroDante.game.TileSetInfo;
 import com.retroDante.game.TileSetIterator;
@@ -112,8 +113,8 @@ public class EditorPicker extends Table {
 	void initAll()
 	{
 		initTypeNames("enemy", "map", "trigger");
-		initTypeCount(8,7,5);
-		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "damageTrigger", "blocTrigger", "killTrigger", "nextLevel", "teleportTrigger"  );
+		initTypeCount(8,11,5);
+		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "platform08", "platform09", "platform10", "platform11", "damageTrigger", "blocTrigger", "killTrigger", "nextLevel", "teleportTrigger"  );
 		initFactories();
 		
 		setDefaultSkin();
@@ -278,8 +279,6 @@ public class EditorPicker extends Table {
 				
 				@Override
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-					//System.out.println("Clicked! Is checked: " + button.isChecked());
-					//button.setText("Good job!");
 					
 					changeType(nameSnap);
 					
@@ -322,8 +321,6 @@ public class EditorPicker extends Table {
 				
 				@Override
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-					//System.out.println("Clicked! Is checked: " + button.isChecked());
-					//button.setText("Good job!");
 					
 					changeLayout(layoutIndex);
 					return false;
@@ -347,14 +344,14 @@ public class EditorPicker extends Table {
 		m_typeGroup.setMaxCheckCount(1);
 
 		
-		for(int typeIndex=0, elementNumber = 0; typeIndex< m_typeNames.size(); typeIndex++)
+		for(int typeIndex=0 ; typeIndex< m_typeNames.size(); typeIndex++)
 		{
 			String typeName = m_typeNames.get(typeIndex);
 			
 			Table tmpTable = new Table();
 			ButtonGroup<TextButton> tmpButtonGrp = new ButtonGroup<TextButton>();
 			
-			for(int j=0, k=0; j<6; j++)
+			for(int j=0, k=0, elementNumber = 0; j<6; j++)
 			{
 				for(int i=0; i<4; i++, k++)
 				{
@@ -364,6 +361,7 @@ public class EditorPicker extends Table {
 						String buttonName = typeName+Integer.toString(k);
 						final TextButton button = new TextButton(buttonName, m_skin, buttonName);
 						button.setText( m_elementNames.get(elementNumber) );
+
 						
 						tmpTable.add(button).space(5).maxSize(90, 70).minSize(80, 60);
 							tmpButtonGrp.add(button);
@@ -372,9 +370,8 @@ public class EditorPicker extends Table {
 							final String finalTypeName = typeName ;
 							final String finalElementName = m_elementNames.get(elementNumber) ;
 							final int finalElementNumber = elementNumber;
-							button.addListener(new /*ChangeListener()*/ InputListener() {
+							button.addListener(new InputListener() {
 							@Override
-							//public void changed (ChangeEvent event, Actor actor) 
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 								
 								if(m_factories.containsKey(finalTypeName))
@@ -386,13 +383,7 @@ public class EditorPicker extends Table {
 										newElement= m_factories.get(finalTypeName).create( finalElementNumber );
 									
 									m_editorMouse.changePlaceable( newElement, finalTypeName, m_layoutIndex, newElement.getConstructorStep() );
-									
-									/*
-									if(finalTypeName == "trigger")
-										m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName, m_layoutIndex, 3 );
-									else
-										m_editorMouse.changePlaceable( m_factories.get(finalTypeName).create( finalElementName ), finalTypeName, m_layoutIndex, 1 );
-									*/
+
 								}
 								else
 								{
@@ -400,22 +391,10 @@ public class EditorPicker extends Table {
 								}
 		
 								
-//								if(finalTypeName.equals("enemy"))
-//								{
-//									m_editorMouse.changePlaceable(EnemyFactory.getInstance().create( finalElementName ));
-//								}
-//								else if(finalTypeName.equals("map"))
-//								{
-//									m_editorMouse.changePlaceable(MapFactory.getInstance().create( finalElementName ));
-//								}
-//								else if(finalTypeName.equals("trigger"))
-//								{
-//									m_editorMouse.changePlaceable(TriggerFactory.getInstance().create( finalElementName ));
-//								}
-								
 								return false;
 							}
-
+							
+							
 						});
 							
 						elementNumber++;
@@ -440,10 +419,6 @@ public class EditorPicker extends Table {
 				m_elementsGroup.put(typeName, tmpButtonGrp);
 		}
 		
-//		//ajoute la premiere table de la map à this
-//		m_currentTypeIndex = 0;
-//		m_currentTypeName = m_typeNames.get(0);
-//		this.add(m_elementsPanel.get(m_typeNames.get(0)));
 	}
 	
 	
@@ -452,20 +427,17 @@ public class EditorPicker extends Table {
 	void setDefaultSkin()
 	{
 		m_skin = new Skin();
-		// Generate a 1x1 white texture and store it in the skin named "white".
+
 		Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
 		m_skin.add("white", new Texture(pixmap));
 
-		// Store the default libgdx font under the name "default".
 		BitmapFont font = new BitmapFont();
 		m_skin.add("default", font);
 		
 		
 		//créé tous les styles des boutons :
-		
-
 		TileSetInfo buttonsTileSet = TileSetManager.getInstance().get("editorButton");
 		TileSetIterator it = (TileSetIterator) buttonsTileSet.iterator();
 		
@@ -498,7 +470,26 @@ public class EditorPicker extends Table {
 			
 			for(int i = 0; i< m_typeCount.get(index); i++)
 			{
-				if(it.hasNext())
+				String typeName = m_typeNames.get(index);
+				
+				if(!typeName.equals("trigger"))
+				{
+					Element2D buttonElement = (Element2D)(m_factories.get(typeName).create( i ));
+					TextureRegion buttonRegion = buttonElement.getTextureRegion();
+					//Drawable buttonBg = new TextureRegionDrawable( buttonRegion );
+					
+					String elementName = m_typeNames.get(index)+Integer.toString(i);
+					m_skin.add( elementName , buttonRegion);
+					
+					TextButtonStyle textButtonStyle = new TextButtonStyle();
+					textButtonStyle.up = m_skin.getDrawable(elementName);
+					textButtonStyle.down = m_skin.newDrawable(elementName, Color.DARK_GRAY);
+					textButtonStyle.checked = m_skin.newDrawable(elementName, Color.BLUE);
+					textButtonStyle.over = m_skin.newDrawable(elementName, Color.LIGHT_GRAY);
+					textButtonStyle.font = m_skin.getFont("default");
+					m_skin.add(elementName, textButtonStyle);
+				}
+				else
 				{
 					TextureRegion tex = it.next();
 					String elementName = m_typeNames.get(index)+Integer.toString(i);
@@ -511,12 +502,8 @@ public class EditorPicker extends Table {
 					textButtonStyle.over = m_skin.newDrawable(elementName, Color.LIGHT_GRAY);
 					textButtonStyle.font = m_skin.getFont("default");
 					m_skin.add(elementName, textButtonStyle);
-
 				}
-				else
-				{
-					System.out.println("ERROR : EditorPicker : SetDefaultSkin() : Le nombre de visuels dans le tileSet ne correspond pas au nombre de boutons.");
-				}
+				
 			}
 		}
 

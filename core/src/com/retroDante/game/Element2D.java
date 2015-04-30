@@ -171,6 +171,11 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 		return m_animationSpeed;
 	}
 	
+	public TextureRegion getTextureRegion()
+	{
+		return m_texRegion;
+	}
+	
 	
 	
 	//updates : 
@@ -291,7 +296,7 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 		//batch.draw(m_texRegion, position.x, position.y, m_collider.width, m_collider.height );
 		
 		this.updateTransform();
-		Affine2 transfo = this.getTransform().preTranslate(decalX, decalY);
+		Affine2 transfo = new Affine2(this.getTransform()).preTranslate(decalX, decalY);
 		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, transfo );
 		
 	}

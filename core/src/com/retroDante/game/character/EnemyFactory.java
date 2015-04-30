@@ -39,7 +39,7 @@ public class EnemyFactory implements Factory<Enemy> {
 
 		if( index > 0 )
 		{
-			return new Enemy(index);
+			return new Enemy(index*16);
 		}
 		else
 		{

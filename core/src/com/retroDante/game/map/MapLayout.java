@@ -20,7 +20,7 @@ public class MapLayout implements Drawable, Json.Serializable {
 	float m_parralaxFactor = 1;
 	int m_index = 0;
 	static int s_maxIndex = 3;
-	static int getMaxIndex() { return s_maxIndex;}
+	public static int getMaxIndex() { return s_maxIndex;}
 	
 	
 	MapLayout()
@@ -31,12 +31,14 @@ public class MapLayout implements Drawable, Json.Serializable {
 	public void setIndex(int newIndex)
 	{
 		m_index = newIndex;
+		/*
 		int absIndex = Math.abs( m_index );
 		if( absIndex > s_maxIndex)
 		{
 			s_maxIndex = absIndex;
 			System.out.println("maxIndex : "+s_maxIndex);
 		}
+		*/
 	}
 
 

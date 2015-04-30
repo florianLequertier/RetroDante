@@ -356,7 +356,7 @@ public class Player extends Character {
 		if(this.m_isInvulnerable)
 			batch.setColor(1,1,1,0.5f);
 		else
-			batch.setColor(1,1,1,1);
+			batch.setColor(new Color(Color.WHITE));
 		
 		this.updateTransform();
 		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform());
@@ -381,7 +381,7 @@ public class Player extends Character {
 			batch.setColor(sreenColor);
 		}
 		else*/
-			batch.setColor(1,1,1,1);
+			batch.setColor(new Color(Color.WHITE));
 
 		
 	}

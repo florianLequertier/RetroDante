@@ -1,6 +1,8 @@
 package com.retroDante.game.Editor;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +36,7 @@ import com.retroDante.game.character.EnemyManager;
 import com.retroDante.game.character.Player;
 import com.retroDante.game.map.Map;
 import com.retroDante.game.map.MapElement;
+import com.retroDante.game.map.MapLayout;
 import com.retroDante.game.trigger.TriggerManager;
 
 public class EditorSceen extends InputAdapter implements Drawable, Json.Serializable{
@@ -45,6 +48,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	private EditorCamera m_sceenCamera;
 	private int m_lastDroppedIndice;
 	private Vector2 m_positionDrop = Vector2.Zero;
+	private Vector2 m_positionMouseInSceen = Vector2.Zero;
 	
 	EditorSceen()
 	{
@@ -123,15 +127,22 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	
 	public void update(float delta)
 	{
-		if(m_mouseEditor != null && m_mouseEditor.hasCanvas())
+		//Conversion de la position de la souris par rapport à l'ecran / par rapport au monde / par rapport au monde + magnétisme
+		Vector2 positionDrop = new Vector2( (((int)(m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX()))/32)*32 - 48, (((int)(m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight()))/32)*32 - 32 );
+		m_positionDrop = positionDrop;
+		m_positionMouseInSceen = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() );
+		
+		
+		if(m_mouseEditor != null)
 		{
-			
-			Vector2 positionDrop = new Vector2( (((int)(m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX()))/32)*32 - 48, (((int)(m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight()))/32)*32 - 32 );
 			m_mouseEditor.setDropPosition(positionDrop);
-			m_positionDrop = positionDrop;
-			if(	m_lastDroppedIndice!=-1 && m_mouseEditor.testCanvasEquality(  m_canvasContainer.get(m_lastDroppedIndice)) )
+			
+			if(m_mouseEditor.hasCanvas())
 			{
-				m_mouseEditor.updateDropStrategy(positionDrop);
+				if(	m_lastDroppedIndice!=-1 && m_mouseEditor.testCanvasEquality(  m_canvasContainer.get(m_lastDroppedIndice)) )
+				{
+					m_mouseEditor.updateDropStrategy(positionDrop);
+				}
 			}
 		}
 	}
@@ -154,7 +165,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 			return;
 		}
 		
-		if(m_mouseEditor.hasCanvas())
+		if(m_mouseEditor.hasCanvas()) //On dépose le canvas dans la scene
 		{
 			
 			String canvasType = m_mouseEditor.getCanvasType();
@@ -164,7 +175,10 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 				{
 					if(canvasType.equals("map") ) // traitement de faveur pour la map à cause du parralax
 					{
-						m_mouseEditor.setCanvasPosition( positionDrop.mulAdd( ((Map)m_managers.get(canvasType)).getParralaxDecalOfPlane(m_mouseEditor.getCanvasLayout() ), -1 ) );
+						if(m_mouseEditor.getCanvasLayout() == -MapLayout.getMaxIndex())
+							m_mouseEditor.setCanvasPosition( positionDrop.mulAdd( ((Map)m_managers.get(canvasType)).getParralaxDecalOfPlane(m_mouseEditor.getCanvasLayout() ), -1 ) );
+						else
+							m_mouseEditor.setCanvasPosition( positionDrop);
 					}
 					else
 					{
@@ -175,6 +189,15 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 					if(m_mouseEditor.dropCanvasOn(m_canvasContainer)) //On drop le canvas dans canvasContainer
 					{
 						m_lastDroppedIndice = m_canvasContainer.size()-1;
+						
+						//On trie les canvas celon le layout auquel ils appartiennent (du plus grand layout (plus proche de la caméra) au plus éloigné). Cela sert pour éviter les erreurs quand on séléctionne les canvas à la souris
+						Collections.sort(m_canvasContainer, new Comparator<CanvasInterface>() {
+					        @Override
+					        public int compare(CanvasInterface  canvas01, CanvasInterface  canvas02)
+					        {
+					            return -((Integer)canvas01.getLayout()).compareTo(canvas02.getLayout());
+					        }
+					    });
 					}
 					
 					m_mouseEditor.checkIfDropIsFinished(); // Regarde s'il faut maintenir le canvas actif ou si la souris peut briser le lien qu'elle a sur le canvas actif. 
@@ -200,18 +223,16 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 			{
 				System.out.println("ERROR : EditorSceen : dropCanvasOnSceen : aucun manager ne correspond au type de canvas : "+canvasType+" le'element du canvas ne peut pas s'attacher à un manager");
 			}
-			
-			
-			//System.out.println("canvas droppé à la position : "+ positionDrop.toString() +" dans le manager "+canvasType+" ce manager contient alors "+m_managers.get(canvasType).toString() );
+
 		}
-		else if(!m_mouseEditor.hasCanvas())
+		else if(!m_mouseEditor.hasCanvas()) // On ne posséde pas de canvas. On tente d'en récuperer un dans la sène
 		{
 			Iterator<CanvasInterface> it = m_canvasContainer.iterator();
 			while(it.hasNext())
 			{
 				CanvasInterface canvas = it.next();
 				
-				if(canvas.getCollider().contains(positionDrop))
+				if(canvas.getCollider().contains(m_positionMouseInSceen))
 				{
 					System.out.println("La souris est dans un element de l'editeur.");
 					

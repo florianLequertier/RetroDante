@@ -241,25 +241,60 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 	{
 		int maxIndex = MapLayout.getMaxIndex();
 		
+		
+		//Ancien algo
+		
 		for(MapLayout layout : m_backgrounds)
 		{
-			
-			float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
-			float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
-			
-			layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
-
+			if(layout.getIndex() == -1)
+			{
+				layout.setParralaxDecal( Vector2.Zero );
+			}
+			else
+			{
+				float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+				float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+				
+				layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
+			}
 		}
 		
 		
 		for(MapLayout layout : m_foregrounds)
 		{
-			float newParralaxDecalX = ( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
-			float newParralaxDecalY = ( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
-			
-			layout.setParralaxDecal( new Vector2(newParralaxDecalX, newParralaxDecalY) );
-
+			if(layout.getIndex() == 1)
+			{
+				layout.setParralaxDecal( Vector2.Zero );
+			}
+			else
+			{
+				float newParralaxDecalX = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().x;
+				float newParralaxDecalY = -( layout.getIndex()/(float)maxIndex ) * layout.getParralaxFactor() * camera.getCurrentTranslation().y;
+				
+				layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
+			}
 		}
+		
+		
+		/*
+		for(MapLayout layout : m_backgrounds)
+		{
+			if(layout.getIndex() == -maxIndex)
+			{
+				layout.setParralaxDecal( layout.getParralaxDecal().add(camera.getCurrentTranslation()) );
+			}
+			else
+			{
+				layout.setParralaxDecal( Vector2.Zero );
+			}
+		}
+		
+		
+		for(MapLayout layout : m_foregrounds)
+		{
+			layout.setParralaxDecal( Vector2.Zero );
+		}
+		*/
 	}
 	
 	public void updateParralax(EditorCamera camera)
@@ -286,7 +321,7 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		
 		for(MapLayout layout : m_foregrounds)
 		{
-			if(layout.getIndex() == -1)
+			if(layout.getIndex() == 1)
 			{
 				layout.setParralaxDecal( Vector2.Zero );
 			}
@@ -297,8 +332,8 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 				
 				layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
 			}
-		}*/
-		
+		}
+		*/
 		for(MapLayout layout : m_backgrounds)
 		{
 			if(layout.getIndex() == -maxIndex)
@@ -415,7 +450,7 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 					tempElement = tempContainer.get(j);
 					
 					Element2D newElement = json.fromJson(MapElement.class, tempElement.toString());
-					this.addToBackground(index, newElement);
+					this.addToForeground(index, newElement);
 				}
 			}
 			

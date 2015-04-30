@@ -288,7 +288,7 @@ public class Enemy extends Character{
 	public void draw(Batch batch)
 	{
 			
-		Color screenColor = batch.getColor();
+		//Color screenColor = batch.getColor();
 		
 		if(m_texRegion.isFlipX() &&  m_rightDirection)
 			m_texRegion.flip(true, false);
@@ -298,12 +298,12 @@ public class Enemy extends Character{
 		if(this.m_isInvulnerable)
 			batch.setColor(1,1,1,0.5f);
 		else
-			batch.setColor(1,1,1,1);
+			batch.setColor(new Color(Color.WHITE));
 
 		this.updateTransform();
 		batch.draw(m_texRegion, this.getDimension().x, this.getDimension().y, this.getTransform());
 
-		batch.setColor(screenColor);
+		batch.setColor(new Color(Color.WHITE));
 
 
 		m_lifeBar.setLife((int) this.m_life);

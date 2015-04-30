@@ -1,6 +1,7 @@
 package com.retroDante.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -42,6 +43,7 @@ public class EffectCamera  extends OrthographicCamera{
 	
 	public void draw(Batch batch)
 	{
+		batch.setProjectionMatrix(this.combined);
 		if(m_tintEffect != null)
 			m_tintEffect.draw(batch);
 	}
