@@ -44,7 +44,9 @@ public class GameScreen  implements Screen, InputProcessor{
 	AttackManager attackManager = AttackManager.getInstance(); //singleton
 	TileSetManager tileSetManager = TileSetManager.getInstance(); //singleton
 	GameManager gameManager = GameManager.getInstance(); //Singleton
+	EffectCamera effectCamera = null;
     private String folderPath; //chemin vers le dossier source des ressources de cette map.
+    
 	
     
 	GameScreen(String loadPath)
@@ -72,6 +74,7 @@ public class GameScreen  implements Screen, InputProcessor{
 		//Initialisation Player : 
 		player = Player.load(folderPath+"/player.txt");
 		player.setCamera(gameCamera);
+		player.setEffectCamera(effectCamera);
 		playerController = player.getController();
 		//updateCamera : 
 		gameCamera.setPosition(player.getPosition());
@@ -107,6 +110,8 @@ public class GameScreen  implements Screen, InputProcessor{
 		//Initialisation tileSetManager : 
 		tileSetManager.load(Gdx.files.getLocalStoragePath()+"/asset/"+"textureInfo/tileSetManagerLoader.txt");
 		
+		
+		effectCamera = new EffectCamera();
 		//load Map Ressources (mapElements, triggers, player, enemies,...)
 		this.loadRessourcesFromCustom();
 		
@@ -145,6 +150,7 @@ public class GameScreen  implements Screen, InputProcessor{
 		attackManager.updateOnEnemies(delta, this.enemyManager.getContainer());
 		attackManager.updateOnPlayer(delta, player);
 		
+		effectCamera.update(delta);
 		
 	}
 	
@@ -188,6 +194,8 @@ public class GameScreen  implements Screen, InputProcessor{
 			 triggerManager.draw(batch); //for debug ou creation de la map
 			 this.attackManager.drawDebug(batch);
 		     
+			 effectCamera.draw(batch);
+			 
 		 batch.end();
 		 
 		 

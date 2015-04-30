@@ -1,4 +1,4 @@
-7
+8
 player
 texture/player.png
 textureInfo/player.txt
@@ -26,3 +26,7 @@ textureInfo/cutscene.txt
 hud
 texture/hud.png
 textureInfo/hud.txt
+
+postprodEffect
+texture/postprodEffect.png
+textureInfo/postprodEffect.txt

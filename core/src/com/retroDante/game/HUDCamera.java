@@ -5,17 +5,17 @@ import com.badlogic.gdx.math.Vector2;
 
 public class HUDCamera extends OrthographicCamera{
 	
-	HUDCamera()
+	public HUDCamera()
 	{
 		super();
 	}
 	
-	HUDCamera(Vector2 viewportDim)
+	public HUDCamera(Vector2 viewportDim)
 	{
 		super(viewportDim.x, viewportDim.y);
 	}
 	
-	HUDCamera(float viewportX, float viewportY)
+	public HUDCamera(float viewportX, float viewportY)
 	{
 		super(viewportX, viewportY);
 	}

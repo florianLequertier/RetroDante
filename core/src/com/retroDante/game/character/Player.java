@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.retroDante.game.Animator;
 import com.retroDante.game.Direction;
+import com.retroDante.game.EffectCamera;
 import com.retroDante.game.Element2D;
 import com.retroDante.game.Force;
 import com.retroDante.game.GameCamera;
@@ -35,6 +36,7 @@ import com.retroDante.game.attack.BurningHearthquake;
 public class Player extends Character {
 
 	private GameCamera m_camera;
+	private EffectCamera m_effectCamera;
 	private AttackEmitter m_weapon;
 	private PlayerController m_controller;
 	private boolean m_wounded = false;
@@ -120,6 +122,11 @@ public class Player extends Character {
 		m_camera = newCamera;
 	}
 	
+	public void setEffectCamera(EffectCamera effectCamera)
+	{
+		m_effectCamera = effectCamera;
+	}
+	
 	public void removeCamera()
 	{
 		m_camera = null;
@@ -187,6 +194,9 @@ public class Player extends Character {
 		{
 			m_wounded = true;
 			m_woundedTimer = 0;
+			
+			if(m_effectCamera != null)
+			m_effectCamera.activateEffect();
 		}
 	}
 	
@@ -228,6 +238,7 @@ public class Player extends Character {
 			m_woundedTimer = 0;
 			m_wounded = false;
 		}
+		
 	}
 	
 	//Override element2D :

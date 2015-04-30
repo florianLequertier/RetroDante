@@ -14,17 +14,17 @@ public class GameCamera extends OrthographicCamera{
 	float m_currentSpeed = 0;
 	Vector2 m_currentTranslation;
 	
-	GameCamera()
+	public GameCamera()
 	{
 		super();
 	}
 	
-	GameCamera(Vector2 viewportDim)
+	public GameCamera(Vector2 viewportDim)
 	{
 		super(viewportDim.x, viewportDim.y);
 	}
 	
-	GameCamera(float viewportX, float viewportY)
+	public GameCamera(float viewportX, float viewportY)
 	{
 		super(viewportX, viewportY);
 	}
