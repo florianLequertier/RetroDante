@@ -218,11 +218,16 @@ public class MouseEditor {
 
 	}
 	
-	public void checkIfDropIsFinished()
+	public boolean checkIfDropIsFinished()
 	{
 		if(m_currentPlaceable.checkIfDropIsFinished())
 		{
 			m_currentPlaceable = null;
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	

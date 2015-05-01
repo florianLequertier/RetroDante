@@ -23,7 +23,7 @@ public class DamageTrigger extends Trigger {
 		super(Color.ORANGE, 2);
 		this.setType("damage");
 		
-		m_damageAmount = 30;
+		m_damageAmount = 1;
 	}
 	
 	public DamageTrigger(float damageAmount)

@@ -59,6 +59,7 @@ public class EditorPicker extends Table {
 	private String m_currentTypeName; //nom du type utilisé
 	private MouseEditor m_editorMouse; 
 	private HashMap<String, Factory<? extends Body> > m_factories; // toutes les factories permettant d'instancier les objets du jeu
+	private EditorSceen m_sceenPtr; // pointeur sur la scene pour déclencher un evenement particulier
 	
 	EditorPicker()
 	{
@@ -106,6 +107,12 @@ public class EditorPicker extends Table {
 		this();
 		this.setPosition(x, y);
 	}
+	
+	public void setScreenPointer(EditorSceen sceenPtr)
+	{
+		m_sceenPtr = sceenPtr;
+	}
+	
 	
 	/**
 	 * Réalise toutes les initialisations dans le bon ordre. 
@@ -344,7 +351,7 @@ public class EditorPicker extends Table {
 		m_typeGroup.setMaxCheckCount(1);
 
 		
-		for(int typeIndex=0 ; typeIndex< m_typeNames.size(); typeIndex++)
+		for(int typeIndex=0 , totalElementNumber = 0; typeIndex< m_typeNames.size(); typeIndex++)
 		{
 			String typeName = m_typeNames.get(typeIndex);
 			
@@ -360,7 +367,7 @@ public class EditorPicker extends Table {
 					{
 						String buttonName = typeName+Integer.toString(k);
 						final TextButton button = new TextButton(buttonName, m_skin, buttonName);
-						button.setText( m_elementNames.get(elementNumber) );
+						button.setText( m_elementNames.get(totalElementNumber) );
 
 						
 						tmpTable.add(button).space(5).maxSize(90, 70).minSize(80, 60);
@@ -368,11 +375,15 @@ public class EditorPicker extends Table {
 						
 							
 							final String finalTypeName = typeName ;
-							final String finalElementName = m_elementNames.get(elementNumber) ;
+							final String finalElementName = m_elementNames.get(totalElementNumber) ;
 							final int finalElementNumber = elementNumber;
+							final EditorSceen finalSceenPtr = m_sceenPtr;
 							button.addListener(new InputListener() {
 							@Override
 							public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+								
+								if(finalSceenPtr != null)
+								finalSceenPtr.immediateDrop();
 								
 								if(m_factories.containsKey(finalTypeName))
 								{
@@ -398,6 +409,7 @@ public class EditorPicker extends Table {
 						});
 							
 						elementNumber++;
+						totalElementNumber++;
 					}
 					else //bouton "vide" (trop de boutons affichés par rapport au nombre d'objets)
 					{

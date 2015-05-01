@@ -118,6 +118,8 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		if(m_element != null && onlyButton == false)
 			m_element.draw(batch);
+		
+		//m_collider.draw(batch);
 	}
 	
 	@Override
@@ -235,16 +237,45 @@ public class Canvas<T extends Body> implements CanvasInterface {
 	{
 		System.out.println("TODO : resize action");
 		
-		Vector2 A = m_element.getPosition();
-		Vector2 B = position;//new Vector2( Gdx.input.getX(), Gdx.input.getY() );
-		Vector2 dimension = B.mulAdd(A, -1);
+		Vector2 A = new Vector2(m_element.getPosition());
+		Vector2 B = new Vector2(position);//new Vector2( Gdx.input.getX(), Gdx.input.getY() );
+		Vector2 dimension = new Vector2(B).mulAdd(new Vector2(A), -1);
 		
-		m_element.setDimension(dimension);
-		//m_button.setSize(dimension.x, dimension.y );
-		m_collider.setDimension(dimension);
-		
-		if(decreaseAction)
-		m_remainActions--;
+		if(!decreaseAction)
+		{
+			m_element.setDimension(dimension);
+			//m_button.setSize(dimension.x, dimension.y );
+			m_collider.setDimension(dimension);
+		}
+		else
+		{
+			dimension = new Vector2(Math.abs(dimension.x), Math.abs(dimension.y));
+			
+			//cas particuliers : 
+			if(B.y < A.y)
+			{
+				float posX = m_element.getPosition().x;
+				float posY = m_element.getPosition().y - Math.abs(B.y - A.y);
+				
+				m_element.setPosition(new Vector2(posX, posY));
+				m_collider.setPosition(new Vector2(posX, posY));
+			}
+			if(B.x < A.x)
+			{
+				float posY = m_element.getPosition().y;
+				float posX = m_element.getPosition().x - Math.abs(B.x - A.x);
+				
+				m_element.setPosition(new Vector2(posX, posY));
+				m_collider.setPosition(new Vector2(posX, posY));
+			}
+			
+			m_element.setDimension(dimension);
+			//m_button.setSize(dimension.x, dimension.y );
+			m_collider.setDimension(dimension);
+			
+			m_remainActions--;
+		}
+
 	}
 	@Override
 	public void additionnalAction(boolean decreaseAction, Vector2 worldPosition)

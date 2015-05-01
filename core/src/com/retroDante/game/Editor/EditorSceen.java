@@ -46,7 +46,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	private Player m_player; 
 	private HashMap<String, Manager<? extends Body> > m_managers;
 	private EditorCamera m_sceenCamera;
-	private int m_lastDroppedIndice;
+	private boolean m_isLastCanvasDropped; // Indique si l'element precedement droppé est encore en cours d'edition ou s'il a definitivement été droppé dans la scène
 	private Vector2 m_positionDrop = Vector2.Zero;
 	private Vector2 m_positionMouseInSceen = Vector2.Zero;
 	
@@ -55,7 +55,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 		m_canvasContainer = new ArrayList<CanvasInterface>();
 		m_managers = new HashMap<String, Manager<? extends Body> >();
 		m_sceenCamera = new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		m_lastDroppedIndice = -1;
+		m_isLastCanvasDropped = true;
 		
 		
 		initAll();
@@ -135,13 +135,17 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 		
 		if(m_mouseEditor != null)
 		{
-			m_mouseEditor.setDropPosition(positionDrop);
 			
 			if(m_mouseEditor.hasCanvas())
 			{
-				if(	m_lastDroppedIndice!=-1 && m_mouseEditor.testCanvasEquality(  m_canvasContainer.get(m_lastDroppedIndice)) )
+				if(m_mouseEditor.getCanvasType().equals("trigger"))
+					m_mouseEditor.setDropPosition(m_positionMouseInSceen);
+				else
+					m_mouseEditor.setDropPosition(positionDrop);
+				
+				if(	m_isLastCanvasDropped!=true /* && m_mouseEditor.testCanvasEquality(  m_canvasContainer.get(m_isLastCanvasDropped))*/ )
 				{
-					m_mouseEditor.updateDropStrategy(positionDrop);
+					m_mouseEditor.updateDropStrategy(m_positionMouseInSceen);
 				}
 			}
 		}
@@ -152,12 +156,17 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 		m_mouseEditor = mouse;
 	}
 	
+	public void immediateDrop()
+	{
+		m_isLastCanvasDropped = true;
+	}
+	
 	public void dropCanvasOnSceen()
 	{
 		
 		Vector2 positionDrop = m_positionDrop;//new Vector2( (m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX())%32, (m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight())%32 );
 		Vector2 mousePosition = new Vector2(  Gdx.input.getX(), -Gdx.input.getY() + Gdx.graphics.getHeight());
-		
+		m_positionMouseInSceen = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() );
 		
 		if(m_mouseEditor == null)
 		{
@@ -171,7 +180,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 			String canvasType = m_mouseEditor.getCanvasType();
 			if(m_managers.containsKey(canvasType))
 			{
-				if(	m_lastDroppedIndice==-1 || !m_mouseEditor.testCanvasEquality( m_canvasContainer.get(m_lastDroppedIndice)) )
+				if(	m_isLastCanvasDropped==true /*|| !m_mouseEditor.testCanvasEquality( m_canvasContainer.get(m_isLastCanvasDropped))*/ )
 				{
 					if(canvasType.equals("map") ) // traitement de faveur pour la map à cause du parralax
 					{
@@ -180,33 +189,44 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 						else
 							m_mouseEditor.setCanvasPosition( positionDrop);
 					}
+					else if(canvasType.equals("trigger"))
+					{
+						m_mouseEditor.setCanvasPosition( m_positionMouseInSceen);
+					}
 					else
 					{
 						m_mouseEditor.setCanvasPosition( positionDrop);
 					}
 					
 					m_mouseEditor.attachCanvasOn(m_managers.get(canvasType)); // Le canvas s'attache au manager
-					if(m_mouseEditor.dropCanvasOn(m_canvasContainer)) //On drop le canvas dans canvasContainer
-					{
-						m_lastDroppedIndice = m_canvasContainer.size()-1;
-						
-						//On trie les canvas celon le layout auquel ils appartiennent (du plus grand layout (plus proche de la caméra) au plus éloigné). Cela sert pour éviter les erreurs quand on séléctionne les canvas à la souris
-						Collections.sort(m_canvasContainer, new Comparator<CanvasInterface>() {
-					        @Override
-					        public int compare(CanvasInterface  canvas01, CanvasInterface  canvas02)
-					        {
-					            return -((Integer)canvas01.getLayout()).compareTo(canvas02.getLayout());
-					        }
-					    });
-					}
 					
-					m_mouseEditor.checkIfDropIsFinished(); // Regarde s'il faut maintenir le canvas actif ou si la souris peut briser le lien qu'elle a sur le canvas actif. 
+					m_mouseEditor.dropCanvasOn(m_canvasContainer); //On drop le canvas dans canvasContainer
+					
+					m_isLastCanvasDropped = false; // On suppose que l'elements est maintenant en cours d'édition (scale, ...)
+						
+					//On trie les canvas celon le layout auquel ils appartiennent (du plus grand layout (plus proche de la caméra) au plus éloigné). Cela sert pour éviter les erreurs quand on séléctionne les canvas à la souris
+					Collections.sort(m_canvasContainer, new Comparator<CanvasInterface>() {
+						@Override
+						public int compare(CanvasInterface  canvas01, CanvasInterface  canvas02)
+						{
+							return -((Integer)canvas01.getLayout()).compareTo(canvas02.getLayout());
+						}
+					});
+					
+					
+					if(m_mouseEditor.checkIfDropIsFinished()) // Regarde s'il faut maintenir le canvas actif ou si la souris peut briser le lien qu'elle a sur le canvas actif. 
+					{
+						m_isLastCanvasDropped = true; //Si c'est le cas : previens que l'on a arrété l'edition du dernier canvas 
+					}
 					//m_mouseEditor.applyDropStrategy(positionDrop);
 				}
 				else
 				{
-					m_mouseEditor.applyDropStrategy(positionDrop); // Effectue des modifications (si besoin) sur le canvas actif (scale, ...)
-					m_mouseEditor.checkIfDropIsFinished();
+					m_mouseEditor.applyDropStrategy( m_positionMouseInSceen ); // Effectue des modifications (si besoin) sur le canvas actif (scale, ...)
+					if(m_mouseEditor.checkIfDropIsFinished()) // Regarde s'il faut maintenir le canvas actif ou si la souris peut briser le lien qu'elle a sur le canvas actif. 
+					{
+						m_isLastCanvasDropped = true;
+					}
 				}
 
 			}
@@ -217,7 +237,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 				m_mouseEditor.dropCanvasOn(m_canvasContainer);
 				m_mouseEditor.applyDropStrategy(positionDrop);
 				m_mouseEditor.checkIfDropIsFinished();
-				m_lastDroppedIndice = -1;
+				m_isLastCanvasDropped = true; //pas d'édition pour le joueur
 			}
 			else
 			{
@@ -249,13 +269,13 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 					if(canvasType == "player")
 					{
 						m_player = null;
-						m_lastDroppedIndice = -1;
+						m_isLastCanvasDropped = true;
 						
 					}
 					else
 					{
 						m_mouseEditor.removeCanvasOn(m_managers.get(canvasType));
-						m_lastDroppedIndice = -1;
+						m_isLastCanvasDropped = true;
 					}
 	
 					break;

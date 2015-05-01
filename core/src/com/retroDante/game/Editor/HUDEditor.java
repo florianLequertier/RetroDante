@@ -91,6 +91,7 @@ public class HUDEditor extends Table{
 		this.addActor(m_editorPicker);
 		m_editorPicker.setMouse(mouse);
 		
+		m_editorPicker.setScreenPointer(sceenPtr);
 		
 		parent.addActor(this);
 	

@@ -51,7 +51,7 @@ public class TeleportTrigger extends Trigger {
 	public void triggerEventOn(Character target)
 	{
 		//m_effect.play(target.getPosition(), false);
-		target.setPosition(m_teleportDestination);
+		target.setPosition(new Vector2(m_teleportDestination) );
 	}
 	
 	@Override
