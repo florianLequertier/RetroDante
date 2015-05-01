@@ -9,6 +9,7 @@ public class NextLevel extends Trigger {
 	NextLevel()
 	{
 		super(Color.MAGENTA, 2);
+		this.setType("nextLevel");
 	}
 	
 	@Override

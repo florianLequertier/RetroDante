@@ -334,10 +334,10 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	
 	private void loadRessources(String folderPath)
 	{
-		m_player = Player.load(folderPath+"/player.txt");	
-		m_managers.put("map", Map.load(folderPath+"/map.txt"));
-		m_managers.put("enemy", EnemyManager.load(folderPath+"/enemy.txt"));
-		m_managers.put("trigger", TriggerManager.load(folderPath+"/trigger.txt"));
+		m_player = Player.load("/editorSave/"+folderPath+"/player.txt");	
+		m_managers.put("map", Map.load("/editorSave/"+folderPath+"/map.txt"));
+		m_managers.put("enemy", EnemyManager.load("/editorSave/"+folderPath+"/enemy.txt"));
+		m_managers.put("trigger", TriggerManager.load("/editorSave/"+folderPath+"/trigger.txt"));
 		/*
 		String filePath = "editorSave/editableMap/"+folderPath+"/canvasContainer.txt";
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);

@@ -130,6 +130,10 @@ public class TriggerManager extends Manager<Trigger> implements Json.Serializabl
 			{
 				newTrigger = json.fromJson(KillTrigger.class, triggerValue.toString());
 			}
+			else if ( typeOfTrigger.equals("nextLevel") )
+			{
+				newTrigger = json.fromJson(NextLevel.class, triggerValue.toString());
+			}
 			else
 			{
 				System.out.println("attention ! Probleme dans TriggerManager : \n mauvais type de trigger lors du chargement");

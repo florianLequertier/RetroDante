@@ -1,0 +1,1 @@
+{triggerContainer:[{m_positionX:-11,m_positionY:-158,m_dimensionW:116,m_dimensionH:126,m_rotation:0,m_scaleFactorX:1,m_scaleFactorY:1,m_colliderPosX:-11,m_colliderPosY:-158,m_colliderWidth:116,m_colliderHeight:126,type:teleport,teleportDestination_x:32,teleportDestination_y:159}]}

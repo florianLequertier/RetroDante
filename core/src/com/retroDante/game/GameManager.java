@@ -245,7 +245,7 @@ public class GameManager implements DataSingleton<GameManager>{
 	
 	public void nextChapter()
 	{
-		if(m_currentChapter.hasNextChapter())
+		if(m_currentChapter != null && m_currentChapter.hasNextChapter())
 		{
 			m_game.getScreen().dispose();
 			m_game.setScreen(new GameScreen(m_currentChapter.nextChapter()));
