@@ -54,7 +54,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	{
 		m_canvasContainer = new ArrayList<CanvasInterface>();
 		m_managers = new HashMap<String, Manager<? extends Body> >();
-		m_sceenCamera = new EditorCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		m_sceenCamera = new EditorCamera();
 		m_isLastCanvasDropped = true;
 		
 		

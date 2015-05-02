@@ -11,6 +11,9 @@ import com.retroDante.game.map.Map;
 
 public class EditorCamera extends OrthographicCamera implements InputProcessor{
 	
+	public static int editorCameraWidth = 600;
+	public static int editorCameraHeight = 400;
+	
 	public static enum Direction{
 		RIGHT,
 		LEFT,
@@ -26,7 +29,7 @@ public class EditorCamera extends OrthographicCamera implements InputProcessor{
 	
 	EditorCamera()
 	{
-		super();
+		super(editorCameraWidth, editorCameraHeight);
 		m_directions = new ArrayList<Direction>();
 	}
 	

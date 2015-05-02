@@ -5,9 +5,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public class HUDCamera extends OrthographicCamera{
 	
+	public static int hudCameraWidth = 600;
+	public static int hudCameraHeight = 400;
+	
 	public HUDCamera()
 	{
-		super();
+		super(hudCameraWidth, hudCameraHeight);
 	}
 	
 	public HUDCamera(Vector2 viewportDim)

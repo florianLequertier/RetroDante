@@ -104,9 +104,9 @@ public class GameScreen  implements Screen, InputProcessor{
 		font = new BitmapFont();
 		
 		//Initialisation cameras (gameCamera / hudCamera) : 
-		gameCamera = new GameCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
+		gameCamera = new GameCamera();
 		batch.setProjectionMatrix(gameCamera.combined);
-		hudCamera = new HUDCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
+		hudCamera = new HUDCamera();
 		
 
 		//Initialisation tileSetManager : 
@@ -260,7 +260,7 @@ public class GameScreen  implements Screen, InputProcessor{
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+		m_stage.getViewport().update(width, height);
 	}
 
 	@Override

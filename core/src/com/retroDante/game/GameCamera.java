@@ -9,6 +9,9 @@ import com.retroDante.game.map.Map;
 
 public class GameCamera extends OrthographicCamera{
 	
+	public static int gameCameraWidth = 600;
+	public static int gameCameraHeight = 400;
+	
 	Map m_parralaxTarget = null;
 	float m_maxSpeed = 2.f;
 	float m_currentSpeed = 0;
@@ -16,7 +19,7 @@ public class GameCamera extends OrthographicCamera{
 	
 	public GameCamera()
 	{
-		super();
+		super(gameCameraWidth, gameCameraHeight);
 	}
 	
 	public GameCamera(Vector2 viewportDim)
