@@ -37,6 +37,7 @@ import com.retroDante.game.TileSetInfo;
 import com.retroDante.game.TileSetIterator;
 import com.retroDante.game.TileSetManager;
 import com.retroDante.game.character.EnemyFactory;
+import com.retroDante.game.item.ItemFactory;
 import com.retroDante.game.map.MapFactory;
 import com.retroDante.game.trigger.TriggerFactory;
 
@@ -119,9 +120,9 @@ public class EditorPicker extends Table {
 	 */
 	void initAll()
 	{
-		initTypeNames("enemy", "map", "trigger");
-		initTypeCount(8,11,5);
-		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "platform08", "platform09", "platform10", "platform11", "damageTrigger", "blocTrigger", "killTrigger", "nextLevel", "teleportTrigger"  );
+		initTypeNames("enemy", "map", "trigger", "item");
+		initTypeCount(8,11,5, 1);
+		initElementNames("enemy01", "enemy02", "enemy03", "enemy04", "enemy05", "enemy06", "enemy07", "enemy08", "platform01", "platform02",  "platform03", "platform04",  "platform05", "platform06",  "platform07", "platform08", "platform09", "platform10", "platform11", "damageTrigger", "blocTrigger", "killTrigger", "nextLevel", "teleportTrigger", "itemLife"  );
 		initFactories();
 		
 		setDefaultSkin();
@@ -220,6 +221,10 @@ public class EditorPicker extends Table {
 			else if(m_typeNames.get(i).equals("trigger"))
 			{
 				m_factories.put("trigger", TriggerFactory.getInstance());
+			}
+			else if(m_typeNames.get(i).equals("item"))
+			{
+				m_factories.put("item", ItemFactory.getInstance());
 			}
 		}
 	}

@@ -34,6 +34,7 @@ import com.retroDante.game.Element2D;
 import com.retroDante.game.Manager;
 import com.retroDante.game.character.EnemyManager;
 import com.retroDante.game.character.Player;
+import com.retroDante.game.item.ItemManager;
 import com.retroDante.game.map.Map;
 import com.retroDante.game.map.MapElement;
 import com.retroDante.game.map.MapLayout;
@@ -80,6 +81,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 		m_managers.put("map", new Map());
 		m_managers.put("enemy", new EnemyManager());
 		m_managers.put("trigger", new TriggerManager());
+		m_managers.put("item", new ItemManager());
 	}
 	
 	/**

@@ -32,6 +32,8 @@ public abstract class Rigidbody extends Body implements Json.Serializable{
 	 */
 	public Rigidbody()
 	{
+		super();
+		
 		setBlockCursor(true);
 		setIsSolid(true);
 	}
@@ -90,6 +92,8 @@ public abstract class Rigidbody extends Body implements Json.Serializable{
 	 */
 	public void makeStaticBody()
 	{
+		this.m_tabConstantForce.clear();
+		this.m_tabForce.clear();
 		this.setBlockCursor(false);
 		this.setIsSolid(true);
 	}
@@ -97,6 +101,7 @@ public abstract class Rigidbody extends Body implements Json.Serializable{
 	
 	public void update(float deltaTime)
 	{
+
 		this.updateForces(deltaTime);
 		updateMovement(deltaTime);
 	}
@@ -109,7 +114,7 @@ public abstract class Rigidbody extends Body implements Json.Serializable{
 
 		
 		//réinitialisation : 
-		m_velocity = Vector2.Zero;
+		m_velocity = new Vector2(Vector2.Zero);
 	}
 	
 	
@@ -208,7 +213,7 @@ public abstract class Rigidbody extends Body implements Json.Serializable{
 		
 		int nbOfForces = m_tabForce.size() + m_tabConstantForce.size();
 		if(nbOfForces == 0)
-			return Vector2.Zero;
+			return new Vector2(Vector2.Zero);
 		
 		float resultant_x = 0.f;
 		float resultant_y = 0.f;

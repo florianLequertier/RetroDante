@@ -59,6 +59,8 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	
 	public Element2D(Texture tex)
 	{
+		super();
+		
 		m_animationSpeed = 60;
 		m_type = "element2D";
 		m_visual = tex;
@@ -67,6 +69,8 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	}
 	public Element2D(TileSetInfo tileSet, int spriteIndex)
 	{
+		super();
+		
 		m_animationSpeed = 60;
 		m_type = "element2D";
 		m_visual = tileSet.getTexture();
@@ -240,7 +244,7 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 		}
 		
 		//réinitialisation : 
-		m_velocity = Vector2.Zero;
+		m_velocity = new Vector2(Vector2.Zero);
 	}
 	
 	

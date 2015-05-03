@@ -18,7 +18,7 @@ public class ItemLife extends Item {
 		super(tex);
 		m_trigger = TriggerFactory.getInstance().create("damageTrigger");
 		((DamageTrigger)m_trigger).setDamage(-1);
-		this.setDimension(Element2D.getUnit().scl(2));
+		this.setDimension( new Vector2(64, 64) );
 		this.setPosition(new Vector2(Vector2.Zero));
 
 	}
@@ -36,7 +36,7 @@ public class ItemLife extends Item {
 		super(TileSetManager.getInstance().get("item"), 0);
 		m_trigger = TriggerFactory.getInstance().create("damageTrigger");
 		((DamageTrigger)m_trigger).setDamage(-1);
-		this.setDimension(Element2D.getUnit().scl(2));
+		this.setDimension(new Vector2(64, 64));
 		this.setPosition(new Vector2(Vector2.Zero));
 
 	}

@@ -338,7 +338,7 @@ public class Player extends Character {
 		if(m_lifeBar != null)
 		{
 			m_lifeBar.setLife((int) this.m_life);
-			m_lifeBar.setPosition(new Vector2(-Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getHeight()*0.5f - 32));
+			m_lifeBar.setPosition(new Vector2(-GameCamera.gameCameraWidth*0.5f, GameCamera.gameCameraHeight*0.5f - 32));
 			m_lifeBar.draw(batch);
 		}
 	}

@@ -23,6 +23,7 @@ import com.retroDante.game.character.Enemy;
 import com.retroDante.game.character.EnemyManager;
 import com.retroDante.game.character.Player;
 import com.retroDante.game.character.PlayerController;
+import com.retroDante.game.item.ItemManager;
 import com.retroDante.game.map.Map;
 import com.retroDante.game.map.MapElement;
 import com.retroDante.game.trigger.TeleportTrigger;
@@ -46,6 +47,7 @@ public class GameScreen  implements Screen, InputProcessor{
 	TileSetManager tileSetManager = TileSetManager.getInstance(); //singleton
 	GameManager gameManager = GameManager.getInstance(); //Singleton
 	EffectCamera effectCamera = null;
+	ItemManager itemManager;
     private String folderPath; //chemin vers le dossier source des ressources de cette map.
     private SpriteBatch batch = new SpriteBatch();
     
@@ -88,7 +90,11 @@ public class GameScreen  implements Screen, InputProcessor{
 
 
 		//Initialisation Ennemis : 
-		enemyManager = EnemyManager.load(folderPath+"/enemy.txt");  
+		enemyManager = EnemyManager.load(folderPath+"/enemy.txt"); 
+		
+		//Initialisation items :
+		itemManager = ItemManager.load(folderPath+"/item.txt");
+		
 	}
 	
 	@Override
@@ -140,6 +146,7 @@ public class GameScreen  implements Screen, InputProcessor{
 		//enemy.update(delta, listCollider, player.getPosition()); //test
 		enemyManager.update(delta, listCollider, player.getPosition());
 		
+		itemManager.update(delta, player);
 //		List<Character> listCharacter = new ArrayList<Character>();
 //			listCharacter.add(player);
 		triggerManager.update(delta, player );
@@ -174,6 +181,7 @@ public class GameScreen  implements Screen, InputProcessor{
 		     enemyManager.draw(batch);
 		     player.draw(batch);
 		     attackManager.draw(batch);
+		     itemManager.drawDebug(batch);
 		     
 	
 		     //plan avant : 

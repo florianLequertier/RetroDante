@@ -3,14 +3,17 @@ package com.retroDante.game.item;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Animator;
 import com.retroDante.game.Element2D;
+import com.retroDante.game.Force;
 import com.retroDante.game.TileSetInfo;
 import com.retroDante.game.TileSetManager;
 import com.retroDante.game.trigger.Trigger;
 import com.retroDante.game.visualEffect.VisualEffect;
 
-public abstract class Item extends Element2D {
+public class Item extends Element2D implements Json.Serializable {
 	
 	protected Trigger m_trigger;
 	protected VisualEffect m_visualEffect;
@@ -28,7 +31,7 @@ public abstract class Item extends Element2D {
 		super(tileSet, spriteIndex);
 		this.makeStaticBody();
 		this.setIsSolid(false);
-		
+
 		m_texRegion = tileSet.get(0);
 		m_animator = new Animator(tileSet.getForAnimation(0)); //créé une list avec les trois premiere ligne du tileSet (correspondant donc aux 3 premieres animations)
 		setAnimationSpeed(0.5f);
@@ -60,6 +63,7 @@ public abstract class Item extends Element2D {
 		if(this.m_trigger.collideWith(character))
 		{
 			this.m_trigger.triggerEventOn(character);
+			this.m_isAlive = false;
 			return true;
 		}
 		else 
@@ -84,6 +88,19 @@ public abstract class Item extends Element2D {
 		
 		if(this.m_visualEffect != null)
 			m_visualEffect.setPosition(position);
+		
+	}
+	
+	@Override 
+	public void move( Vector2 deltaPos)
+	{
+		super.move(deltaPos);
+		
+		if(this.m_trigger != null)
+			m_trigger.move(deltaPos);
+		
+		if(this.m_visualEffect != null)
+			m_visualEffect.move(deltaPos);
 		
 	}
 	
@@ -116,13 +133,14 @@ public abstract class Item extends Element2D {
 	@Override
 	public void update(float deltaTime)
 	{
-		super.update(deltaTime);
+		//super.update(deltaTime);
+		super.updateAnimation(deltaTime);
 		
 		if(this.m_visualEffect != null)
 			this.m_visualEffect.update(deltaTime);
 		
-		if(this.m_trigger != null)
-			this.m_trigger.update(deltaTime);
+//		if(this.m_trigger != null)
+//			this.m_trigger.update(deltaTime);
 		
 	}
 
@@ -149,6 +167,21 @@ public abstract class Item extends Element2D {
 		{
 			m_trigger.draw(batch);
 		}
+	}
+	
+	//loader Json : 
+	
+	@Override
+	public void write(Json json) {
+			super.write(json);
+			this.m_trigger.write(json);
+			
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		super.read(json, jsonData);
+		this.m_trigger.read(json, jsonData);
 	}
 	
 }
