@@ -46,13 +46,13 @@ public class Element2D extends Rigidbody implements Json.Serializable{
 	
 	
 	protected String m_type;
-	private Texture m_visual;
+	protected Texture m_visual;
 	protected TextureRegion m_texRegion;
 	protected Animator m_animator;
-	private float m_animationSpeed;
-	private int m_constructorStep = 1;
-	private int m_spriteIndex = 0;
-	private TileSetInfo m_tileSet = null; ///// ! \\\\\
+	protected float m_animationSpeed;
+	protected int m_constructorStep = 1;
+	protected int m_spriteIndex = 0;
+	protected TileSetInfo m_tileSet = null; ///// ! \\\\\
 	
 	
 	//constructeurs et factories : 

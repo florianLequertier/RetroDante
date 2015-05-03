@@ -1,4 +1,4 @@
-8
+9
 player
 texture/player.png
 textureInfo/player.txt
@@ -30,3 +30,7 @@ textureInfo/hud.txt
 postprodEffect
 texture/postprodEffect.png
 textureInfo/postprodEffect.txt
+
+item
+texture/item.png
+textureInfo/item.txt

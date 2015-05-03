@@ -1,0 +1,1 @@
+{foregrounds:{},mainground:{layout:{m_index:0,container:[{m_positionX:-78,m_positionY:-61,m_dimensionW:64,m_dimensionH:128,m_rotation:0,m_scaleFactorX:1,m_scaleFactorY:1,m_colliderPosX:-78,m_colliderPosY:-61,m_colliderWidth:64,m_colliderHeight:128,m_type:platform,m_animationSpeed:60,m_spriteIndex:9}]}},backgrounds:{}}
