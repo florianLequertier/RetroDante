@@ -13,6 +13,7 @@ public class EditorCamera extends OrthographicCamera implements InputProcessor{
 	
 	public static int editorCameraWidth = 600;
 	public static int editorCameraHeight = 400;
+	static float m_zoom = 1.f;
 	
 	public static enum Direction{
 		RIGHT,
@@ -26,6 +27,7 @@ public class EditorCamera extends OrthographicCamera implements InputProcessor{
 	private Map m_parralaxTarget = null;
 	float m_maxSpeed = 2.f;
 	float m_currentSpeed = 1.f;
+	
 	
 	EditorCamera()
 	{
@@ -145,7 +147,12 @@ public class EditorCamera extends OrthographicCamera implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
+
+		
+		m_zoom += amount*0.1f;
+		this.viewportWidth = this.editorCameraWidth * m_zoom;
+		this.viewportHeight = this.editorCameraHeight * m_zoom;
+		
 		return false;
 	}
 

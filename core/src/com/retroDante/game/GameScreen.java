@@ -26,6 +26,7 @@ import com.retroDante.game.character.PlayerController;
 import com.retroDante.game.item.ItemManager;
 import com.retroDante.game.map.Map;
 import com.retroDante.game.map.MapElement;
+import com.retroDante.game.sound.SoundManager;
 import com.retroDante.game.trigger.TeleportTrigger;
 import com.retroDante.game.trigger.TriggerManager;
 
@@ -99,6 +100,8 @@ public class GameScreen  implements Screen, InputProcessor{
 	
 	@Override
 	public void show() {
+		
+		SoundManager.getInstance().playMusic("survey");
 		
 		//Initialisation stage : 
 		m_stage = new Stage();

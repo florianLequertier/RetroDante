@@ -3,6 +3,7 @@ package com.retroDante.game.character;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.retroDante.game.Force;
+import com.retroDante.game.sound.SoundManager;
 
 public enum CharacterState implements State<Character> {
 
@@ -131,6 +132,7 @@ public enum CharacterState implements State<Character> {
 			entity.addForce(Force.Jump());
 			entity.getAnimator().changeAnimation("jump");
 			entity.getAnimator().playAt(0.8f);
+			SoundManager.getInstance().playSound("jump");
 		}
 		
 		@Override
@@ -164,6 +166,11 @@ public enum CharacterState implements State<Character> {
 				
 				entity.getAnimator().changeAnimation("attack");
 				entity.getAnimator().playAt(0.5f);
+				
+				if(entity instanceof Player)
+					SoundManager.getInstance().playSound("attack");
+				else
+					SoundManager.getInstance().playSound("skeleton", 0.8f);
 			}
 
 		}

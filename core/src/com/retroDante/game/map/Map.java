@@ -243,7 +243,7 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		
 		
 		//Ancien algo
-		
+		/*
 		for(MapLayout layout : m_backgrounds)
 		{
 			if(layout.getIndex() == -1)
@@ -274,9 +274,9 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 				layout.setParralaxDecal( layout.getParralaxDecal().add(new Vector2(newParralaxDecalX, newParralaxDecalY)) );
 			}
 		}
+		*/
 		
 		
-		/*
 		for(MapLayout layout : m_backgrounds)
 		{
 			if(layout.getIndex() == -maxIndex)
@@ -294,7 +294,7 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		{
 			layout.setParralaxDecal( Vector2.Zero );
 		}
-		*/
+		
 	}
 	
 	public void updateParralax(EditorCamera camera)

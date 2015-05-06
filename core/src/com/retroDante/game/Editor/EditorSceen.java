@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.retroDante.game.Body;
 import com.retroDante.game.Drawable;
 import com.retroDante.game.Element2D;
+import com.retroDante.game.GameManager;
 import com.retroDante.game.Manager;
 import com.retroDante.game.character.EnemyManager;
 import com.retroDante.game.character.Player;
@@ -67,6 +68,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	EditorSceen(String FolderPath)
 	{
 		this();
+
 		loadRessources(FolderPath);
 	}
 
@@ -130,9 +132,9 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	public void update(float delta)
 	{
 		//Conversion de la position de la souris par rapport à l'ecran / par rapport au monde / par rapport au monde + magnétisme
-		Vector2 positionDrop = new Vector2( (((int)(m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX()))/32)*32 - 48, (((int)(m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight()))/32)*32 - 32 );
+		Vector2 positionDrop = new Vector2( (((int)(m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX()))/32)*32 , (((int)(m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight()))/32)*32 ).scl(EditorCamera.m_zoom).add(-48, -32);
 		m_positionDrop = positionDrop;
-		m_positionMouseInSceen = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() );
+		m_positionMouseInSceen = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() ).scl(EditorCamera.m_zoom);
 		
 		
 		if(m_mouseEditor != null)

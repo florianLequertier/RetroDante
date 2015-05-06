@@ -11,6 +11,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.retroDante.game.Controller;
+import com.retroDante.game.sound.SoundManager;
 
 
 public class PlayerController extends Controller implements InputProcessor {
@@ -32,8 +33,10 @@ public class PlayerController extends Controller implements InputProcessor {
 		mappedKey.put(Keys.SPACE, "jump");
 			mappedEvent.put("jump", false);
 			
+			
 		mappedButton.put(Buttons.LEFT, "attack");
 			mappedEvent.put("attack", false);
+			
 		
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.math.Vector2;
+import com.retroDante.game.sound.SoundManager;
 
 public enum EnemyState implements State<IAController>{
 
@@ -119,6 +120,7 @@ public enum EnemyState implements State<IAController>{
 		public void enter(IAController entity) {
 			entity.resetActions();
 			entity.putAction("attack", true);
+			
 			//entity.putAction("walk_left", false);
 			//entity.putAction("walk_right", false);
 		}

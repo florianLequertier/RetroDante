@@ -54,6 +54,8 @@ public class Player extends Character {
 		m_weapon = new AttackEmitter("burningHearthquake");
 		m_isEnemy = false;
 		
+		m_speed = 120f;
+		
 	}
 	
 	public Player(TileSetInfo tileSet, int spriteIndex) 
@@ -63,6 +65,8 @@ public class Player extends Character {
 		m_controller = new PlayerController();
 		m_weapon = new AttackEmitter("burningHearthquake");
 		m_isEnemy = false;
+		
+		m_speed = 120f;
 		
 	}
 	
@@ -82,6 +86,8 @@ public class Player extends Character {
 		m_animator.changeSpeed(0.02f);
 		
 		m_isEnemy = false;
+		
+		m_speed = 120f;
 
 	}
 	
@@ -102,6 +108,7 @@ public class Player extends Character {
 		
 		m_isEnemy = false;
 		
+		m_speed = 120f;
 	}
 	
 	//setters/ getters : 

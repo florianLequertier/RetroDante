@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.retroDante.game.sound.SoundManager;
 
 public class MenuScreen implements Screen {
 	
@@ -57,7 +58,7 @@ public class MenuScreen implements Screen {
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = m_skin.newDrawable("white", Color.DARK_GRAY);
 		textButtonStyle.down = m_skin.newDrawable("white", Color.DARK_GRAY);
-		textButtonStyle.checked = m_skin.newDrawable("white", Color.BLUE);
+		textButtonStyle.checked = m_skin.newDrawable("white", Color.DARK_GRAY);
 		textButtonStyle.over = m_skin.newDrawable("white", Color.LIGHT_GRAY);
 		textButtonStyle.font = m_skin.getFont("default");
 		m_skin.add("default", textButtonStyle);
@@ -122,7 +123,8 @@ public class MenuScreen implements Screen {
 			public void changed (ChangeEvent event, Actor actor) {
 				button_load.setChecked(false);
 				
-				GameManager.getInstance().changeScreen("game", "editorSave/"+textField_load.getText());
+				if(Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+"editorSave/"+textField_load.getText()).isDirectory())
+					GameManager.getInstance().changeScreen("game", "editorSave/"+textField_load.getText());
 			}
 
 		});
@@ -130,10 +132,15 @@ public class MenuScreen implements Screen {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				button_play.setChecked(false);
+				
 				if(textField_loadEditor.getText().equals(""))
 					GameManager.getInstance().changeScreen("editor");
 				else
-					GameManager.getInstance().changeScreen("editor", textField_loadEditor.getText() );
+				{
+					if(Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+"editorSave/"+textField_loadEditor.getText()).isDirectory())
+						GameManager.getInstance().changeScreen("editor", textField_loadEditor.getText() );
+				}
+					
 			}
 
 		});
@@ -154,6 +161,10 @@ public class MenuScreen implements Screen {
 		
 		String localPath = Gdx.files.getLocalStoragePath();
 		m_background = new Texture(localPath+"/asset/"+"texture/wall.jpg");
+		
+		//initialisation sound manager : 
+		SoundManager.getInstance().starter();
+		SoundManager.getInstance().playMusic("intro");
 		
 	}
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.retroDante.game.Editor.EditorScreen;
+import com.retroDante.game.sound.SoundManager;
 
 /**
  * 
@@ -67,6 +68,10 @@ public class GameManager implements DataSingleton<GameManager>{
 	public void setPause(boolean state)
 	{
 		m_gamePaused = state;
+		if(m_gamePaused == true)
+			SoundManager.getInstance().playMusic("descent");
+		else
+			SoundManager.getInstance().playMusic("survey");
 	}
 	
 	public void update(float deltaTime)
