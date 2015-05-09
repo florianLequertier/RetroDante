@@ -7,6 +7,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.retroDante.game.map.Map;
 
 public class EditorCamera extends OrthographicCamera implements InputProcessor{
@@ -25,8 +27,8 @@ public class EditorCamera extends OrthographicCamera implements InputProcessor{
 	private List<Direction> m_directions;
 	private Vector2 m_currentTranslation;
 	private Map m_parralaxTarget = null;
-	float m_maxSpeed = 2.f;
-	float m_currentSpeed = 1.f;
+	private float m_maxSpeed = 2.f;
+	private float m_currentSpeed = 1.f;
 	
 	
 	EditorCamera()

@@ -59,7 +59,7 @@ public class EnemyManager extends Manager<Enemy> implements  Json.Serializable {
 		{
 			Enemy e = itEnemy.next();
 			
-			e.update(deltaTime, others, targetPosition);
+			e.update(deltaTime, others, new Vector2(targetPosition) );
 			if(e.getIsDead())
 			{
 				itEnemy.remove();

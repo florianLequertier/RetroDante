@@ -40,7 +40,7 @@ public class Attack implements Drawable, Cloneable {
 		
 		AnimatedEffect effect = (AnimatedEffect) VisualEffectFactory.getInstance().create("slice");
 		effect.setLifeTime(m_lifeTime);
-		m_visual = effect; //VisualEffectFactory.getInstance().create("slice");
+		m_visual = effect; 
 		m_visual.setFlipRight(true);
 	}
 	
@@ -150,7 +150,7 @@ public class Attack implements Drawable, Cloneable {
 	
 	public void updateTrigger(float deltaTime)
 	{
-		m_trigger.update(deltaTime);
+		//m_trigger.update(deltaTime);
 	}
 	
 	public void updateVisual(float deltaTime)

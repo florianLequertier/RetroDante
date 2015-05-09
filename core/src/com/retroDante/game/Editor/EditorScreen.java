@@ -6,8 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.retroDante.game.StoryChapter;
 import com.retroDante.game.TileSetManager;
 
@@ -42,7 +44,7 @@ public class EditorScreen implements Screen {
 		System.out.println(m_tileSetManager.toString());
 		
 		m_stage = new Stage();
-		
+		m_stage.setViewport(new ScreenViewport(new OrthographicCamera(800,600)));
 		
 					
 			
@@ -114,7 +116,9 @@ public class EditorScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		m_stage.getViewport().update(width, height, true);		
+		m_stage.getViewport().update(width, height, true);
+		m_hud.onResize();
+		
 	}
 
 	@Override
@@ -139,6 +143,7 @@ public class EditorScreen implements Screen {
 	public void dispose() {
 		m_tileSetManager.clear();
 		m_stage.dispose();		
+		m_hud.dispose();
 	}
 	
 	

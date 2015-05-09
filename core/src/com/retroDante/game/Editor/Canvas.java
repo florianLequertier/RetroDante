@@ -119,7 +119,8 @@ public class Canvas<T extends Body> implements CanvasInterface {
 		if(m_element != null && onlyButton == false)
 			m_element.draw(batch);
 		
-		//m_collider.draw(batch);
+		if(!(m_element instanceof Trigger))
+		m_collider.draw(batch);
 	}
 	
 	@Override

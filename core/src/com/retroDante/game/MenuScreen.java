@@ -212,6 +212,7 @@ public class MenuScreen implements Screen {
 	public void dispose() {
 		m_shapeRenderer.dispose();
 		m_stage.dispose();		
+		m_background.dispose();
 	}
 
 }

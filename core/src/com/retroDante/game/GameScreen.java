@@ -146,19 +146,11 @@ public class GameScreen  implements Screen, InputProcessor{
 		listCollider.addAll(map.getColliders());
 		
 		player.update(delta, listCollider);
-		//enemy.update(delta, listCollider, player.getPosition()); //test
 		enemyManager.update(delta, listCollider, player.getPosition());
 		
 		itemManager.update(delta, player);
-//		List<Character> listCharacter = new ArrayList<Character>();
-//			listCharacter.add(player);
 		triggerManager.update(delta, player );
 		
-		if(Gdx.input.isKeyPressed(Input.Keys.E))
-		{
-			System.out.println("coucou");
-			attackManager.add(new BurningHearthquake(new Vector2(100,100)));
-		}
 		attackManager.updateOnEnemies(delta, this.enemyManager.getContainer());
 		attackManager.updateOnPlayer(delta, player);
 		
@@ -202,9 +194,9 @@ public class GameScreen  implements Screen, InputProcessor{
 		     
 		     player.drawHUD(batch);
 		     
-		     batch.setProjectionMatrix(gameCamera.combined);
-			 triggerManager.draw(batch); //for debug ou creation de la map
-			 this.attackManager.drawDebug(batch);
+		     //batch.setProjectionMatrix(gameCamera.combined);
+			 //triggerManager.draw(batch); //pour le debug des triggers ou creation de la map
+			 //this.attackManager.drawDebug(batch); //pour le debug des triggers
 		     
 
 			 batch.setProjectionMatrix(effectCamera.combined);
@@ -294,13 +286,12 @@ public class GameScreen  implements Screen, InputProcessor{
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		
 		batch.setColor(Color.WHITE);
 		if(batch.isDrawing())
 		batch.end();
 		
-		attackManager.clear(); // AttackManager étant dans le stack, il ne faut pas oublier d'enlever les elements qu'elle contient lorsque l'on quitte le niveau.
+		attackManager.clear(); // AttackManager étant un singleton, il ne faut pas oublier d'enlever les elements qu'elle contient lorsque l'on quitte le niveau.
 		tileSetManager.clear(); // idem
 		
 		m_hudManager.dispose();

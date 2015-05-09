@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.retroDante.game.Body;
 import com.retroDante.game.Drawable;
 import com.retroDante.game.Element2D;
@@ -51,6 +52,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	private boolean m_isLastCanvasDropped; // Indique si l'element precedement droppé est encore en cours d'edition ou s'il a definitivement été droppé dans la scène
 	private Vector2 m_positionDrop = Vector2.Zero;
 	private Vector2 m_positionMouseInSceen = Vector2.Zero;
+	
 	
 	EditorSceen()
 	{
@@ -132,9 +134,10 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	public void update(float delta)
 	{
 		//Conversion de la position de la souris par rapport à l'ecran / par rapport au monde / par rapport au monde + magnétisme
-		Vector2 positionDrop = new Vector2( (((int)(m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX()))/32)*32 , (((int)(m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight()))/32)*32 ).scl(EditorCamera.m_zoom).add(-48, -32);
+		Vector3 tmpPos = m_sceenCamera.unproject( new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+		Vector2 positionDrop = new Vector2(((int)tmpPos.x/32)*32-32, ((int)tmpPos.y/32)*32-32);//new Vector2( (((int)(m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX()))/32)*32 , (((int)(m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight()))/32)*32 ).scl(EditorCamera.m_zoom).add(-48, -32);
 		m_positionDrop = positionDrop;
-		m_positionMouseInSceen = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() ).scl(EditorCamera.m_zoom);
+		m_positionMouseInSceen = new Vector2(tmpPos.x-32, tmpPos.y-32);//new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() ).scl(EditorCamera.m_zoom);
 		
 		
 		if(m_mouseEditor != null)
@@ -168,9 +171,10 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 	public void dropCanvasOnSceen()
 	{
 		
-		Vector2 positionDrop = m_positionDrop;//new Vector2( (m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX())%32, (m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight())%32 );
+		Vector3 tmpPos = m_sceenCamera.unproject( new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+		Vector2 positionDrop = new Vector2(((int)tmpPos.x/32)*32-32, ((int)tmpPos.y/32)*32-32);//m_positionDrop;//new Vector2( (m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX())%32, (m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight())%32 );
 		Vector2 mousePosition = new Vector2(  Gdx.input.getX(), -Gdx.input.getY() + Gdx.graphics.getHeight());
-		m_positionMouseInSceen = new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() );
+		m_positionMouseInSceen = new Vector2(tmpPos.x-32, tmpPos.y-32);//new Vector2( m_sceenCamera.position.x - m_sceenCamera.viewportWidth*0.5f + Gdx.input.getX(), m_sceenCamera.position. y- m_sceenCamera.viewportHeight*0.5f -Gdx.input.getY() + Gdx.graphics.getHeight() );
 		
 		if(m_mouseEditor == null)
 		{
@@ -256,7 +260,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 			{
 				CanvasInterface canvas = it.next();
 				
-				if(canvas.getCollider().contains(m_positionMouseInSceen))
+				if(canvas.getCollider().contains(new Vector2(m_positionMouseInSceen) ))
 				{
 					System.out.println("La souris est dans un element de l'editeur.");
 					
@@ -342,6 +346,7 @@ public class EditorSceen extends InputAdapter implements Drawable, Json.Serializ
 		m_managers.put("map", Map.load("/editorSave/"+folderPath+"/map.txt"));
 		m_managers.put("enemy", EnemyManager.load("/editorSave/"+folderPath+"/enemy.txt"));
 		m_managers.put("trigger", TriggerManager.load("/editorSave/"+folderPath+"/trigger.txt"));
+		m_managers.put("item", ItemManager.load("/editorSave/"+folderPath+"/item.txt"));
 		/*
 		String filePath = "editorSave/editableMap/"+folderPath+"/canvasContainer.txt";
 		FileHandle file = Gdx.files.absolute(Gdx.files.getLocalStoragePath()+"/asset/"+filePath);

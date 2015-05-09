@@ -2,6 +2,7 @@ package com.retroDante.game.map;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -115,6 +116,17 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		newLayout.setIndex(index);
 		newLayout.add(element);
 		m_foregrounds.add(newLayout);
+		
+		// trie : 
+		m_backgrounds.sort(new Comparator<MapLayout>(){
+
+			@Override
+			public int compare(MapLayout arg0, MapLayout arg1) {
+				
+				return (arg0.m_index - arg1.m_index);
+			}			
+			
+		});
 	}
 	
 	void addToBackground(int index, Element2D element)
@@ -131,6 +143,17 @@ public class Map extends Manager<Element2D> implements Json.Serializable{
 		newLayout.setIndex(index);
 		newLayout.add(element);
 		m_backgrounds.add(newLayout);
+		
+		// trie : 
+		m_backgrounds.sort(new Comparator<MapLayout>(){
+
+			@Override
+			public int compare(MapLayout arg0, MapLayout arg1) {
+				
+				return (arg0.m_index - arg1.m_index);
+			}			
+			
+		});
 	}
 	
 	void addToMainground(Element2D element)

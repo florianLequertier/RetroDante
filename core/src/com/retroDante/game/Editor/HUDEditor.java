@@ -1,5 +1,6 @@
 package com.retroDante.game.Editor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -87,7 +88,9 @@ public class HUDEditor extends Table{
 		m_pauseMenu = new HUDEditorPause(m_skin, this);
 		m_centerCell = this.add().center().space(10);
 		
+		//Cell<Table> leftCell =  this.add().left().space(10);
 		m_editorPicker = new EditorPicker();
+		//leftCell.setActor(m_editorPicker);
 		this.addActor(m_editorPicker);
 		m_editorPicker.setMouse(mouse);
 		
@@ -96,6 +99,12 @@ public class HUDEditor extends Table{
 		parent.addActor(this);
 	
 	}
+	
+	public void onResize()
+	{
+		m_editorPicker.setPosition(Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 500);
+	}
+	
 	
 	public void closePauseMenu()
 	{
